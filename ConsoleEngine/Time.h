@@ -4,9 +4,14 @@
 #include "stdafx.h"
 
 class Time {
-public:
+	friend class Engine;
+private:
 	static float DeltaTime;
 	static float ExecutionTime;
+public:
+	static void Delay(float millisecond);
+	static float GetDeltaTime();
+	static float GetExecutionTime();
 };
 
 #endif // !___TIME___

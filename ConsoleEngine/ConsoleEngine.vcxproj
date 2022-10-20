@@ -127,11 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Script.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Script.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>

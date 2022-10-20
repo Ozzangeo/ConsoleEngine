@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace chrono;
-// 카메라 & 필드 구현 해야함
+// 카메라(성공) & 필드(레이어, 미완) 구현 해야함
 
 class TestScript : public EngineScript {
 private:
@@ -20,7 +20,7 @@ private:
 			cout << "Up\n\n";
 		} break;
 		}
-		switch (Keyboard::isKey(KeyCode_B)) {
+		switch (Keyboard::isKey(KeyCode_ESC)) {
 		case KeyType_DOWN: {
 			return false;
 		} break;
@@ -32,12 +32,7 @@ private:
 };
 
 int main() {
-	Engine* engine = Engine::GetInstance();
-
-	engine->Run<TestScript>();
-
-	Engine::Release();
-	Keyboard::Release();
-
+	Engine::GetInstance()->Run<TestScript, 60>();
+	
 	return 0;
 }

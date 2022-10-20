@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <Windows.h>
+#include <string>
 #include <memory>
 #include <chrono>
 #include <typeinfo>

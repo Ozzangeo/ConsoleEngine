@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="벡터">
+      <UniqueIdentifier>{8ca5aa1c-8653-4b68-a41f-17dfd0069e52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Time.cpp">
@@ -28,6 +31,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Field2D.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Layer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector.cpp">
+      <Filter>벡터</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera2D.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -48,6 +60,15 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Field2D.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>벡터</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera2D.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

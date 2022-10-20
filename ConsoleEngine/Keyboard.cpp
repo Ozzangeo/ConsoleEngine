@@ -2,7 +2,7 @@
 
 bool* Keyboard::isHold = new bool[256]{ false, };
 
-Keyboard::~Keyboard() { Release(); }
+Keyboard::~Keyboard() {}
 KeyType Keyboard::isKey(KeyCode code) {
 	bool Key = GetAsyncKeyState(code);
 

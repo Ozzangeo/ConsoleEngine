@@ -2,21 +2,12 @@
 #define ___FIELD2D___
 
 #include "stdafx.h"
+#include "Layer.h"
 
-class Layer {
-private:
-	static short size;
-public:
-	WORD color;
-	
-	operator CHAR_INFO();
-};
+using namespace std;
 
 class Field2D {
-private:
-	Layer a;
-public:
-
 };
 
 #endif // !___FIELD2D___
+

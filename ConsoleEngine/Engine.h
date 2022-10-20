@@ -12,6 +12,8 @@ using namespace chrono;
 class EngineScript : public Script {
 	friend class Engine;
 protected:
+	Time itme;
+	Keyboard itmea;
 
 	bool Awake() override;
 	bool Update() override = 0;

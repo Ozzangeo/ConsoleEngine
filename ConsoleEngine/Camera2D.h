@@ -6,11 +6,13 @@
 
 class Camera2D {
 private:
+	Field2D m_Field;
+
 	Vector2 m_Pos;
 	Vector3 m_ScreenSize;
+	Vector2 m_HalfScreenSize;
 
 	CHAR_INFO* m_Screen;
-	CHAR_INFO* m_DefaultScreen;
 
 	COORD m_size;
 	SMALL_RECT m_rect;

@@ -8,22 +8,39 @@ using namespace chrono;
 
 class TestScript : public EngineScript {
 private:
+	Camera2D* m_Camera = Camera2D::GetInstance();
+	Vector2* m_CameraPos = nullptr;
+
+	bool Awake() override {
+		m_CameraPos = m_Camera->GetPos();
+		return true;
+	}
 	bool Update() override {
-		switch (Keyboard::isKey(KeyCode_A)) {
-		case KeyType_DOWN: {
-			cout << "Down\n";
-		} break;
-		case KeyType_HOLD: {
-			cout << "Hold " << (int)round(1.0f / Time::GetDeltaTime()) << "\n";
-		} break;
-		case KeyType_UP: {
-			cout << "Up\n\n";
-		} break;
-		}
 		switch (Keyboard::isKey(KeyCode_ESC)) {
 		case KeyType_DOWN: {
 			return false;
 		} break;
+		}
+
+		switch (Keyboard::isKey(KeyCode_RIGHT)) {
+		case KeyType_HOLD: {
+			m_CameraPos->x += 100 * Time::GetDeltaTime();
+		}
+		}
+		switch (Keyboard::isKey(KeyCode_LEFT)) {
+		case KeyType_HOLD: {
+			m_CameraPos->x -= 100 * Time::GetDeltaTime();
+		}
+		}
+		switch (Keyboard::isKey(KeyCode_UP)) {
+		case KeyType_HOLD: {
+			m_CameraPos->y -= 100 * Time::GetDeltaTime();
+		}
+		}
+		switch (Keyboard::isKey(KeyCode_DOWN)) {
+		case KeyType_HOLD: {
+			m_CameraPos->y += 100 * Time::GetDeltaTime();
+		}
 		}
 
 		return true;
@@ -33,6 +50,6 @@ private:
 
 int main() {
 	Engine::GetInstance()->Run<TestScript, 60>();
-	
+
 	return 0;
 }

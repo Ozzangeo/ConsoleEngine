@@ -8,34 +8,33 @@ using namespace std;
 
 enum Color {
 	Color_Black = 0,
-	Color_Blue = 1,
-	Color_Green = 2,
-	Color_SkyBlue = 3,
-	Color_Red = 4,
-	Color_Perple = 5,
-	Color_Yellow = 6,
-	Color_White = 7,
-	Color_LightBlack = 8,
-	Color_LightBlue = 9,
-	Color_LightGreen = 10,
-	Color_LightSkyBlue = 11,
-	Color_LightRed = 12,
-	Color_LightPerple = 13,
-	Color_LightYellow = 14,
-	Color_LightWhite = 15
+	Color_Blue = 16,
+	Color_Green = 32,
+	Color_SkyBlue = 48,
+	Color_Red = 64,
+	Color_Perple = 80,
+	Color_Yellow = 96,
+	Color_White = 112,
+	Color_LightBlack = 128,
+	Color_LightBlue = 144,
+	Color_LightGreen = 160,
+	Color_LightSkyBlue = 176,
+	Color_LightRed = 192,
+	Color_LightPerple = 208,
+	Color_LightYellow = 224,
+	Color_LightWhite = 240,
+	Color_NULL = 255
 };
 
 class Layer {
 private:
-	static Vector3 m_Size;
-
-	WORD* color;
-	bool* isStatic;
-	Layer();
-	Layer(WORD* _color, bool* _isStatic);
-
 public:
+	Layer();
+	Layer(WORD _color, bool _isStatic);
 	~Layer();
+	
+	WORD color;
+	bool isStatic;
 
 	static const WORD DEFAULT_COLOR;
 };

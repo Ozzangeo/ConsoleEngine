@@ -1,17 +1,6 @@
 #include "Layer.h"
 
-const WORD Layer::DEFAULT_COLOR = 7;
-Layer::Layer() {
-	m_Size = { 200, 200, 40000 };
-
-	color = new WORD[static_cast<int>(m_Size.z)];
-	isStatic = new bool[static_cast<int>(m_Size.z)]{ false, };
-
-	//Clear();
-}
-Layer::Layer(WORD* _color, bool* _isStatic) {
-}
-Layer::~Layer() {
-	if (color) { delete[] color; }
-	if (isStatic) { delete[] isStatic; }
-}
+const WORD Layer::DEFAULT_COLOR = Color_NULL;
+Layer::Layer() : color(DEFAULT_COLOR), isStatic(false) {}
+Layer::Layer(WORD _color, bool _isStatic) : color(_color), isStatic(_isStatic) {}
+Layer::~Layer() {}

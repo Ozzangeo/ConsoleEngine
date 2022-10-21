@@ -1,24 +1,20 @@
 #include "Camera2D.h"
 
 Camera2D* Camera2D::m_Instance = nullptr;
-const WORD Camera2D::DEFAULT_BACKGROUND = (Color_LightWhite << 4);
+const WORD Camera2D::DEFAULT_BACKGROUND = Color_LightWhite;
 const HANDLE Camera2D::HANDLE = GetStdHandle(STD_OUTPUT_HANDLE);
 const COORD Camera2D::ZERO_POS = { 0, 0 };
 
-Camera2D::Camera2D() : m_Pos({ 0, 0 }), m_ScreenSize({ 100, 50, 5000 }),
-	m_rect({ 0, 0, 100, 50 }), m_size({100, 50}),
-	m_DefaultScreen(new CHAR_INFO[5000]), m_Screen(new CHAR_INFO[5000]) {
+Camera2D::Camera2D() : m_Pos(0, 0), m_ScreenSize(128, 64, 8192), m_HalfScreenSize(64, 32),
+	m_rect({ 0, 0, 128, 64 }), m_size({ 128, 64 }), m_Screen(new CHAR_INFO[8192]) {
 
-	system("mode con: cols=100 lines=50");
+	string System = "mode con: cols=" + to_string(static_cast<int>(m_ScreenSize.x)) + " lines=" + to_string(static_cast<int>(m_ScreenSize.y));
+	system(System.c_str());
 
-	for (int i = 0; i < m_ScreenSize.z; i++) {
-		m_DefaultScreen[i] = { ' ', DEFAULT_BACKGROUND};
-		m_Screen[i] = { ' ', DEFAULT_BACKGROUND};
-	}
+	for (int i = 0; i < m_ScreenSize.z; i++) { m_Screen[i] = { ' ', DEFAULT_BACKGROUND }; }
 }
 Camera2D::~Camera2D() {
 	if (m_Screen) { delete[] m_Screen; }
-	if (m_DefaultScreen) { delete[] m_DefaultScreen; }
 }
 
 Camera2D* Camera2D::GetInstance() {
@@ -27,15 +23,19 @@ Camera2D* Camera2D::GetInstance() {
 }
 
 void Camera2D::Render() {
+	m_Field.Render(m_Screen, m_Pos, m_ScreenSize);
 	WriteConsoleOutput(HANDLE, m_Screen, m_size, ZERO_POS, &m_rect);
 	Clear();
 }
 void Camera2D::Clear() {
-	m_Screen = m_DefaultScreen;
+	for (int i = 0; i < m_ScreenSize.z; i++) {
+		m_Screen[i].Attributes = DEFAULT_BACKGROUND;
+	}
+	m_Field.Clear();
 }
 
 void Camera2D::SetScreenSize(Vector3 Size) {
-	string System = "mode con: cols=" + to_string(Size.x) + " lines=" + to_string(Size.y);
+	string System = "mode con: cols=" + to_string(static_cast<int>(Size.x)) + " lines=" + to_string(static_cast<int>(Size.y));
 	system(System.c_str());
 	m_ScreenSize = Size;
 }

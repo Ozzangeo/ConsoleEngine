@@ -15,8 +15,9 @@ private:
 	int m_CANVAS;
 
 public:
+	int a = 0;
+
 	Field2D();
-	Field2D(Vector3 FieldSize);
 	~Field2D();
 
 	void Clear();

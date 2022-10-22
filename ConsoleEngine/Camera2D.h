@@ -6,7 +6,6 @@
 
 class Camera2D {
 private:
-	Field2D m_Field;
 
 	Vector2 m_Pos;
 	Vector3 m_ScreenSize;
@@ -16,6 +15,8 @@ private:
 
 	COORD m_size;
 	SMALL_RECT m_rect;
+
+	Field2D m_Field;
 
 	static Camera2D* m_Instance;
 
@@ -33,6 +34,7 @@ public:
 	void Clear();
 
 	void SetScreenSize(Vector3 Size);
+	void SetScreen();
 	Vector2* GetPos();
 
 	Camera2D operator=(const Camera2D& ref);

@@ -9,5 +9,8 @@
 #include <chrono>
 #include <typeinfo>
 #include <list>
+#include <future>
+#include <thread>
+#include <fstream>
 
 #endif // !___STDAFX___

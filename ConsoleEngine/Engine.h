@@ -28,12 +28,18 @@ private:
 
 	Camera2D* m_Camera = Camera2D::GetInstance();
 
+	HANDLE m_handle;
+	bool isNotDone;
 	static Engine* m_Instance;
 	EngineScript* m_RunScript;
+
+	CONSOLE_FONT_INFOEX m_Console_Font_Infoex;
 
 public:
 	~Engine();
 
+	void Fixing();
+	void Setting(CONSOLE_FONT_INFOEX& ConsoleFontInfo);
 	static Engine* GetInstance();
 	static void Release();
 
@@ -49,10 +55,14 @@ inline void Engine::Run(wstring title) {
 	m_FPS = 1000.0f / Frame;
 
 	m_RunScript = new T;
-	bool isNotDone = true;
+	isNotDone = true;
+
+	thread Scroll([&]() { Fixing(); });
+	Scroll.detach();
 
 	if (!m_RunScript->Awake()) { m_RunScript->Remove(); return; }
 
+	ofstream out("Frame.txt");
 	while (isNotDone) {
 		system_clock::time_point start = system_clock::now();
 		/////////////Update/////////////
@@ -60,11 +70,14 @@ inline void Engine::Run(wstring title) {
 		isNotDone = m_RunScript->Update();
 		m_Camera->Render();
 
+		out << 1 / Time::GetDeltaTime() << '\n';
+
 		////////////////////////////////
 		Time::ExecutionTime = duration<float>(system_clock::now() - start).count() * 1000.0f;
 		if (m_FPS > Time::ExecutionTime) { Time::Delay(m_FPS - Time::ExecutionTime); }
 		Time::DeltaTime = duration<float>(system_clock::now() - start).count();
 	}
+	out.close();
 
 	m_RunScript->Remove();
 

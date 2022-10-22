@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+.vs/ConsoleEngine/v17/ipch/AutoPCH/e9ef5d1cd065e2ed/VECTOR.ipch
+.vs/ConsoleEngine/v17/ipch/AutoPCH/bf2c7a1a66862489/MAIN.ipch
+.vs/ConsoleEngine/v17/ipch/AutoPCH/b3801d9bfd4ff99a/FIELD2D.ipch
+.vs/ConsoleEngine/v17/ipch/AutoPCH/71cb86649745da4/ENGINE.ipch
+.vs/ConsoleEngine/v17/ipch/AutoPCH/64381603b222e33/CAMERA2D.ipch
+.vs/ConsoleEngine/v17/ipch/AutoPCH/450e7d532294e899/LAYER.ipch
+.vs/ConsoleEngine/v17/ipch/AutoPCH/2752baf7fae57b0f/KEYBOARD.ipch

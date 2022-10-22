@@ -10,6 +10,7 @@ class TestScript : public EngineScript {
 private:
 	Camera2D* m_Camera = Camera2D::GetInstance();
 	Vector2* m_CameraPos = nullptr;
+	int speed = 1;
 
 	bool Awake() override {
 		m_CameraPos = m_Camera->GetPos();
@@ -21,34 +22,52 @@ private:
 			return false;
 		} break;
 		}
-
-		switch (Keyboard::isKey(KeyCode_RIGHT)) {
+		
+		switch (Keyboard::isKey(KeyCode_LSHIFT))
+		{
 		case KeyType_HOLD: {
-			m_CameraPos->x += 100 * Time::GetDeltaTime();
+			speed = 100;
+		} break;
+		case KeyType_NON: {
+			speed = 10;
+		} break;
 		}
-		}
-		switch (Keyboard::isKey(KeyCode_LEFT)) {
+		switch (Keyboard::isKey(KeyCode_D)) {
 		case KeyType_HOLD: {
-			m_CameraPos->x -= 100 * Time::GetDeltaTime();
+			m_CameraPos->x += speed * Time::GetDeltaTime();
 		}
 		}
-		switch (Keyboard::isKey(KeyCode_UP)) {
+		switch (Keyboard::isKey(KeyCode_A)) {
 		case KeyType_HOLD: {
-			m_CameraPos->y -= 100 * Time::GetDeltaTime();
+			m_CameraPos->x -= speed * Time::GetDeltaTime();
 		}
 		}
-		switch (Keyboard::isKey(KeyCode_DOWN)) {
+		switch (Keyboard::isKey(KeyCode_W)) {
 		case KeyType_HOLD: {
-			m_CameraPos->y += 100 * Time::GetDeltaTime();
+			m_CameraPos->y -= speed * Time::GetDeltaTime();
 		}
 		}
-
+		switch (Keyboard::isKey(KeyCode_S)) {
+		case KeyType_HOLD: {
+			m_CameraPos->y += speed * Time::GetDeltaTime();
+		}
+		}
 		return true;
 	}
 	void Remove() override {}
 };
 
+
 int main() {
+	CONSOLE_FONT_INFOEX cfi{};
+	cfi.dwFontSize = { 1, 1 };
+	cfi.cbSize = sizeof(cfi);
+	cfi.nFont = 0;
+	cfi.FontFamily = FF_DONTCARE;
+	cfi.FontWeight = FW_NORMAL;
+	wcscpy_s(cfi.FaceName, TEXT("Raster Fonts"));
+
+	Engine::GetInstance()->Setting(cfi);
 	Engine::GetInstance()->Run<TestScript, 60>();
 
 	return 0;

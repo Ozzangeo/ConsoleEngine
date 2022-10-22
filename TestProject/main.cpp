@@ -4,13 +4,15 @@
 
 using namespace std;
 using namespace chrono;
-// 카메라(성공) & 필드(레이어, 미완) 구현 해야함
 
 class TestScript : public EngineScript {
 private:
 	Camera2D* m_Camera = Camera2D::GetInstance();
-	Vector2* m_CameraPos = nullptr;
+	Color* m_Color = Color::GetInstance();
+
+	Vector2<float>* m_CameraPos = nullptr;
 	int speed = 1;
+	float r = 0;
 
 	bool Awake() override {
 		m_CameraPos = m_Camera->GetPos();
@@ -52,23 +54,31 @@ private:
 			m_CameraPos->y += speed * Time::GetDeltaTime();
 		}
 		}
+
+		switch (Keyboard::isKey(KeyCode_LEFT)) {
+		case KeyType_HOLD: {
+			r -= Time::GetDeltaTime() * 150;
+			if (255 >= r && r >= 0) { m_Color->SetColor({ static_cast<BYTE>(r), static_cast<BYTE>(r), 255 }, 0); }
+		}
+		}
+		switch (Keyboard::isKey(KeyCode_RIGHT)) {
+		case KeyType_HOLD: {
+			r += Time::GetDeltaTime() * 150;
+			if (255 >= r && r >= 0) { m_Color->SetColor({ static_cast<BYTE>(r), static_cast<BYTE>(r), 255 }, 0); }
+		}
+		}
+
+
 		return true;
 	}
 	void Remove() override {}
 };
 
-
 int main() {
-	CONSOLE_FONT_INFOEX cfi{};
-	cfi.dwFontSize = { 1, 1 };
-	cfi.cbSize = sizeof(cfi);
-	cfi.nFont = 0;
-	cfi.FontFamily = FF_DONTCARE;
-	cfi.FontWeight = FW_NORMAL;
-	wcscpy_s(cfi.FaceName, TEXT("Raster Fonts"));
+	Engine* engine = Engine::GetInstance();
 
-	Engine::GetInstance()->Setting(cfi);
-	Engine::GetInstance()->Run<TestScript, 60>();
+	engine->FontSetting({ 1, 1 });
+	engine->Run<TestScript, 1000>();
 
 	return 0;
 }

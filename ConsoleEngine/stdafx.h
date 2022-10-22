@@ -8,9 +8,17 @@
 #include <memory>
 #include <chrono>
 #include <typeinfo>
-#include <list>
-#include <future>
+
+#include <mutex>
 #include <thread>
+#include <future>
+#include <functional>
+#include <condition_variable>
+
+#include <vector>
+#include <list>
+#include <queue>
+
 #include <fstream>
 
 #endif // !___STDAFX___

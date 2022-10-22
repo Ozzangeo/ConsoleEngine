@@ -6,10 +6,12 @@
 
 class Camera2D {
 private:
+	Camera2D();
+	Camera2D(const Camera2D& other);
 
-	Vector2 m_Pos;
-	Vector3 m_ScreenSize;
-	Vector2 m_HalfScreenSize;
+	Vector2<float> m_Pos;
+	Vector3<int> m_ScreenSize;
+	Vector2<int> m_HalfScreenSize;
 
 	CHAR_INFO* m_Screen;
 
@@ -20,24 +22,23 @@ private:
 
 	static Camera2D* m_Instance;
 
-	Camera2D();
-
 public:
 	~Camera2D();
 
 	static Camera2D* GetInstance();
+	static void Release();
+
 	static const WORD DEFAULT_BACKGROUND;
-	static const HANDLE HANDLE;
+	static const HANDLE INPUT_HANDLE;
+	static const HANDLE OUTPUT_HANDLE;
 	static const COORD ZERO_POS;
 	
 	void Render();
 	void Clear();
 
-	void SetScreenSize(Vector3 Size);
+	void SetScreenSize(Vector3<int> Size);
 	void SetScreen();
-	Vector2* GetPos();
-
-	Camera2D operator=(const Camera2D& ref);
+	Vector2<float>* GetPos();
 };
 
 #endif // !___CAMERA___

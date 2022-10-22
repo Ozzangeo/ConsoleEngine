@@ -1,9 +1,2 @@
-﻿  Camera2D.cpp
-  Engine.cpp
-  Field2D.cpp
-  Keyboard.cpp
-  Layer.cpp
-  Script.cpp
-  Time.cpp
-  Vector.cpp
+﻿  Field2D.cpp
   ConsoleEngine.vcxproj -> F:\Github Project\ConsoleEngine\x64\Debug\ConsoleEngine.lib

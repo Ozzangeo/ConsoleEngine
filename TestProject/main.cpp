@@ -74,9 +74,13 @@ private:
 	void Remove() override {}
 };
 
+/*
+async으로 Threadpool 구현하기(?)
+*/
+
 int main() {
 	Engine* engine = Engine::GetInstance();
-
+	 
 	engine->FontSetting({ 1, 1 });
 	engine->Run<TestScript, 1000>();
 

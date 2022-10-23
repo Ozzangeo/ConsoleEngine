@@ -8,14 +8,15 @@
 using namespace std;
 
 class Field2D;
-bool Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2<int> ScreenSize);
+bool Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2<int> ScreenSize, float multiple, float Threads);
 
 class Field2D {
-friend bool Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2<int> ScreenSize);
+friend bool Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2<int> ScreenSize, float multiple, float Threads);
 private:
 	ThreadPool* Thread = ThreadPool::GetInstance();
 
 	Layer* m_Layer;
+	ofstream ofs;
 
 	Vector3<int> m_FieldSize;
 	Vector2<int> m_HalfFieldSize;

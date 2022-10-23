@@ -60,7 +60,7 @@ inline void Engine::Run(wstring title) {
 	m_RunScript = new T;
 	isNotDone = true;
 
-	m_Thread->EnqueueJob([&]() { Fixing(); });
+	//m_Thread->EnqueueJob([&]() { Fixing(); });
 
 	if (!m_RunScript->Awake()) { m_RunScript->Remove(); return; }
 
@@ -83,11 +83,11 @@ inline void Engine::Run(wstring title) {
 
 	m_RunScript->Remove();
 
+	ThreadPool::Release();
 	Engine::Release();
 	Camera2D::Release();
 	Keyboard::Release();
 	Color::Release();
-	ThreadPool::Release();
 }
 
 #endif // !___ENGINE___

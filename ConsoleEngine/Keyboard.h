@@ -129,14 +129,15 @@ enum KeyType {
 };
 
 class Keyboard {
+	friend class Engine2D;
 private:
 	static bool* isHold;
+	static void Release();
 
 public:
 	~Keyboard();
 
 	static KeyType isKey(KeyCode code);
-	static void Release();
 
 	// Keyboard Beta 기능들 ( 불완전함 )
 	class Beta {

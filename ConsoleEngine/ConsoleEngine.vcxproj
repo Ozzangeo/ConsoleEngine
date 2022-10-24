@@ -131,24 +131,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="DefaultComponents.cpp" />
+    <ClCompile Include="DefaultGameObjects.cpp" />
+    <ClCompile Include="Engine2D.cpp" />
     <ClCompile Include="Field2D.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Layer.cpp" />
-    <ClCompile Include="Script.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera2D.h" />
     <ClInclude Include="Color.h" />
-    <ClInclude Include="Engine.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="DefaultComponents.h" />
+    <ClInclude Include="DefaultGameObjects.h" />
+    <ClInclude Include="Engine2D.h" />
     <ClInclude Include="Field2D.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Layer.h" />
-    <ClInclude Include="Script.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Vector.h" />

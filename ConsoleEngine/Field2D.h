@@ -8,7 +8,7 @@ using namespace std;
 
 class Field2D {
 private:
-	const int RENDER_THREAD_COUNT;
+	const int RENDER_THREAD_COUNT = 4;
 	vector<future<void>> m_Futures;
 
 	Layer* m_Layer = nullptr;
@@ -21,14 +21,13 @@ private:
 	void Setting();
 
 public:
-	Field2D(int RenderThreads = 4);
-	Field2D(Vector3<int> Field, int RenderThreads = 4);
-	
+	Field2D();
 	~Field2D();
 
 	void Clear();
 	static void Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2<int> ScreenSize, float multiple, float Threads);
 	void Render(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenSize);
+	void ReSize(Vector3<int> FieldSize);
 };
 
 inline void Field2D::Setting() {

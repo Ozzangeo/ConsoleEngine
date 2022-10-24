@@ -9,12 +9,8 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="벡터">
-      <UniqueIdentifier>{8ca5aa1c-8653-4b68-a41f-17dfd0069e52}</UniqueIdentifier>
+    <Filter Include="2D">
+      <UniqueIdentifier>{edfeb4d4-3f48-456a-94b4-d265b4681f5e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -24,25 +20,34 @@
     <ClCompile Include="Keyboard.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Engine.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Script.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Field2D.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Layer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Vector.cpp">
-      <Filter>벡터</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera2D.cpp">
+    <ClCompile Include="Color.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Color.cpp">
+    <ClCompile Include="Engine2D.cpp">
+      <Filter>2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Field2D.cpp">
+      <Filter>2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultGameObjects.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultComponents.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,25 +61,34 @@
     <ClInclude Include="Keyboard.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Script.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Field2D.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Layer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>벡터</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera2D.h">
+    <ClInclude Include="Color.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
+    <ClInclude Include="Engine2D.h">
+      <Filter>2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Field2D.h">
+      <Filter>2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultGameObjects.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultComponents.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

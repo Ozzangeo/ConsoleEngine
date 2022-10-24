@@ -14,7 +14,7 @@ public:
 	Layer(WORD _color, bool _isStatic);
 	~Layer();
 	
-	WORD color;
+	WORD Color;
 	bool isStatic;
 
 	static const WORD DEFAULT_COLOR;

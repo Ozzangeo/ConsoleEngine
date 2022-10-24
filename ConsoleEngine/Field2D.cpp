@@ -3,15 +3,14 @@
 using namespace std;
 using namespace chrono;
 
-Field2D::Field2D(int RenderThreads) : m_FieldSize(128, 72, 1), RENDER_THREAD_COUNT(RenderThreads) { Setting(); }
-Field2D::Field2D(Vector3<int> Field, int RenderThreads) : m_FieldSize(Field), RENDER_THREAD_COUNT(RenderThreads) { Setting(); }
+Field2D::Field2D() : m_FieldSize(128, 72, 1), RENDER_THREAD_COUNT(4) { Setting(); }
 Field2D::~Field2D() {
 	if (m_Layer) { delete[] m_Layer; m_Layer = nullptr; }
 }
 
 void Field2D::Clear() {
 	for (int i = 0, d = static_cast<int>(m_CANVAS * m_FieldSize.z); i < d; i++) {
-		if (!m_Layer[i].isStatic) { m_Layer[i].color = Color_LightWhite; }
+		if (!m_Layer[i].isStatic) { m_Layer[i].Color = Color_White; }
 	}
 }
 void Field2D::Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2<int> ScreenSize, float multiple, float Threads) {
@@ -33,8 +32,8 @@ void Field2D::Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2
 
 				if (0 <= pos && pos < Field->m_CANVAS) {
 					pos += static_cast<int>(Temp.z);
-					if (Field->m_Layer[pos].color != Color_NULL) {
-						Screen[i].Attributes = Field->m_Layer[pos].color;
+					if (Field->m_Layer[pos].Color != Color_NULL) {
+						Screen[i].Attributes = Field->m_Layer[pos].Color;
 					}
 				}
 			}
@@ -50,6 +49,7 @@ void Field2D::Render(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenS
 		m_Futures.emplace_back(async(launch::async, Merge, this, Screen, Pos.toVector2<int>(), ScreenSize, i, Threads));
 	}
 	for (auto& f : m_Futures) { f.wait(); }
+	m_Futures.clear();
 
 	// 싱글 스레딩 출력
 	/*Vector3<float> Temp;
@@ -73,4 +73,13 @@ void Field2D::Render(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenS
 			}
 		}
 	}*/
+}
+
+void Field2D::ReSize(Vector3<int> FieldSize) {
+	m_FieldSize = FieldSize;
+	m_HalfFieldSize = m_FieldSize.toVector2<int>() * 0.5f;
+	if (m_Layer) { delete[] m_Layer; m_Layer = nullptr; }
+	
+	m_CANVAS = FieldSize.x * FieldSize.y;
+	m_Layer = new Layer[m_FieldSize.z * m_CANVAS];
 }

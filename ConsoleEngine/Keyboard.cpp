@@ -18,7 +18,7 @@ KeyType Keyboard::isKey(KeyCode code) {
 	else { return KeyType_NON; }
 }
 void Keyboard::Release() {
-	if (isHold) { delete[] isHold; }
+	if (isHold) { delete[] isHold; isHold = nullptr; }
 }
 
 // Keyboard Beta 기능들 ( 불완전함 )

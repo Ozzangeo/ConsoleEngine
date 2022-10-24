@@ -2,9 +2,12 @@
 #define ___STDAFX___
 
 #include <iostream>
+#include <fstream>
+
 #include <cstdlib>
-#include <Windows.h>
 #include <string>
+#include <Windows.h>
+
 #include <memory>
 #include <chrono>
 #include <typeinfo>
@@ -19,6 +22,9 @@
 #include <list>
 #include <queue>
 
-#include <fstream>
+namespace Handle {
+	const HANDLE OUTPUT = GetStdHandle(STD_OUTPUT_HANDLE);
+	const HANDLE INPUT = GetStdHandle(STD_INPUT_HANDLE);
+};
 
 #endif // !___STDAFX___

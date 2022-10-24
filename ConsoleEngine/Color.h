@@ -25,16 +25,9 @@ enum EnumColor {
 };
 class Color {
 private:
-	Color();
-
-	HANDLE m_handle;
 	CONSOLE_SCREEN_BUFFER_INFOEX m_Info;
-
-	static Color* m_Instance;
-
 public:
-	static Color* GetInstance();
-	static void Release();
+	Color();
 
 	bool SetColor(Vector3<BYTE> _RGB, int num);
 	Vector3<DWORD> GetColor(int num);

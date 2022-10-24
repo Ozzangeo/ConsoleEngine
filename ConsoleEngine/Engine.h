@@ -7,87 +7,58 @@
 #include "Camera2D.h"
 #include "Color.h"
 #include "Field2D.h"
-#include "ThreadPool.h"
 #include "Time.h"
 
 using namespace std;
 using namespace chrono;
 
-class EngineScript : public Script {
-	friend class Engine;
-protected:
-
-	bool Awake() override;
-	bool Update() override = 0;
-	void Remove() override = 0;
-};
 class Engine {
 private:
-	Engine();
-	Engine(const Engine& other);
-
 	float m_FPS;
 
-	ThreadPool* m_Thread = ThreadPool::GetInstance();
-	Camera2D* m_Camera = Camera2D::GetInstance();
-	Color* m_Color = Color::GetInstance();
+	Camera2D* m_Camera = nullptr;
+	Color m_Color;
 
-	static bool isNotDone;
-	static Engine* m_Instance;
-	EngineScript* m_RunScript;
+	bool isDone;
 
 	CONSOLE_FONT_INFOEX m_Console_Font_Infoex;
 
+	// 생성자에 사용하는 함수
+	void Setting(Vector2<short> FontSize);
+
 public:
-	~Engine();
+	Engine(Camera2D* Camera);
+	Engine(Vector2<short> FontSize, Camera2D* Camera);
 
-	static Engine* GetInstance();
+	void FontSetting(Vector2<short> FontSize);
+	void Run(wstring title = L"Engine", int Frame = 60);
 
-	void Fixing();
-	void FontSetting(Vector2<SHORT> FontSize);
 	static void Release();
-
-	template<typename T, int Frame = 60, enable_if_t<is_base_of_v<EngineScript, T>, bool> = true>
-	void Run(wstring title = L"Engine");
 };
 
-template<typename T, int Frame, enable_if_t<is_base_of_v<EngineScript, T>, bool>>
-inline void Engine::Run(wstring title) {
-	SetConsoleTitle(title.c_str());
+inline void Engine::Setting(Vector2<short> FontSize) {
+	// 스타일 설정
+	LONG style = GetWindowLong(GetConsoleWindow(), GWL_STYLE);
+	SetWindowLong(GetConsoleWindow(), GWL_STYLE, style & ~WS_SIZEBOX);
 
-	m_FPS = 1000.0f / Frame;
+	// 마우스 입력 금지
+	DWORD prevMode;
+	GetConsoleMode(Handle::INPUT, &prevMode);
+	SetConsoleMode(Handle::INPUT, prevMode & ~ENABLE_QUICK_EDIT_MODE);
 
-	m_RunScript = new T;
-	isNotDone = true;
+	// 콘솔 커서 숨기기
+	CONSOLE_CURSOR_INFO cursorInfo = { 1, false };
+	SetConsoleCursorInfo(Handle::OUTPUT, &cursorInfo);
 
-	//m_Thread->EnqueueJob([&]() { Fixing(); });
+	// 폰트 사이즈 조절
+	m_Console_Font_Infoex.dwFontSize = { FontSize.x, FontSize.y };
+	m_Console_Font_Infoex.cbSize = sizeof(m_Console_Font_Infoex);
+	m_Console_Font_Infoex.nFont = 0;
+	m_Console_Font_Infoex.FontFamily = FF_DONTCARE;
+	m_Console_Font_Infoex.FontWeight = FW_NORMAL;
+	wcscpy_s(m_Console_Font_Infoex.FaceName, TEXT("Raster Fonts"));
 
-	if (!m_RunScript->Awake()) { m_RunScript->Remove(); return; }
-
-	ofstream out("Frame.txt");
-	while (isNotDone) {
-		system_clock::time_point start = system_clock::now();
-		/////////////Update/////////////
-
-		isNotDone = m_RunScript->Update();
-		m_Camera->Render();
-
-		out << 1.0f / Time::GetDeltaTime() << '\n';
-
-		////////////////////////////////
-		Time::ExecutionTime = duration<float>(system_clock::now() - start).count() * 1000.0f;
-		if (m_FPS > Time::ExecutionTime) { Time::Delay(m_FPS - Time::ExecutionTime); }
-		Time::DeltaTime = duration<float>(system_clock::now() - start).count();
-	}
-	out.close();
-
-	m_RunScript->Remove();
-
-	ThreadPool::Release();
-	Engine::Release();
-	Camera2D::Release();
-	Keyboard::Release();
-	Color::Release();
+	SetCurrentConsoleFontEx(Handle::OUTPUT, FALSE, &m_Console_Font_Infoex);
 }
 
 #endif // !___ENGINE___

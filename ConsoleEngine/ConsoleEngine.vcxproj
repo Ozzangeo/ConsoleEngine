@@ -138,7 +138,6 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Script.cpp" />
-    <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
@@ -151,7 +150,6 @@
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="ThreadPool.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

@@ -3,23 +3,18 @@
 using namespace std;
 using namespace chrono;
 
-Field2D::Field2D() : m_FieldSize(2048, 2048, 1) {
-	ofs.open("Multi.txt");
-	m_CANVAS = m_FieldSize.x * m_FieldSize.y;
-	m_HalfFieldSize = m_FieldSize.toVector2<int>() * 0.5f;
-	m_Layer = new Layer[static_cast<size_t>(m_FieldSize.z * m_CANVAS)];
-}
+Field2D::Field2D(int RenderThreads) : m_FieldSize(128, 72, 1), RENDER_THREAD_COUNT(RenderThreads) { Setting(); }
+Field2D::Field2D(Vector3<int> Field, int RenderThreads) : m_FieldSize(Field), RENDER_THREAD_COUNT(RenderThreads) { Setting(); }
 Field2D::~Field2D() {
-	if (m_Layer) { delete[] m_Layer; }
-	ofs.close();
+	if (m_Layer) { delete[] m_Layer; m_Layer = nullptr; }
 }
 
 void Field2D::Clear() {
 	for (int i = 0, d = static_cast<int>(m_CANVAS * m_FieldSize.z); i < d; i++) {
-		if(!m_Layer[i].isStatic) { m_Layer[i].color = Color_Black; }
+		if (!m_Layer[i].isStatic) { m_Layer[i].color = Color_LightWhite; }
 	}
 }
-bool Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2<int> ScreenSize, float multiple, float Threads) {
+void Field2D::Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2<int> ScreenSize, float multiple, float Threads) {
 	Vector3<float> Temp;
 	int pos;
 	int temp = static_cast<int>(ScreenSize.y * multiple);
@@ -45,23 +40,16 @@ bool Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2<int> Scr
 			}
 		}
 	}
-
-	return true;
 }
-
 void Field2D::Render(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenSize) {
 	Pos = Pos + m_HalfFieldSize.toVector2<float>() - (ScreenSize.toVector2<float>() * 0.5f);
 	Pos.vround();
 
 	// 멀티 스레딩 출력
-	vector<future<bool>> futures;
-	//                                 v : 스레드 개수
-	for (float i = 0, Threads = 1.0f / 4; i < 1; i += Threads) {
-		futures.emplace_back(Thread->EmplaceJobAndGetFutrue(Merge, this, Screen, Pos.toVector2<int>(), ScreenSize, i, Threads));
+	for (float i = 0, Threads = 1.0f / RENDER_THREAD_COUNT; i < 1; i += Threads) {
+		m_Futures.emplace_back(async(launch::async, Merge, this, Screen, Pos.toVector2<int>(), ScreenSize, i, Threads));
 	}
-	for (auto& f : futures) { f.wait(); }
-
-	ofs << "Cycle End\n";
+	for (auto& f : m_Futures) { f.wait(); }
 
 	// 싱글 스레딩 출력
 	/*Vector3<float> Temp;

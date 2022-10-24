@@ -38,6 +38,7 @@ inline T* GameObject::AddComponent() {
 
 	Component = new T;
 	Component->gameobject = this;
+	Component->scene = this->scene;
 	Component->Awake();
 	m_Components.push_back(Component);
 

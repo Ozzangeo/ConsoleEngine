@@ -12,11 +12,11 @@
 * Color color
 * Time time
 */
+class Scene;
 class GameObject;
 class Component {
 	friend class GameObject;
 protected:
-	// 지금 여기 뭔가 이상함
 	Scene* scene = nullptr;
 	GameObject* gameobject = nullptr;
 	Keyboard keyboard;

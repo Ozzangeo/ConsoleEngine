@@ -11,26 +11,26 @@ private:
 	float speed = 150.0f;
 
 	void Awake() override {
-
+		Pos = &scene->GetGameObject<Camera2D>(L"Camera")->pos;
 	}
 	void Update() override {
-		switch (keyboard.isKey((KeyCode)'w')) {
-		case KeyType_DOWN: {
-			Pos->y += Time::GetDeltaTime() * speed;
-		} break;
-		}
-		switch (keyboard.isKey((KeyCode)'s')) {
-		case KeyType_DOWN: {
+		switch (keyboard.isKey(KeyCode_W)) {
+		case KeyType_HOLD: {
 			Pos->y -= Time::GetDeltaTime() * speed;
 		} break;
 		}
-		switch (keyboard.isKey((KeyCode)'a')) {
-		case KeyType_DOWN: {
+		switch (keyboard.isKey(KeyCode_S)) {
+		case KeyType_HOLD: {
+			Pos->y += Time::GetDeltaTime() * speed;
+		} break;
+		}
+		switch (keyboard.isKey(KeyCode_A)) {
+		case KeyType_HOLD: {
 			Pos->x -= Time::GetDeltaTime() * speed;
 		} break;
 		}
-		switch (keyboard.isKey((KeyCode)'d')) {
-		case KeyType_DOWN: {
+		switch (keyboard.isKey(KeyCode_D)) {
+		case KeyType_HOLD: {
 			Pos->x += Time::GetDeltaTime() * speed;
 		} break;
 		}
@@ -49,6 +49,7 @@ class C : public Scene {
 private:
 	void GameObjects() override {
 		Camera2D* camera2D = AddGameObject<Camera2D>(L"Camera");
+		camera2D->pos = { 0, 4, 0 };
 		camera2D->GetComponent<DefaultComponents::Camera2D>()->SetFieldSize({ 16, 9, 1 });
 		AddGameObject<B>(L"Camera2");
 	}

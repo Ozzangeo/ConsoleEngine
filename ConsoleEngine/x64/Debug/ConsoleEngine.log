@@ -1,3 +1,7 @@
-﻿  DefaultGameObjects.cpp
+﻿  Component.cpp
+  DefaultComponents.cpp
+  DefaultGameObjects.cpp
   Engine2D.cpp
+  GameObject.cpp
+  Scene.cpp
   ConsoleEngine.vcxproj -> F:\Github Project\ConsoleEngine\x64\Debug\ConsoleEngine.lib

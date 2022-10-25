@@ -2,6 +2,7 @@
 #define ___KEYBOARD___
 
 #include "stdafx.h"
+#include "Debug.h"
 
 enum KeyCode {
 	KeyCode_BACK = 0x08,

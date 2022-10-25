@@ -29,7 +29,7 @@ namespace DefaultComponents {
 		
 	public:
 		void SetFieldSize(Vector3<int> Size);
-		void SetScreenSize(Vector3<int> Size);
+		void SetScreenSize(Vector2<int> Size);
 		void SetScreen();
 	};
 }

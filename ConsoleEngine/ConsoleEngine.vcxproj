@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DefaultComponents.cpp" />
     <ClCompile Include="DefaultGameObjects.cpp" />
     <ClCompile Include="Engine2D.cpp" />
@@ -147,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="DefaultComponents.h" />
     <ClInclude Include="DefaultGameObjects.h" />
     <ClInclude Include="Engine2D.h" />

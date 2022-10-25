@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Keyboard.h"
 #include "Color.h"
+#include "Debug.h"
 #include "Time.h"
 #include "DefaultComponents.h"
 #include "DefaultGameObjects.h"
@@ -71,29 +72,31 @@ inline void Engine2D::Run(wstring title, int Frame) {
 		Scene->GameObjects();
 	}
 
-	float time = 0.0f;
+	int fps = 0;
+	float time = -1.0f;
 
-	ofstream DebugFPS("Debug.FPS.txt");
 	while (!isDone) {
 		system_clock::time_point start = system_clock::now();
 		/////////////Update/////////////
 
 		switch (Keyboard::isKey(KeyCode_ESC)) { case KeyType_DOWN: { isDone = true; } break; }
-
+	
 		Scene->Update();
+		
+		// FPS Debug
 		time += Time::DeltaTime;
-
 		if (time >= 1.0f) {
-			DebugFPS << 1 / Time::DeltaTime << "\n";
+			Debug::Log("[FPS] : " + to_string(fps));
 			time -= 1.0f;
+			fps = 0;
 		}
-
+		fps++;
+		
 		////////////////////////////////
 		Time::ExecutionTime = duration<float>(system_clock::now() - start).count() * 1000.0f;
-		if (m_FPS > Time::ExecutionTime) { Time::Delay(m_FPS - Time::ExecutionTime); }
+		if (m_FPS > Time::ExecutionTime) { /*Time::Delay(m_FPS - Time::ExecutionTime);*/ }
 		Time::DeltaTime = duration<float>(system_clock::now() - start).count();
 	}
-	DebugFPS.close();
 
 	Scene->Release();
 }

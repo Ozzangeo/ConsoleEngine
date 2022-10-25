@@ -8,7 +8,7 @@ using namespace std;
 
 class Field2D {
 private:
-	const int RENDER_THREAD_COUNT = 4;
+	const int RENDER_THREAD_COUNT = 2;
 	vector<future<void>> m_Futures;
 
 	Layer* m_Layer = nullptr;

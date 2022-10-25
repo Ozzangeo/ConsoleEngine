@@ -12,4 +12,5 @@ void Engine2D::FontSetting(Vector2<short> FontSize) {
 }
 void Engine2D::Release() {
 	Keyboard::Release();
+	Debug::Release();
 }

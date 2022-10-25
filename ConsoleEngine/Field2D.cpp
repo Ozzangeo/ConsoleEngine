@@ -45,14 +45,14 @@ void Field2D::Render(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenS
 	Pos.vround();
 
 	// 멀티 스레딩 출력
-	for (float i = 0, Threads = 1.0f / RENDER_THREAD_COUNT; i < 1; i += Threads) {
+	/*for (float i = 0, Threads = 1.0f / RENDER_THREAD_COUNT; i < 1; i += Threads) {
 		m_Futures.emplace_back(async(launch::async, Merge, this, Screen, Pos.toVector2<int>(), ScreenSize, i, Threads));
 	}
 	for (auto& f : m_Futures) { f.wait(); }
-	m_Futures.clear();
+	m_Futures.clear();*/
 
 	// 싱글 스레딩 출력
-	/*Vector3<float> Temp;
+	Vector3<float> Temp;
 	int pos = 0;
 	for (int d = 0; d < m_FieldSize.z; d++) {
 		Temp.z = d * static_cast<float>(m_CANVAS);
@@ -68,18 +68,20 @@ void Field2D::Render(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenS
 
 				if (0 <= pos && pos < m_CANVAS) {
 					pos += static_cast<int>(Temp.z);
-					if(m_Layer[pos].color != Color_NULL) { Screen[i].Attributes = m_Layer[pos].color; }
+					if (m_Layer[pos].Color != Color_NULL) { Screen[i].Attributes = m_Layer[pos].Color; }
 				}
 			}
 		}
-	}*/
+	}
 }
 
 void Field2D::ReSize(Vector3<int> FieldSize) {
 	m_FieldSize = FieldSize;
 	m_HalfFieldSize = m_FieldSize.toVector2<int>() * 0.5f;
-	if (m_Layer) { delete[] m_Layer; m_Layer = nullptr; }
-	
 	m_CANVAS = FieldSize.x * FieldSize.y;
-	m_Layer = new Layer[m_FieldSize.z * m_CANVAS];
+	
+	thread([&]() {
+		if (m_Layer) { delete[] m_Layer; m_Layer = nullptr; }
+		m_Layer = new Layer[m_FieldSize.z * m_CANVAS];
+	}).detach();
 }

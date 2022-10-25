@@ -12,6 +12,7 @@ void Field2D::Clear() {
 	for (int i = 0, d = static_cast<int>(m_CANVAS * m_FieldSize.z); i < d; i++) {
 		if (!m_Layer[i].isStatic) { m_Layer[i].Color = Color_White; }
 	}
+	m_Layer[0].Color = Color_Red;
 }
 void Field2D::Merge(Field2D* Field, CHAR_INFO* Screen, Vector2<int> Pos, Vector2<int> ScreenSize, float multiple, float Threads) {
 	Vector3<float> Temp;

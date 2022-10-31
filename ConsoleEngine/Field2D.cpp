@@ -53,10 +53,10 @@ void Field2D::Render(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenS
 	m_Futures.clear();*/
 
 	// 싱글 스레딩 출력
-	Vector3<float> Temp;
+	Vector3<float> Temp = { 0, 0, -m_CANVAS };
 	int pos = 0;
 	for (int d = 0; d < m_FieldSize.z; d++) {
-		Temp.z = d * static_cast<float>(m_CANVAS);
+		Temp.z += static_cast<float>(m_CANVAS);
 
 		for (int y = 0, i = 0; y < ScreenSize.y; y++) {
 			Temp.y = (y + Pos.y) * m_FieldSize.x;

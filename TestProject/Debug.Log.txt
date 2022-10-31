@@ -1,9 +1,8 @@
-[FPS] : 167
-[FPS] : 170
-[FPS] : 171
-[FPS] : 170
+[FPS] : 126
+[FPS] : 134
+[FPS] : 137
 [FPS] : 168
 [FPS] : 170
-[FPS] : 171
+[FPS] : 158
 [ Keyboard ] : Release
 [ Debug ] : Release

@@ -1,4 +1,4 @@
-#include "../ConsoleEngine/Engine2D.h"
+#include "../ConsoleEngine/Engine.h"
 
 using namespace std;
 using namespace chrono;
@@ -63,11 +63,11 @@ private:
 class C : public Scene {
 private:
 	void GameObjects() override {
-		Camera2D* camera2D = AddGameObject<Camera2D>(L"Camera");
-		camera2D->pos = { 0, 4, 0 };
-		auto* a = camera2D->GetComponent<DefaultComponents::Camera2D>();
+		Camera* camera = AddGameObject<Camera>(L"Camera");
+		camera->pos = { 0, 4, 0 };
+		auto* a = camera->GetComponent<DefaultComponents::Camera>();
 		a->SetFieldSize({ 160, 90, 1 });
-		a->SetScreenSize({ 256, 144 });
+		a->SetCameraSize({ 256, 144 });
 
 		AddGameObject<B>(L"Camera2");
 	}
@@ -83,11 +83,11 @@ private:
 // รัวี = 10ms
 
 int main() {
-	Engine2D engine({ 1, 1 });
+	Engine engine;
 
 	engine.Run<C>(L"Engine", 1000);
 
-	Engine2D::Release();
+	Engine::Release();
 
 	return 0;
 }

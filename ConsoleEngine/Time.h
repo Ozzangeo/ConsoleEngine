@@ -4,7 +4,7 @@
 #include "stdafx.h"
 
 class Time {
-	friend class Engine2D;
+	friend class Engine;
 private:
 	static float DeltaTime;
 	static float ExecutionTime;

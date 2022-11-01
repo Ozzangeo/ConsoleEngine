@@ -2,13 +2,13 @@
 #define ___SCENE___
 
 #include "stdafx.h"
-#include "Field2D.h"
+#include "Field.h"
 #include "GameObject.h"
 
 using namespace std;
 
 class Scene {
-	friend class Engine2D;
+	friend class Engine;
 private:
 	list<GameObject*> m_GameObjects;
 

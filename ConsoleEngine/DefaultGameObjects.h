@@ -4,10 +4,10 @@
 #include "stdafx.h"
 #include "GameObject.h"
 #include "DefaultComponents.h"
-#include "Field2D.h"
+#include "Field.h"
 
 namespace DefaultGameObjects {
-	class Camera2D : public GameObject {
+	class Camera : public GameObject {
 	private:
 		void Components() override;
 	public:

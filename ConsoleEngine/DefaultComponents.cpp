@@ -2,44 +2,46 @@
 
 using namespace DefaultComponents;
 
-void Camera2D::Awake() {
-	SetScreenSize({ 128, 72 });
+void Camera::Awake() {
+	SetCameraSize({ 128, 72 });
 }
-void Camera2D::Update() {
+void Camera::Update() {
 	/////////////////// Render ////////////////
-	m_Field.Render(m_Screen, gameobject->pos.toVector2<float>(), m_ScreenSize.toVector2<int>());
-	WriteConsoleOutput(Handle::OUTPUT, m_Screen, m_size, ZERO_POS, &m_rect);
+	Vector2<int> CameraSize = m_CameraSize.toVector2<int>();
+
+	graphic.Merge(m_Screen, gameobject->pos.toVector2<float>(), CameraSize);
+	graphic.Render(m_Screen, CameraSize, m_size, m_rect);
 	///////////////////////////////////////////
 
 	/////////////////// Clear /////////////////
-	for (int i = 0; i < m_ScreenSize.z; i++) {
+	for (int i = 0; i < m_CameraSize.z; i++) {
 		m_Screen[i].Attributes = DEFAULT_BACKGROUND;
 	}
-	m_Field.Clear();
+	graphic.FieldClear();
 	///////////////////////////////////////////
 }
-void Camera2D::Remove() {
+void Camera::Remove() {
 	if (m_Screen) { delete[] m_Screen; m_Screen = nullptr; }
 }
 
-void Camera2D::SetFieldSize(Vector3<int> Size) {
-	m_Field.ReSize(Size);
+void Camera::SetFieldSize(Vector3<int> Size) {
+	graphic.ReSize(Size);
 }
-void Camera2D::SetScreenSize(Vector2<int> Size) {
-	m_ScreenSize = { Size.x, Size.y, Size.x * Size.y };
-	m_HalfScreenSize = m_ScreenSize.toVector2<int>() * 0.5f;
+void Camera::SetCameraSize(Vector2<int> Size) {
+	m_CameraSize = { Size.x, Size.y, Size.x * Size.y };
+	m_HalfScreenSize = m_CameraSize.toVector2<int>() * 0.5f;
 	
-	m_rect = { 0, 0, static_cast<short>(m_ScreenSize.x), static_cast<short>(m_ScreenSize.y) };
-	m_size = { static_cast<short>(m_ScreenSize.x), static_cast<short>(m_ScreenSize.y) };
+	m_rect = { 0, 0, static_cast<short>(m_CameraSize.x), static_cast<short>(m_CameraSize.y) };
+	m_size = { static_cast<short>(m_CameraSize.x), static_cast<short>(m_CameraSize.y) };
 
 	if (m_Screen) { delete[] m_Screen; m_Screen = nullptr; }
-	m_Screen = new CHAR_INFO[static_cast<size_t>(m_ScreenSize.z)];
+	m_Screen = new CHAR_INFO[static_cast<size_t>(m_CameraSize.z)];
 
 	SetScreen();
 
-	for (int i = 0; i < m_ScreenSize.z; i++) { m_Screen[i] = { ' ', DEFAULT_BACKGROUND }; }
+	for (int i = 0; i < m_CameraSize.z; i++) { m_Screen[i] = { ' ', DEFAULT_BACKGROUND }; }
 }
-void Camera2D::SetScreen() {
-	string System = "mode con: cols=" + to_string(m_ScreenSize.x) + " lines=" + to_string(m_ScreenSize.y);
+void Camera::SetScreen() {
+	string System = "mode con: cols=" + to_string(m_CameraSize.x) + " lines=" + to_string(m_CameraSize.y);
 	system(System.c_str());
 }

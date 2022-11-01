@@ -5,6 +5,7 @@
 #include "Keyboard.h"
 #include "Time.h"
 #include "Color.h"
+#include "Graphic.h"
 
 /* [ Component 기본 변수 ]
 * GameObject* gameobject
@@ -19,6 +20,7 @@ class Component {
 protected:
 	Scene* scene = nullptr;
 	GameObject* gameobject = nullptr;
+	Graphic& graphic = Graphic::GetInstance();
 	Keyboard keyboard;
 	Color color;
 	Time time;

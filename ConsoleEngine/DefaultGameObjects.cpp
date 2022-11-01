@@ -2,7 +2,7 @@
 
 using namespace DefaultGameObjects;
 
-void Camera2D::Components() {
+void Camera::Components() {
 	this->isOnceGameObject = true;
-	AddComponent<DefaultComponents::Camera2D>();
+	AddComponent<DefaultComponents::Camera>();
 }

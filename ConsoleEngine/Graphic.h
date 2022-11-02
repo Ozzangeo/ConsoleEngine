@@ -2,33 +2,44 @@
 #define ___GRAPHIC___
 
 #include "stdafx.h"
-#include "Field.h"
+#include "Vector.h"
+#include "Color.h"
 #include "Debug.h"
 
-class Graphic : public Field {
+namespace DefaultComponents { class Camera; }
+
+class Graphic {
+	friend class Engine;
+	friend class Component;
+	friend class DefaultComponents::Camera;
 private:
-	const COORD ZeroPos;
-
-	const int BufferSize;
-	bool m_Index;
-	HANDLE* m_Screen;
-
-	void ScreenFlipping();
-
 	Graphic();
+
+	Vector4 m_ScreenSize;
+	Vector4 m_HalfScreenSize;
+
+	COORD m_size;
+	SMALL_RECT m_rect;
+	CHAR_INFO* m_Screen;
+	int* m_Depth;
+
+	const WORD DEFAULT_BACKGROUND = Color_LightWhite;
+	const CHAR_INFO DEFAULT_SCREEN = { ' ', DEFAULT_BACKGROUND };
+	const int DEFAULT_DEPTH = -100;
+	const COORD ZERO_POS = { 0, 0 };
 
 	static Graphic* m_Instance;
 
+	inline void SetScreenScale(const COORD& Scale);
+	void SetScreenSize(const COORD& Size);
+	void SetScreen();
+
+	void Render();
+	static void Release();
+	static Graphic& GetInstance();
+
 public:
 	~Graphic();
-
-	static Graphic& GetInstance();
-	static void Release();
-	
-	void SetFontSize(COORD FontSize);
-
-	void Merge(CHAR_INFO* Screen, Vector4 Pos, Vector4 ScreenSize);
-	void Render(CHAR_INFO* Screen, const Vector4& ScreenSize, const COORD& size, SMALL_RECT& rect);
 };
 
 #endif // !___GRAPHIC___

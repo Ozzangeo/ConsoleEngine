@@ -2,7 +2,6 @@
 #define ___SCENE___
 
 #include "stdafx.h"
-#include "Field.h"
 #include "GameObject.h"
 
 using namespace std;

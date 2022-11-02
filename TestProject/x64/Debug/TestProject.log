@@ -1,3 +1,0 @@
-﻿  main.cpp
-C:\Users\My\Documents\GitHub\ConsoleEngine\TestProject\main.cpp(92,8): warning C4091: '': 변수를 선언하지 않으면 '__m128' 왼쪽은 무시됩니다.
-  TestProject.vcxproj -> C:\Users\My\Documents\GitHub\ConsoleEngine\x64\Debug\TestProject.exe

@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "GameObject.h"
 #include "DefaultComponents.h"
-#include "Field.h"
 
 namespace DefaultGameObjects {
 	class Camera : public GameObject {

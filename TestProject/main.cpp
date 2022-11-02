@@ -7,9 +7,9 @@ using namespace DefaultGameObjects;
 // Component 수정하기
 class CameraMover : public Component {
 private:
-	Vector4* Pos;
+	Vector4* Pos = nullptr;
 	float speed = 150.0f;
-	float byte = 0;
+	BYTE byte = 40;
 
 	void Awake() override {
 		Pos = &scene->GetGameObject(L"Camera")->pos;
@@ -39,16 +39,16 @@ private:
 		switch (keyboard.isKey(KeyCode_1))
 		{
 		case KeyType_HOLD: {
-			if (byte > 0) { byte -= Time::GetDeltaTime() * 100.0f; }
+			if (byte > 0) { byte -= Time::GetDeltaTime() * 200.0f; }
  		} break;
 		}
 		switch (keyboard.isKey(KeyCode_2))
 		{
 		case KeyType_HOLD: {
-			if (byte < 255) { byte += Time::GetDeltaTime() * 100.0f; }
+			if (byte < 255) { byte += Time::GetDeltaTime() * 200.0f; }
 		} break;
 		}
-		color.SetColor({ byte, byte, byte }, 7);
+		color.SetColor({ byte, 10, 20 }, 7);
 	}
 	void Remove() override {
 
@@ -64,33 +64,23 @@ class C : public Scene {
 private:
 	void GameObjects() override {
 		Camera* camera = AddGameObject<Camera>(L"Camera");
-		camera->pos = { 0, 4, 0 };
+		camera->pos = { 0, 0, 0 };
 		auto* a = camera->GetComponent<DefaultComponents::Camera>();
-		a->SetFieldSize({ 160, 90 }, 1);
 		a->SetCameraSize({ 256, 144 });
-
-		// w같은 버그
-		system("mode con: cols=256 lines=144");
+		a->SetCameraScale({ 4, 4 });
 
 		AddGameObject<B>(L"Camera2");
 	}
 };
 
-// hotspot 최적화 아이디어
-// 출력을 스레드로 나누어서 비동기화 출력을 한다?
-// 문제점.. 만약 출력이 컴포넌트보다 느려서 출력하는 도중에 Screen이 바뀐다면?
-
-// Camera : Write..() 필드가 256x144일 때, 약 6ms ( hotspot )
-// Field2D : Merge() 필드가 160x90x20일 때, 약 3ms
-// 이외 : 약 1ms..
-// 총합 = 10ms
+// 해야할거
+// 그래픽 클래스에 여러 도형 함수 추가하기
+// 딱히 이거말고 없는듯..?
 
 int main() {
 	Engine engine;
 
 	engine.Run<C>(L"Engine", 1000);
-
-	__m128;
 
 	Engine::Release();
 

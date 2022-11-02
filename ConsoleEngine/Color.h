@@ -23,14 +23,24 @@ enum EnumColor {
 	Color_LightWhite = 240,
 	Color_NULL = 255
 };
+
+class Rgb255 {
+public:
+	BYTE r;
+	BYTE g;
+	BYTE b;
+
+	Rgb255() : r(0), g(0), b(0) {}
+	Rgb255(BYTE _r, BYTE _g, BYTE _b) : r(_r), g(_g), b(_b) {}
+};
+
 class Color {
 private:
 	CONSOLE_SCREEN_BUFFER_INFOEX m_Info;
 public:
 	Color();
 
-	bool SetColor(Vector4 _RGB, int num);
-	Vector4 GetColor(int num);
+	bool SetColor(Rgb255 _RGB, int num);
 };
 
 #endif // !___ConsoleColor___

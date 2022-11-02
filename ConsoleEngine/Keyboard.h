@@ -136,8 +136,6 @@ private:
 	static void Release();
 
 public:
-	~Keyboard();
-
 	static KeyType isKey(KeyCode code);
 
 	// Keyboard Beta 기능들 ( 불완전함 )

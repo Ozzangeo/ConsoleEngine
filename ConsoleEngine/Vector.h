@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-class __declspec(align(16)) Vector4 {
+class Vector4 {
 public:
 	union { float x; float r; };
 	union { float y; float g; };
@@ -91,7 +91,6 @@ public:
 	inline Vector4 vround() {
 		return *this = { round(this->x), round(this->y), round(this->z), round(this->w) };                  
 	}
-
 };
 
 #endif // !___VECTOR___

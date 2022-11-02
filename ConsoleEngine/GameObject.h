@@ -21,18 +21,14 @@ protected:
 public:
 	Scene* scene = nullptr;
 	wstring name;
-	Vector4 pos = { 0, 0, 0, 0 };
+	Vector4 pos;
 
-	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true>
-	T* AddComponent();
-	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true>
-	T* GetComponent();
-	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true>
-	bool RemoveComponent();
+	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> T* AddComponent();
+	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> T* GetComponent();
+	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> bool RemoveComponent();
 };
 
-template<typename T, enable_if_t<is_base_of_v<Component, T>, bool>>
-inline T* GameObject::AddComponent() {
+template<typename T, enable_if_t<is_base_of_v<Component, T>, bool>> inline T* GameObject::AddComponent() {
 	Component* Component = GetComponent<T>();
 	if (Component) { return dynamic_cast<T*>(Component); }
 
@@ -44,16 +40,14 @@ inline T* GameObject::AddComponent() {
 
 	return dynamic_cast<T*>(Component);
 }
-template<typename T, enable_if_t<is_base_of_v<Component, T>, bool>>
-inline T* GameObject::GetComponent() {
+template<typename T, enable_if_t<is_base_of_v<Component, T>, bool>> inline T* GameObject::GetComponent() {
 	for (auto& item : m_Components) {
 		if (typeid(*item) == typeid(T)) { return dynamic_cast<T*>(item); }
 	}
 
 	return nullptr;
 }
-template<typename T, enable_if_t<is_base_of_v<Component, T>, bool>>
-inline bool GameObject::RemoveComponent() {
+template<typename T, enable_if_t<is_base_of_v<Component, T>, bool>> inline bool GameObject::RemoveComponent() {
 	T* component = GetComponent<T>();
 	if (!component) { return false; }
 

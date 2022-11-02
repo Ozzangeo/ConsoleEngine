@@ -6,12 +6,14 @@
 using namespace std;
 
 class Debug {
+	friend class Engine;
 private:
 	static ofstream debug;
+	static void Release();
+
 public:
 	static void Log(string log);
 
-	static void Release();
 };
 
 #endif // !___DEBUG___

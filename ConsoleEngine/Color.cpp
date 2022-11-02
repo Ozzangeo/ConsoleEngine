@@ -4,7 +4,7 @@ Color::Color() {
 	m_Info.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
 	GetConsoleScreenBufferInfoEx(Handle::OUTPUT, &m_Info);
 }
-bool Color::SetColor(Vector4 _RGB, int num) {
+bool Color::SetColor(Rgb255 _RGB, int num) {
 	if (0 > num || num > 16) { return false; }
 	GetConsoleScreenBufferInfoEx(Handle::OUTPUT, &m_Info);
 
@@ -13,16 +13,8 @@ bool Color::SetColor(Vector4 _RGB, int num) {
 	m_Info.srWindow.Bottom += 1;
 	/////////////////////////////////////////////////
 
-	m_Info.ColorTable[num] = RGB(_RGB.GetX<BYTE>(), _RGB.GetY<BYTE>(), _RGB.GetZ<BYTE>());
+	m_Info.ColorTable[num] = RGB(_RGB.r, _RGB.g, _RGB.b);
 
 	SetConsoleScreenBufferInfoEx(Handle::OUTPUT, &m_Info);
 	return true;
-}
-
-Vector4 Color::GetColor(int num) {
-	if (0 > num || num > 16) { return { 0, 0, 0, 1 }; }
-	return { static_cast<float>(m_Info.ColorTable[num] & 0x0000ff),
-			 static_cast<float>(m_Info.ColorTable[num] & 0x00ff00),
-			 static_cast<float>(m_Info.ColorTable[num] & 0xff0000),
-			 1 };
 }

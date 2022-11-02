@@ -1,8 +1,6 @@
 #include "Keyboard.h"
 
 bool* Keyboard::isHold = new bool[256]{ false, };
-
-Keyboard::~Keyboard() {}
 KeyType Keyboard::isKey(KeyCode code) {
 	bool Key = GetAsyncKeyState(code);
 

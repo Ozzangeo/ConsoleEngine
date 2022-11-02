@@ -10,16 +10,15 @@ class Field {
 protected:
 	Layer* m_Layer = nullptr;
 
-	Vector3<int> m_FieldSize;
-	Vector2<int> m_HalfFieldSize;
-	int m_CANVAS;
+	Vector4 m_FieldSize;
+	Vector4 m_HalfFieldSize;
 	
 public:
 	Field();
 	virtual ~Field();
 
 	void FieldClear();
-	void ReSize(Vector3<int> FieldSize);
+	void ReSize(COORD FieldSize, int Depth);
 };
 
 #endif // !___FIELD___

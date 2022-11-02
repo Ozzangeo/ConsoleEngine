@@ -22,6 +22,8 @@
 #include <list>
 #include <queue>
 
+#include <xmmintrin.h>
+
 namespace Handle {
 	const HANDLE OUTPUT = GetStdHandle(STD_OUTPUT_HANDLE);
 	const HANDLE INPUT = GetStdHandle(STD_INPUT_HANDLE);

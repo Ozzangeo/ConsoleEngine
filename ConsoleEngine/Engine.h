@@ -18,8 +18,6 @@ private:
 	float m_FPS;
 	bool isDone;
 
-	CONSOLE_FONT_INFOEX m_Console_Font_Infoex;
-
 public:
 	Engine();
 

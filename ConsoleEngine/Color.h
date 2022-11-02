@@ -29,8 +29,8 @@ private:
 public:
 	Color();
 
-	bool SetColor(Vector3<BYTE> _RGB, int num);
-	Vector3<DWORD> GetColor(int num);
+	bool SetColor(Vector4 _RGB, int num);
+	Vector4 GetColor(int num);
 };
 
 #endif // !___ConsoleColor___

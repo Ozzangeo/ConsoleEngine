@@ -25,10 +25,10 @@ public:
 	static Graphic& GetInstance();
 	static void Release();
 	
-	void SetFontSize(Vector2<short> FontSize);
+	void SetFontSize(COORD FontSize);
 
-	void Merge(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenSize);
-	void Render(CHAR_INFO* Screen, const Vector2<int>& ScreenSize, const COORD& size, SMALL_RECT& rect);
+	void Merge(CHAR_INFO* Screen, Vector4 Pos, Vector4 ScreenSize);
+	void Render(CHAR_INFO* Screen, const Vector4& ScreenSize, const COORD& size, SMALL_RECT& rect);
 };
 
 #endif // !___GRAPHIC___

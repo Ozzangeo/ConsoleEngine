@@ -9,7 +9,6 @@ void Graphic::ScreenFlipping() {
 Graphic::Graphic() : BufferSize(2), ZeroPos({ 0, 0 }) {
 	m_Screen = new HANDLE[BufferSize];
 	CONSOLE_CURSOR_INFO cci = { 1, false };
-	DWORD prevMode;
 
 	m_Index = 0;
 
@@ -18,10 +17,6 @@ Graphic::Graphic() : BufferSize(2), ZeroPos({ 0, 0 }) {
 		
 		// 커서 보이기 여부
 		SetConsoleCursorInfo(m_Screen[i], &cci);
-
-		// 마우스 입력 금지
-		GetConsoleMode(m_Screen[i], &prevMode);
-		SetConsoleMode(m_Screen[i], prevMode & ~ENABLE_QUICK_EDIT_MODE);
 	}
 	SetFontSize({ 1, 1 });
 }
@@ -38,9 +33,9 @@ void Graphic::Release() {
 	Debug::Log("[ Graphic ] : Release");
 }
 
-void Graphic::SetFontSize(Vector2<short> FontSize) {
+void Graphic::SetFontSize(COORD FontSize) {
 	CONSOLE_FONT_INFOEX cfi;
-	cfi.dwFontSize = { FontSize.x, FontSize.y };
+	cfi.dwFontSize = { FontSize.X, FontSize.Y };
 	cfi.cbSize = sizeof(cfi);
 	cfi.nFont = 0;
 	cfi.FontFamily = FF_DONTCARE;
@@ -52,14 +47,14 @@ void Graphic::SetFontSize(Vector2<short> FontSize) {
 	}
 }
 
-void Graphic::Merge(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenSize) {
-	Pos = Pos + m_HalfFieldSize.toVector2<float>() - (ScreenSize.toVector2<float>() * 0.5f);
-	Pos.vround();
+void Graphic::Merge(CHAR_INFO* Screen, Vector4 Pos, Vector4 ScreenSize) {
+	Pos = (Pos + m_HalfFieldSize - (ScreenSize * 0.5f)).vround();
 
-	Vector3<float> Temp = { 0, 0, static_cast<float>(-m_CANVAS) };
+	Vector4 Temp = { 0, 0, -m_FieldSize.w, 0 };
 	int pos = 0;
+
 	for (int d = 0; d < m_FieldSize.z; d++) {
-		Temp.z += static_cast<float>(m_CANVAS);
+		Temp.z += m_FieldSize.w;
 
 		for (int y = 0, i = 0; y < ScreenSize.y; y++) {
 			Temp.y = (y + Pos.y) * m_FieldSize.x;
@@ -70,7 +65,7 @@ void Graphic::Merge(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenSi
 				if (0 > Temp.x || Temp.x >= m_FieldSize.x) { continue; }
 				pos = static_cast<int>(Temp.y + Temp.x);
 
-				if (0 <= pos && pos < m_CANVAS) {
+				if (0 <= pos && pos < m_FieldSize.w) {
 					pos += static_cast<int>(Temp.z);
 					if (m_Layer[pos].Color != Color_NULL) { Screen[i].Attributes = m_Layer[pos].Color; }
 				}
@@ -78,7 +73,7 @@ void Graphic::Merge(CHAR_INFO* Screen, Vector2<float> Pos, Vector2<int> ScreenSi
 		}
 	}
 }
-void Graphic::Render(CHAR_INFO* Screen, const Vector2<int>& ScreenSize, const COORD& size, SMALL_RECT& rect) {
+void Graphic::Render(CHAR_INFO* Screen, const Vector4& ScreenSize, const COORD& size, SMALL_RECT& rect) {
 	WriteConsoleOutput(m_Screen[m_Index], Screen, size, ZeroPos, &rect);
 
 	ScreenFlipping();

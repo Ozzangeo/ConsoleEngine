@@ -10,8 +10,8 @@
 namespace DefaultComponents {
 	class Camera : public Component {
 	private:
-		Vector3<int> m_CameraSize;
-		Vector2<int> m_HalfScreenSize;
+		Vector4 m_CameraSize;
+		Vector4 m_HalfScreenSize;
 
 		// WriteConsoleOutput에 쓰는 용도
 		COORD m_size;
@@ -26,8 +26,8 @@ namespace DefaultComponents {
 		void Remove() override;
 		
 	public:
-		void SetFieldSize(Vector3<int> Size);
-		void SetCameraSize(Vector2<int> Size);
+		void SetFieldSize(COORD Size, int Depth);
+		void SetCameraSize(COORD Size);
 		void SetScreen();
 	};
 }

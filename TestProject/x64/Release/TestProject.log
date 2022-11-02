@@ -1,5 +1,7 @@
 ﻿  main.cpp
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(1094,5): error MSB6006: "link.exe"이(가) 종료되었습니다(코드: 1120).
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: __cdecl Camera2D::Camera2D(class Field2D *)" (??0Camera2D@@QEAA@PEAVField2D@@@Z)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: __cdecl Engine::Engine(class Camera2D *)" (??0Engine@@QEAA@PEAVCamera2D@@@Z)
-C:\Users\My\Documents\GitHub\ConsoleEngine\x64\Release\TestProject.exe : fatal error LNK1120: 2개의 확인할 수 없는 외부 참조입니다.
+  코드를 생성하고 있습니다.
+  29 of 482 functions ( 6.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  코드를 생성했습니다.
+  TestProject.vcxproj -> C:\Users\My\Documents\GitHub\ConsoleEngine\x64\Release\TestProject.exe

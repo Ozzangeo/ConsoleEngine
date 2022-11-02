@@ -12,8 +12,7 @@ private:
 public:
 	Layer();
 	Layer(WORD _color, bool _isStatic);
-	~Layer();
-	
+
 	WORD Color;
 	bool isStatic;
 

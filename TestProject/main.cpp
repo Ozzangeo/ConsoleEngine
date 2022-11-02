@@ -7,9 +7,9 @@ using namespace DefaultGameObjects;
 // Component 수정하기
 class CameraMover : public Component {
 private:
-	Vector3<float>* Pos;
+	Vector4* Pos;
 	float speed = 150.0f;
-	BYTE byte = 0;
+	float byte = 0;
 
 	void Awake() override {
 		Pos = &scene->GetGameObject(L"Camera")->pos;
@@ -39,13 +39,13 @@ private:
 		switch (keyboard.isKey(KeyCode_1))
 		{
 		case KeyType_HOLD: {
-			if (byte > 0) { byte--; }
+			if (byte > 0) { byte -= Time::GetDeltaTime() * 100.0f; }
  		} break;
 		}
 		switch (keyboard.isKey(KeyCode_2))
 		{
 		case KeyType_HOLD: {
-			if (byte < 255) { byte++; }
+			if (byte < 255) { byte += Time::GetDeltaTime() * 100.0f; }
 		} break;
 		}
 		color.SetColor({ byte, byte, byte }, 7);
@@ -66,8 +66,11 @@ private:
 		Camera* camera = AddGameObject<Camera>(L"Camera");
 		camera->pos = { 0, 4, 0 };
 		auto* a = camera->GetComponent<DefaultComponents::Camera>();
-		a->SetFieldSize({ 160, 90, 1 });
+		a->SetFieldSize({ 160, 90 }, 1);
 		a->SetCameraSize({ 256, 144 });
+
+		// w같은 버그
+		system("mode con: cols=256 lines=144");
 
 		AddGameObject<B>(L"Camera2");
 	}
@@ -86,6 +89,8 @@ int main() {
 	Engine engine;
 
 	engine.Run<C>(L"Engine", 1000);
+
+	__m128;
 
 	Engine::Release();
 

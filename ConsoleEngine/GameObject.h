@@ -21,7 +21,7 @@ protected:
 public:
 	Scene* scene = nullptr;
 	wstring name;
-	Vector3<float> pos = { 0, 0, 0 };
+	Vector4 pos = { 0, 0, 0, 0 };
 
 	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true>
 	T* AddComponent();

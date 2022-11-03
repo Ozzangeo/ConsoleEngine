@@ -76,9 +76,6 @@ private:
 	}
 };
 
-// 그 문제의 코드는
-// Graphic.cpp 파일에 들어있습니다 (Render함수, SetScreenSize함수)
-
 int main() {
 	Engine engine;
 

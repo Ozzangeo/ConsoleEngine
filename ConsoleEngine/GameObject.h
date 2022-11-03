@@ -21,7 +21,10 @@ protected:
 public:
 	Scene* scene = nullptr;
 	wstring name;
+
 	Vector4 pos;
+	Vector4 scale;
+	Vector4 rotate;
 
 	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> T* AddComponent();
 	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> T* GetComponent();

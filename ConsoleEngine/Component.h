@@ -7,14 +7,16 @@
 #include "Color.h"
 #include "Graphic.h"
 
+class Scene;
+class GameObject;
 /* [ Component 기본 변수 ]
+* Scene* scene
 * GameObject* gameobject
 * Keyboard keyboard
+* Graphic graphic
 * Color color
 * Time time
 */
-class Scene;
-class GameObject;
 class Component {
 	friend class GameObject;
 protected:

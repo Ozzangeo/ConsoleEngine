@@ -6,6 +6,8 @@
 #include "Color.h"
 #include "Debug.h"
 
+using namespace std;
+
 namespace DefaultComponents { class Camera; }
 
 class Graphic {
@@ -22,9 +24,14 @@ private:
 
 	COORD m_size;
 	SMALL_RECT m_rect;
+
+#if defined(DEBUG_MODE)
+	vector<CHAR_INFO> m_vScreen;
+	vector<int> m_vDepth;
+#else
 	CHAR_INFO* m_Screen;
 	int* m_Depth;
-
+#endif
 	const WORD DEFAULT_BACKGROUND = Color_LightWhite;
 	const CHAR_INFO DEFAULT_SCREEN = { ' ', DEFAULT_BACKGROUND };
 	const int DEFAULT_DEPTH = -100;
@@ -44,9 +51,15 @@ private:
 
 public:
 	void Pixel(Vector4 pos, EnumColor color);
+	void Pixel(Vector4 pos, float depth, EnumColor color);
 	void Fill(Vector4 pos, Vector4 pos2, EnumColor color);
 	void Line(Vector4 pos, Vector4 pos2, EnumColor color);
+	void Line(Vector4 pos, Vector4 pos2, float depth, EnumColor color);
 	void Circle(Vector4 pos, EnumColor color, INT radius, INT curvature);
+
+	// NotSafe 시리즈 ( if문이 2개 생략되어 살짝 더 빠름 )
+	void NotSafePixel(const Vector4& pos, const EnumColor& color);
+	void NotSafeFill(Vector4 pos, Vector4 pos2, EnumColor color);
 };
 
 #endif // !___GRAPHIC___

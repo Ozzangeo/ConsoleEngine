@@ -1,0 +1,8 @@
+[FPS] : 293
+[FPS] : 300
+[FPS] : 339
+[FPS] : 335
+[FPS] : 302
+[ Keyboard ] : Release
+[ Graphic ] : Release
+[ Debug ] : Release

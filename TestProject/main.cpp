@@ -50,7 +50,7 @@ private:
 		}
 		color.SetColor({ static_cast<BYTE>(byte), 10, 20 }, 7);
 		graphic.Fill({ -10, byte, 0 }, { 10, 0, 0 }, Color_White);
-		graphic.Line({ -10, byte, 1 }, { -30, 0, 0 }, Color_LightBlue);
+		graphic.Line({-10, byte, 1}, {-30, 0, 0}, Color_LightBlue);
 		graphic.Circle({ 0, 0, 4 }, Color_LightGreen, byte, 0);
 	}
 	void Remove() override {
@@ -76,9 +76,8 @@ private:
 	}
 };
 
-// 해야할거
-// 그래픽 클래스에 여러 도형 함수 추가하기
-// 딱히 이거말고 없는듯..?
+// 그 문제의 코드는
+// Graphic.cpp 파일에 들어있습니다 (Render함수, SetScreenSize함수)
 
 int main() {
 	Engine engine;

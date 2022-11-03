@@ -1,12 +1,12 @@
 ﻿  Color.cpp
   Component.cpp
+  Debug.cpp
   DefaultComponents.cpp
   DefaultGameObjects.cpp
   Engine.cpp
-  Field.cpp
   GameObject.cpp
   Graphic.cpp
-  Layer.cpp
+  Keyboard.cpp
   Scene.cpp
   Time.cpp
   Vector.cpp

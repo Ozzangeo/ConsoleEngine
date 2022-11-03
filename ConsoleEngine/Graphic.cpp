@@ -44,8 +44,10 @@ void Graphic::SetScreenSize(const COORD& Size) {
 	if (m_Screen) { delete[] m_Screen; m_Screen = nullptr; }
 	if (m_Depth) { delete[] m_Depth; m_Depth = nullptr; }
 
-	m_Screen = new CHAR_INFO[m_ScreenSize.GetZ<size_t>()];
-	m_Depth = new int[m_ScreenSize.GetZ<size_t>()];
+	size_t length = (round(m_ScreenSize.x * m_ScreenSize.y));
+
+	m_Screen = new CHAR_INFO[length];
+	m_Depth = new int[length];
 
 	// √ ±‚»≠
 	for (int i = 0; i < m_ScreenSize.z; i++) {
@@ -131,6 +133,9 @@ void Graphic::Fill(Vector4 pos, Vector4 pos2, EnumColor color) {
 	}
 }
 void Graphic::Line(Vector4 pos, Vector4 pos2, EnumColor color) {
+	pos.vround();
+	pos2.vround();
+	
 	INT counter = 0;
 
 	COORD addr = { 0, 0 };
@@ -152,11 +157,11 @@ void Graphic::Line(Vector4 pos, Vector4 pos2, EnumColor color) {
 		for (INT i = 0; i < d.x; i++) {
 			pos.x += addr.X;
 
-			counter += d.y;
+			counter += static_cast<int>(d.y);
 
 			if (counter >= d.x) {
 				pos.y += addr.Y;
-				counter -= d.x;
+				counter -= static_cast<int>(d.x);
 			}
 			Pixel(pos, color);
 		}
@@ -165,17 +170,19 @@ void Graphic::Line(Vector4 pos, Vector4 pos2, EnumColor color) {
 		for (INT i = 0; i < d.y; i++) {
 			pos.y += addr.Y;
 
-			counter += d.x;
+			counter += static_cast<int>(d.x);
 
 			if (counter >= d.y) {
 				pos.x += addr.X;
-				counter -= d.y;
+				counter -= static_cast<int>(d.y);
 			}
 			Pixel(pos, color);
 		}
 	}
 }
 void Graphic::Circle(Vector4 pos, EnumColor color, INT radius, INT curvature) {
+	pos.vround();
+
 	Vector4 tp = { 0, static_cast<float>(radius), 0 };
 	INT d = 3 - (2 * radius);
 
@@ -188,9 +195,9 @@ void Graphic::Circle(Vector4 pos, EnumColor color, INT radius, INT curvature) {
 
 		if (d > 0) {
 			tp.y--;
-			d += 4 * (tp.x - tp.y) + curvature;
+			d += static_cast<int>(4 * (tp.x - tp.y) + curvature);
 		}
-		else { d += (4 * tp.x) + curvature; }
+		else { d += static_cast<int>((4 * tp.x) + curvature); }
 
 		DrawCircle(pos, tp, color);
 	}

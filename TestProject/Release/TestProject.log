@@ -1,32 +1,7 @@
 ﻿  main.cpp
-F:\Github Project\ConsoleEngine\ConsoleEngine\Scene.h(35,1): warning C4316: 'DefaultGameObjects::Camera': 힙에 할당된 개체가 16에 맞추어져 있지 않을 수도 있습니다
-F:\Github Project\ConsoleEngine\TestProject\main.cpp(66): message : 컴파일되는 함수 템플릿 인스턴스화 'T *Scene::AddGameObject<DefaultGameObjects::Camera,true>(std::wstring)'에 대한 참조를 확인하세요.
-          with
-          [
-              T=DefaultGameObjects::Camera
-          ]
-F:\Github Project\ConsoleEngine\ConsoleEngine\Scene.h(35,1): warning C4316: 'B': 힙에 할당된 개체가 16에 맞추어져 있지 않을 수도 있습니다
-F:\Github Project\ConsoleEngine\TestProject\main.cpp(75): message : 컴파일되는 함수 템플릿 인스턴스화 'T *Scene::AddGameObject<B,true>(std::wstring)'에 대한 참조를 확인하세요.
-          with
-          [
-              T=B
-          ]
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: virtual void __thiscall DefaultGameObjects::Camera::Components(void)" (?Components@Camera@DefaultGameObjects@@EAEXXZ)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: static float __cdecl Time::GetDeltaTime(void)" (?GetDeltaTime@Time@@SAMXZ)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: void __thiscall DefaultComponents::Camera::SetCameraSize(struct _COORD)" (?SetCameraSize@Camera@DefaultComponents@@QAEXU_COORD@@@Z)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: void __thiscall DefaultComponents::Camera::SetFieldSize(struct _COORD,int)" (?SetFieldSize@Camera@DefaultComponents@@QAEXU_COORD@@H@Z)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: bool __thiscall Color::SetColor(class Vector4,int)" (?SetColor@Color@@QAE_NVVector4@@H@Z)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: __thiscall Color::Color(void)" (??0Color@@QAE@XZ)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: class GameObject * __thiscall Scene::GetGameObject(class std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >)" (?GetGameObject@Scene@@QAEPAVGameObject@@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@@Z)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: void __thiscall Scene::Release(void)" (?Release@Scene@@AAEXXZ)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: void __thiscall Scene::Update(void)" (?Update@Scene@@AAEXXZ)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: void __thiscall Scene::Awake(void)" (?Awake@Scene@@AAEXXZ)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: static float Time::DeltaTime" (?DeltaTime@Time@@0MA)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: static float Time::ExecutionTime" (?ExecutionTime@Time@@0MA)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: static class Graphic & __cdecl Graphic::GetInstance(void)" (?GetInstance@Graphic@@SAAAV1@XZ)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: static enum KeyType __cdecl Keyboard::isKey(enum KeyCode)" (?isKey@Keyboard@@SA?AW4KeyType@@W4KeyCode@@@Z)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: __thiscall Keyboard::~Keyboard(void)" (??1Keyboard@@QAE@XZ)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: static void __cdecl Debug::Log(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?Log@Debug@@SAXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: static void __cdecl Engine::Release(void)" (?Release@Engine@@SAXXZ)
-main.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: __thiscall Engine::Engine(void)" (??0Engine@@QAE@XZ)
-F:\Github Project\ConsoleEngine\Release\TestProject.exe : fatal error LNK1120: 18개의 확인할 수 없는 외부 참조입니다.
+  코드를 생성하고 있습니다.
+  5 of 459 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    3 functions had inline decision re-evaluated but remain unchanged
+  코드를 생성했습니다.
+  TestProject.vcxproj -> F:\Github Project\ConsoleEngine\Release\TestProject.exe

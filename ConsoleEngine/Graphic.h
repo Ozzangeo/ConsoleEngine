@@ -14,7 +14,9 @@ class Graphic {
 	friend class DefaultComponents::Camera;
 private:
 	Graphic();
+	~Graphic();
 
+	Vector4* CameraPos;
 	Vector4 m_ScreenSize;
 	Vector4 m_HalfScreenSize;
 
@@ -34,12 +36,17 @@ private:
 	void SetScreenSize(const COORD& Size);
 	void SetScreen();
 
+	inline void DrawCircle(Vector4& pos, Vector4& pos2, EnumColor& color);
+
 	void Render();
 	static void Release();
 	static Graphic& GetInstance();
 
 public:
-	~Graphic();
+	void Pixel(Vector4 pos, EnumColor color);
+	void Fill(Vector4 pos, Vector4 pos2, EnumColor color);
+	void Line(Vector4 pos, Vector4 pos2, EnumColor color);
+	void Circle(Vector4 pos, EnumColor color, INT radius, INT curvature);
 };
 
 #endif // !___GRAPHIC___

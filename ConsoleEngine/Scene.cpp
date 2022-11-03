@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 void Scene::Awake() {
-
+	
 }
 void Scene::Update() {
 	for (auto& item : m_GameObjects) {

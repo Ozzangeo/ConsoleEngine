@@ -9,7 +9,7 @@ class CameraMover : public Component {
 private:
 	Vector4* Pos = nullptr;
 	float speed = 150.0f;
-	BYTE byte = 40;
+	float byte = 40;
 
 	void Awake() override {
 		Pos = &scene->GetGameObject(L"Camera")->pos;
@@ -45,10 +45,13 @@ private:
 		switch (keyboard.isKey(KeyCode_2))
 		{
 		case KeyType_HOLD: {
-			if (byte < 255) { byte += Time::GetDeltaTime() * 200.0f; }
+			if (byte < 254) { byte += Time::GetDeltaTime() * 200.0f; }
 		} break;
 		}
-		color.SetColor({ byte, 10, 20 }, 7);
+		color.SetColor({ static_cast<BYTE>(byte), 10, 20 }, 7);
+		graphic.Fill({ -10, byte, 0 }, { 10, 0, 0 }, Color_White);
+		graphic.Line({ -10, byte, 1 }, { -30, 0, 0 }, Color_LightBlue);
+		graphic.Circle({ 0, 0, 4 }, Color_LightGreen, byte, 0);
 	}
 	void Remove() override {
 

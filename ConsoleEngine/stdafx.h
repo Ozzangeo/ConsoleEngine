@@ -29,4 +29,11 @@ namespace Handle {
 	const HANDLE INPUT = GetStdHandle(STD_INPUT_HANDLE);
 };
 
+template<typename T>
+void Change(T* a, T* b) {
+	T temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
 #endif // !___STDAFX___

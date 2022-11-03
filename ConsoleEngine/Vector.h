@@ -5,10 +5,10 @@
 
 class Vector4 {
 public:
-	union { float x; float r; };
-	union { float y; float g; };
-	union { float z; float b; };
-	union { float w; float a; };
+	float x;
+	float y;
+	float z;
+	float w;
 
 	Vector4() : x(0), y(0), z(0), w(0) {}
 	Vector4(float _x, float _y, float _z, float _w = 0) : x(_x), y(_y), z(_z), w(_w) {}
@@ -88,8 +88,14 @@ public:
 	inline T GetZ() { return static_cast<T>(this->z); }
 	template<typename T>
 	inline T GetW() { return static_cast<T>(this->w); }
+
 	inline Vector4 vround() {
 		return *this = { round(this->x), round(this->y), round(this->z), round(this->w) };                  
+	}
+	inline void Change(Vector4* other) {
+		Vector4 Temp = *other;
+		*other = *this;
+		*this = Temp;
 	}
 };
 

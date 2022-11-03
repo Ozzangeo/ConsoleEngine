@@ -19,15 +19,11 @@ protected:
 	virtual void GameObjects() = 0;
 
 public:
-	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true>
-	T* AddGameObject(wstring name);
-
-	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true>
-	T* GetGameObject(wstring name);
+	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true> T* AddGameObject(wstring name);
+	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true> T* GetGameObject(wstring name);
+	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true> bool RemoveGameObject(wstring name);
+	
 	GameObject* GetGameObject(wstring name);
-
-	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true>
-	bool RemoveGameObject(wstring name);
 };
 
 template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>>

@@ -39,13 +39,11 @@ private:
 public:
 	Engine();
 
-	template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool> = true>
-	void Run(wstring title = L"Engine", int Frame = 60);
+	template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool> = true> void Run(wstring title = L"Engine", int Frame = 60);
 
 	static void Release();
 };
-template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>>
-inline void Engine::Run(wstring title, int Frame) {
+template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Engine::Run(wstring title, int Frame) {
 	SetConsoleTitle(title.c_str());
 
 	m_FPS = 1000.0f / Frame;

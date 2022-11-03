@@ -1,10 +1,8 @@
-﻿  Color.cpp
-  Component.cpp
-  DefaultComponents.cpp
-  DefaultGameObjects.cpp
-  Engine.cpp
-  GameObject.cpp
-  Graphic.cpp
-  Scene.cpp
-  코드를 생성하고 있습니다...
-  ConsoleEngine.vcxproj -> F:\Github Project\ConsoleEngine\Debug\ConsoleEngine.lib
+﻿  Graphic.cpp
+C:\Users\My\Documents\GitHub\ConsoleEngine\ConsoleEngine\Graphic.cpp(154,16): warning C4244: '+=': 'float'에서 'INT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\My\Documents\GitHub\ConsoleEngine\ConsoleEngine\Graphic.cpp(158,17): warning C4244: '-=': 'float'에서 'INT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\My\Documents\GitHub\ConsoleEngine\ConsoleEngine\Graphic.cpp(167,16): warning C4244: '+=': 'float'에서 'INT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\My\Documents\GitHub\ConsoleEngine\ConsoleEngine\Graphic.cpp(171,17): warning C4244: '-=': 'float'에서 'INT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\My\Documents\GitHub\ConsoleEngine\ConsoleEngine\Graphic.cpp(190,27): warning C4244: '+=': 'float'에서 'INT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\My\Documents\GitHub\ConsoleEngine\ConsoleEngine\Graphic.cpp(192,26): warning C4244: '+=': 'float'에서 'INT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  ConsoleEngine.vcxproj -> C:\Users\My\Documents\GitHub\ConsoleEngine\Debug\ConsoleEngine.lib

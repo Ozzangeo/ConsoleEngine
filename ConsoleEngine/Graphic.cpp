@@ -72,3 +72,126 @@ void Graphic::SetScreen() {
 	system(System.c_str());
 }
 
+inline void Graphic::DrawCircle(Vector4& pos, Vector4& pos2, EnumColor& color) {
+	Pixel({ pos.x + pos2.x, pos.y + pos2.y, pos.z }, color);
+	Pixel({ pos.x - pos2.x, pos.y + pos2.y, pos.z }, color);
+	Pixel({ pos.x + pos2.x, pos.y - pos2.y, pos.z }, color);
+	Pixel({ pos.x - pos2.x, pos.y - pos2.y, pos.z }, color);
+		
+	Pixel({ pos.x + pos2.y, pos.y + pos2.x, pos.z }, color);
+	Pixel({ pos.x - pos2.y, pos.y + pos2.x, pos.z }, color);
+	Pixel({ pos.x + pos2.y, pos.y - pos2.x, pos.z }, color);
+	Pixel({ pos.x - pos2.y, pos.y - pos2.x, pos.z }, color);
+}
+
+void Graphic::Pixel(Vector4 pos, EnumColor color) {
+	Vector4 Temp = { ((pos.x - CameraPos->x) + m_HalfScreenSize.x), ((pos.y - CameraPos->y) + m_HalfScreenSize.y), 0 };;
+
+	// 뭔가 걸러내는데에서 문제있는듯
+	if (0 > Temp.y || m_ScreenSize.y <= Temp.y ||
+		0 > Temp.x || m_ScreenSize.x <= Temp.x) { return; }
+
+	Temp.vround();
+	int index = static_cast<int>((Temp.y * m_ScreenSize.x) + Temp.x);
+
+	m_Screen[index].Attributes = color;
+	m_Depth [index] = static_cast<int>(pos.z);
+}
+void Graphic::Fill(Vector4 pos, Vector4 pos2, EnumColor color) {
+	pos.vround();
+	pos2.vround();
+
+	if (pos.x > pos2.x) { Change<float>(&pos.x, &pos2.x); }
+	if (pos.y > pos2.y) { Change<float>(&pos.y, &pos2.y); }
+
+	Vector4 Temp;
+	int index = 0;
+
+	pos.x  += m_HalfScreenSize.x - CameraPos->x;
+	pos2.x += m_HalfScreenSize.x - CameraPos->x;
+	pos.y  += m_HalfScreenSize.y - CameraPos->y;
+	pos2.y += m_HalfScreenSize.y - CameraPos->y;
+
+	for (int i = pos.GetY<int>(), id = pos2.GetY<int>(); i <= id; i++) {
+		if (i < 0)				{ continue; }
+		if (i >= m_ScreenSize.y) { return; }
+		Temp.y = i * m_ScreenSize.x;
+
+		for (int j = pos.GetX<int>(), jd = pos2.GetX<int>(); j <= jd; j++) {
+			if (j < 0)				{ continue; }
+			if (j >= m_ScreenSize.x) { break; }
+
+			index = static_cast<int>(Temp.y + j);
+
+			if (m_Depth[index] < pos.z) {
+				m_Depth[index] = static_cast<int>(pos.z);
+				m_Screen[index].Attributes = color;
+			}
+		}
+	}
+}
+void Graphic::Line(Vector4 pos, Vector4 pos2, EnumColor color) {
+	INT counter = 0;
+
+	COORD addr = { 0, 0 };
+	Vector4 d = { (pos2.x - pos.x), (pos2.y - pos.y), pos.z };
+
+	if (d.x < 0) {
+		addr.X = -1;
+		d.x = -d.x;
+	}
+	else { addr.X = 1; }
+
+	if (d.y < 0) {
+		addr.Y = -1;
+		d.y = -d.y;
+	}
+	else { addr.Y = 1; }
+
+	if (d.x >= d.y) {
+		for (INT i = 0; i < d.x; i++) {
+			pos.x += addr.X;
+
+			counter += d.y;
+
+			if (counter >= d.x) {
+				pos.y += addr.Y;
+				counter -= d.x;
+			}
+			Pixel(pos, color);
+		}
+	}
+	else {
+		for (INT i = 0; i < d.y; i++) {
+			pos.y += addr.Y;
+
+			counter += d.x;
+
+			if (counter >= d.y) {
+				pos.x += addr.X;
+				counter -= d.y;
+			}
+			Pixel(pos, color);
+		}
+	}
+}
+void Graphic::Circle(Vector4 pos, EnumColor color, INT radius, INT curvature) {
+	Vector4 tp = { 0, static_cast<float>(radius), 0 };
+	INT d = 3 - (2 * radius);
+
+	if (tp.y >= tp.x) {
+		DrawCircle(pos, tp, color);
+	}
+
+	while (tp.y >= tp.x) {
+		tp.x++;
+
+		if (d > 0) {
+			tp.y--;
+			d += 4 * (tp.x - tp.y) + curvature;
+		}
+		else { d += (4 * tp.x) + curvature; }
+
+		DrawCircle(pos, tp, color);
+	}
+}

@@ -5,6 +5,8 @@ void Debug::Log(string log) {
 	if (debug.is_open()) { debug << log << '\n'; }
 }
 void Debug::Release() {
-	debug << "[ Debug ] : Release";
-	debug.close();
+	if (debug.is_open()) {
+		debug << "[ Debug ] : Release";
+		debug.close();
+	}
 }

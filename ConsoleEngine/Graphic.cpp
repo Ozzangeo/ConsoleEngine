@@ -237,7 +237,7 @@ void Graphic::Line(Vector4 pos, Vector4 pos2, EnumColor color) {
 		}
 	}
 }
-void Graphic::Line(Vector4 pos, Vector4 pos2, float depth, EnumColor color) {
+void Graphic::Line(Vector4 pos, Vector4 pos2, const float& depth, EnumColor color) {
 	pos.vround();
 	pos2.vround();
 
@@ -306,6 +306,45 @@ void Graphic::Circle(Vector4 pos, EnumColor color, INT radius, INT curvature) {
 		else { d += static_cast<int>((4 * tp.x) + curvature); }
 
 		DrawCircle(pos, tp, color);
+	}
+}
+void Graphic::Sprite(Vector4 pos, COORD size, EnumColor* sprite) {
+	Vector4 Temp;
+	int index = 0;
+	int spindex = 0;
+	
+	pos.x += m_HalfScreenSize.x - CameraPos->x - (size.X * 0.5f);
+	pos.y += m_HalfScreenSize.y - CameraPos->y - (size.Y * 0.5f);
+
+	pos.vround();
+
+	for (int i = 0; i < size.Y; i++) {
+		Temp.y = pos.y + i;
+		if (Temp.y < 0) { continue; }
+		if (Temp.y >= m_ScreenSize.y) { return; }
+		Temp.y = i * size.X;
+
+		for (int j = 0; j < size.X; j++) {
+			Temp.x = pos.x + j;
+			spindex = static_cast<int>(Temp.y + j);
+
+			if (Temp.x < 0 || sprite[spindex] == Color_NULL) { continue; }
+			if (Temp.x >= m_ScreenSize.x) { break; }
+
+			index = static_cast<int>(((i + pos.y) * m_ScreenSize.x) + Temp.x);
+
+#if defined(DEBUG_MODE)
+			if (m_vDepth[index] < pos.z) {
+				m_vDepth[index] = static_cast<int>(pos.z);
+				m_vScreen[index].Attributes = sprite[spindex];
+			}
+#else
+			if (m_Depth[index] < pos.z) {
+				m_Depth[index] = static_cast<int>(pos.z);
+				m_Screen[index].Attributes = sprite[spindex];
+			}
+#endif
+		}
 	}
 }
 

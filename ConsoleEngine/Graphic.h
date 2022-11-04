@@ -54,8 +54,9 @@ public:
 	void Pixel(Vector4 pos, float depth, EnumColor color);
 	void Fill(Vector4 pos, Vector4 pos2, EnumColor color);
 	void Line(Vector4 pos, Vector4 pos2, EnumColor color);
-	void Line(Vector4 pos, Vector4 pos2, float depth, EnumColor color);
+	void Line(Vector4 pos, Vector4 pos2, const float& depth, EnumColor color);
 	void Circle(Vector4 pos, EnumColor color, INT radius, INT curvature);
+	void Sprite(Vector4 pos, COORD size, EnumColor* sprite);
 
 	// NotSafe 시리즈 ( if문이 2개 생략되어 살짝 더 빠름 )
 	void NotSafePixel(const Vector4& pos, const EnumColor& color);

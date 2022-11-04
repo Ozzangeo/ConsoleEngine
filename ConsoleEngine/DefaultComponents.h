@@ -21,7 +21,7 @@ namespace DefaultComponents {
 		void SetCameraScale(COORD Scale);
 		void SetCameraSize(COORD Size);
 	};
-	class SpriteRenderer : public Component {
+	class PolygonRenderer : public Component {
 	private:
 		int vertexCount;
 		list<pair<int, Vector4>> vertexs;
@@ -37,6 +37,23 @@ namespace DefaultComponents {
 		EnumColor color;
 		bool isVisible;
 		float depth;
+	};
+	class SpriteRenderer : public Component {
+	private:
+#if defined(DEBUG_MODE)
+		vector<CHAR_INFO> vsprite;
+#else
+		EnumColor* sprite;
+#endif
+		COORD size;
+		bool isVisible;
+
+		void Awake() override;
+		void Update() override;
+		void Remove() override;
+
+	public:
+		void LoadSprite(string filename);
 	};
 }
 

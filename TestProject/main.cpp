@@ -4,57 +4,63 @@ using namespace std;
 using namespace chrono;
 using namespace DefaultComponents;
 
-class CameraMover : public Component {
+class Mover : public Component {
 private:
-	Vector4* Pos = nullptr;
+	EnumColor* enu;
 	float speed = 150.0f;
 
 	void Awake() override {
-		Pos = &scene->GetGameObject(L"Camera")->pos;
+		enu = new EnumColor[4]{
+			Color_Red, Color_Green, Color_Blue, Color_Black
+		};
 	}
 	void Update() override {
 		switch (keyboard.isKey(KeyCode_W)) {
 		case KeyType_HOLD: {
-			Pos->y -= Time::GetDeltaTime() * speed;
+			gameobject->pos.y -= Time::GetDeltaTime() * speed;
 		} break;
 		}
 		switch (keyboard.isKey(KeyCode_S)) {
 		case KeyType_HOLD: {
-			Pos->y += Time::GetDeltaTime() * speed;
+			gameobject->pos.y += Time::GetDeltaTime() * speed;
 		} break;
 		}
 		switch (keyboard.isKey(KeyCode_A)) {
 		case KeyType_HOLD: {
-			Pos->x -= Time::GetDeltaTime() * speed;
+			gameobject->pos.x -= Time::GetDeltaTime() * speed;
 		} break;
 		}
 		switch (keyboard.isKey(KeyCode_D)) {
 		case KeyType_HOLD: {
-			Pos->x += Time::GetDeltaTime() * speed;
+			gameobject->pos.x += Time::GetDeltaTime() * speed;
 		} break;
 		}
 
 		graphic.Line({ 0, 0, 0 }, { 10, 10, 0 }, Color_Green);
 		graphic.Circle({ 0, 0, 0 }, Color_Red, 5, 0);
+		graphic.Sprite({ 10, -10, 0 }, { 2, 2 }, enu);
+		graphic.Pixel({ 10, -10, 1 }, Color_LightBlue);
 	}
 	void Remove() override {
-
+		delete[] enu;
 	}
 };
 class SpriteObject : public GameObject {
 private:
 	void Components() override {
-		auto* sprite = AddComponent<SpriteRenderer>();
-		sprite->AddVertex({ 0, -5, 0 });
+		auto* sprite = AddComponent<PolygonRenderer>();
+		sprite->AddVertex({ -5, -5, 0 });
 		sprite->AddVertex({ 0, 5, 0 });
 		sprite->AddVertex({ 5, 0, 0 });
+
+		pos.x = 10;
 	}
 };
 class C : public Scene {
 private:
 	void GameObjects() override {
 		auto* camera = AddGameObject<DefaultGameObjects::Camera>(L"Camera");
-		camera->AddComponent<CameraMover>();
+		camera->AddComponent<Mover>();
 
 		auto* a = camera->GetComponent<Camera>();
 		a->SetCameraSize({ 256, 144 });

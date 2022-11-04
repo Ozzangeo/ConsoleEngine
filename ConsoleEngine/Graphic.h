@@ -32,7 +32,7 @@ private:
 	CHAR_INFO* m_Screen;
 	int* m_Depth;
 #endif
-	const WORD DEFAULT_BACKGROUND = Color_LightWhite;
+	const WORD DEFAULT_BACKGROUND = Color_Black;
 	const CHAR_INFO DEFAULT_SCREEN = { ' ', DEFAULT_BACKGROUND };
 	const int DEFAULT_DEPTH = -100;
 	const COORD ZERO_POS = { 0, 0 };

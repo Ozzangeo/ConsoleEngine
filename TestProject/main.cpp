@@ -6,14 +6,9 @@ using namespace DefaultComponents;
 
 class Mover : public Component {
 private:
-	EnumColor* enu;
 	float speed = 150.0f;
 
-	void Awake() override {
-		enu = new EnumColor[4]{
-			Color_Red, Color_Green, Color_Blue, Color_Black
-		};
-	}
+	void Awake() override {}
 	void Update() override {
 		switch (keyboard.isKey(KeyCode_W)) {
 		case KeyType_HOLD: {
@@ -38,22 +33,30 @@ private:
 
 		graphic.Line({ 0, 0, 0 }, { 10, 10, 0 }, Color_Green);
 		graphic.Circle({ 0, 0, 0 }, Color_Red, 5, 0);
-		graphic.Sprite({ 10, -10, 0 }, { 2, 2 }, enu);
-		graphic.Pixel({ 10, -10, 1 }, Color_LightBlue);
 	}
-	void Remove() override {
-		delete[] enu;
-	}
+	void Remove() override {}
 };
 class SpriteObject : public GameObject {
+private:
+	void Components() override {
+		auto* sprite = AddComponent<SpriteRenderer>();
+		sprite->LoadSprite("Sans");
+
+		pos.x = 0;
+		pos.z = 10;
+	}
+};
+class PolygonObject : public GameObject {
 private:
 	void Components() override {
 		auto* sprite = AddComponent<PolygonRenderer>();
 		sprite->AddVertex({ -5, -5, 0 });
 		sprite->AddVertex({ 0, 5, 0 });
 		sprite->AddVertex({ 5, 0, 0 });
+		sprite->color = Color_SkyBlue;
 
 		pos.x = 10;
+		this->pos.z = -5;
 	}
 };
 class C : public Scene {
@@ -66,7 +69,9 @@ private:
 		a->SetCameraSize({ 256, 144 });
 		a->SetCameraScale({ 4, 4 });
 
-		AddGameObject<SpriteObject>(L"SpriteObjectTest");
+		auto* obj = AddGameObject<SpriteObject>(L"SpriteObjectTest");
+		obj->AddComponent<Mover>();
+		AddGameObject<PolygonObject>(L"PolygonObjectTest");
 	}
 };
 

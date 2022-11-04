@@ -122,13 +122,15 @@ void Graphic::Pixel(Vector4 pos, EnumColor color) {
 		0 > Temp.x || m_ScreenSize.x <= Temp.x) { return; }
 
 	int index = static_cast<int>((Temp.y * m_ScreenSize.x) + Temp.x);
+	if (m_Depth[index] < pos.z) {
 #if defined(DEBUG_MODE)
-	m_vScreen.at(index).Attributes = color;
-	m_vDepth .at(index) = static_cast<int>(pos.z);
+		m_vScreen.at(index).Attributes = color;
+		m_vDepth.at(index) = static_cast<int>(pos.z);
 #else
-	m_Screen[index].Attributes = color;
-	m_Depth [index] = static_cast<int>(pos.z);
+		m_Screen[index].Attributes = color;
+		m_Depth[index] = static_cast<int>(pos.z);
 #endif
+	}
 }
 void Graphic::Pixel(Vector4 pos, float depth, EnumColor color) {
 	Vector4 Temp = { ((pos.x - CameraPos->x) + m_HalfScreenSize.x), ((pos.y - CameraPos->y) + m_HalfScreenSize.y), 0 };;
@@ -140,13 +142,16 @@ void Graphic::Pixel(Vector4 pos, float depth, EnumColor color) {
 	}
 
 	int index = static_cast<int>((Temp.y * m_ScreenSize.x) + Temp.x);
+
+	if (m_Depth[index] < depth) {
 #if defined(DEBUG_MODE)
-	m_vScreen.at(index).Attributes = color;
-	m_vDepth.at(index) = static_cast<int>(depth);
+		m_vScreen.at(index).Attributes = color;
+		m_vDepth.at(index) = static_cast<int>(depth);
 #else
-	m_Screen[index].Attributes = color;
-	m_Depth[index] = static_cast<int>(depth);
+		m_Screen[index].Attributes = color;
+		m_Depth[index] = static_cast<int>(depth);
 #endif
+	}
 }
 void Graphic::Fill(Vector4 pos, Vector4 pos2, EnumColor color) {
 	if (pos.x > pos2.x) { Change<float>(&pos.x, &pos2.x); }
@@ -322,7 +327,7 @@ void Graphic::Sprite(Vector4 pos, COORD size, EnumColor* sprite) {
 		Temp.y = pos.y + i;
 		if (Temp.y < 0) { continue; }
 		if (Temp.y >= m_ScreenSize.y) { return; }
-		Temp.y = i * size.X;
+		Temp.y = static_cast<float>(i * size.X);
 
 		for (int j = 0; j < size.X; j++) {
 			Temp.x = pos.x + j;

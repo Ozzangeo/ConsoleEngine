@@ -1,3 +1,2 @@
 ﻿  DefaultComponents.cpp
-C:\Users\My\Documents\GitHub\ConsoleEngine\ConsoleEngine\DefaultComponents.cpp(111,4): warning C4060: switch문에 'case' 또는 'default' 레이블이 없습니다.
   ConsoleEngine.vcxproj -> C:\Users\My\Documents\GitHub\ConsoleEngine\Debug\ConsoleEngine.lib

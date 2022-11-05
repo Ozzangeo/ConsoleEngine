@@ -6,7 +6,7 @@
 using namespace std;
 
 class Debug {
-	friend class Engine;
+	friend class ConsoleEngine;
 private:
 	static ofstream debug;
 	static void Release();

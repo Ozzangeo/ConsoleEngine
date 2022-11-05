@@ -1,4 +1,4 @@
-#include "../ConsoleEngine/Engine.h"
+#include "../ConsoleEngine/ConsoleEngine.h"
 
 using namespace std;
 using namespace chrono;
@@ -30,9 +30,6 @@ private:
 			gameobject->pos.x += Time::GetDeltaTime() * speed;
 		} break;
 		}
-
-		graphic.Line({ 0, 0, 0 }, { 10, 10, 0 }, Color_Green);
-		graphic.Circle({ 0, 0, 0 }, Color_Red, 5, 0);
 	}
 	void Remove() override {}
 };
@@ -40,10 +37,12 @@ class SpriteObject : public GameObject {
 private:
 	void Components() override {
 		auto* sprite = AddComponent<SpriteRenderer>();
-		sprite->LoadSprite("Sans");
+		sprite->sprite.LoadSprite("Sans");
+		auto* ani = AddComponent<Animator>();
+		ani->animation.LoadAnimaition("Sans");
 
 		pos.x = 0;
-		pos.z = 10;
+		pos.z = -1;
 	}
 };
 class PolygonObject : public GameObject {
@@ -56,10 +55,11 @@ private:
 		sprite->color = Color_SkyBlue;
 
 		pos.x = 10;
-		this->pos.z = -5;
+		pos.y = 10;
+		pos.z = 0;
 	}
 };
-class C : public Scene {
+class TestScene : public Scene {
 private:
 	void GameObjects() override {
 		auto* camera = AddGameObject<DefaultGameObjects::Camera>(L"Camera");
@@ -70,17 +70,16 @@ private:
 		a->SetCameraScale({ 4, 4 });
 
 		auto* obj = AddGameObject<SpriteObject>(L"SpriteObjectTest");
-		obj->AddComponent<Mover>();
 		AddGameObject<PolygonObject>(L"PolygonObjectTest");
 	}
 };
 
 int main() {
-	Engine engine;
+	ConsoleEngine engine;
 
-	engine.Run<C>(L"Engine", 1000);
+	engine.Run<TestScene>(L"Engine", 1000);
 
-	Engine::Release();
+	ConsoleEngine::Release();
 
 	return 0;
 }

@@ -5,13 +5,14 @@
 #include "Vector.h"
 #include "Color.h"
 #include "Debug.h"
+#include "Sprite.h"
 
 using namespace std;
 
 namespace DefaultComponents { class Camera; }
 
 class Graphic {
-	friend class Engine;
+	friend class ConsoleEngine;
 	friend class Component;
 	friend class DefaultComponents::Camera;
 private:
@@ -56,7 +57,7 @@ public:
 	void Line(Vector4 pos, Vector4 pos2, EnumColor color);
 	void Line(Vector4 pos, Vector4 pos2, const float& depth, EnumColor color);
 	void Circle(Vector4 pos, EnumColor color, INT radius, INT curvature);
-	void Sprite(Vector4 pos, COORD size, EnumColor* sprite);
+	void DrawSprite(Vector4 pos, Sprite& sprite);
 
 	// NotSafe 시리즈 ( if문이 2개 생략되어 살짝 더 빠름 )
 	void NotSafePixel(const Vector4& pos, const EnumColor& color);

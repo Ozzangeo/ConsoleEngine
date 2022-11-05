@@ -131,30 +131,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DefaultComponents.cpp" />
     <ClCompile Include="DefaultGameObjects.cpp" />
-    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="ConsoleEngine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graphic.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="DefaultComponents.h" />
     <ClInclude Include="DefaultGameObjects.h" />
-    <ClInclude Include="Engine.h" />
+    <ClInclude Include="ConsoleEngine.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Graphic.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Vector.h" />

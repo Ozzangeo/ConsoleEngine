@@ -23,6 +23,7 @@
 #include <queue>
 
 #include <xmmintrin.h>
+#include <fvec.h>
 
 namespace Handle {
 	const HANDLE OUTPUT = GetStdHandle(STD_OUTPUT_HANDLE);

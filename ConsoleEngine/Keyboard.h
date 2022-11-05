@@ -130,7 +130,7 @@ enum KeyType {
 };
 
 class Keyboard {
-	friend class Engine;
+	friend class ConsoleEngine;
 private:
 	static bool* isHold;
 	static void Release();

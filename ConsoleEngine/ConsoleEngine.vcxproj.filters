@@ -23,7 +23,7 @@
     <ClCompile Include="Color.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Engine.cpp">
+    <ClCompile Include="ConsoleEngine.cpp">
       <Filter>2D</Filter>
     </ClCompile>
     <ClCompile Include="Vector.cpp">
@@ -50,6 +50,15 @@
     <ClCompile Include="Graphic.cpp">
       <Filter>2D</Filter>
     </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -64,7 +73,7 @@
     <ClInclude Include="Color.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Engine.h">
+    <ClInclude Include="ConsoleEngine.h">
       <Filter>2D</Filter>
     </ClInclude>
     <ClInclude Include="Vector.h">
@@ -90,6 +99,15 @@
     </ClInclude>
     <ClInclude Include="Graphic.h">
       <Filter>2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

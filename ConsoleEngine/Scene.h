@@ -7,7 +7,7 @@
 using namespace std;
 
 class Scene {
-	friend class Engine;
+	friend class ConsoleEngine;
 private:
 	list<GameObject*> m_GameObjects;
 
@@ -16,6 +16,7 @@ private:
 	void Release();
 
 protected:
+	ConsoleEngine* Engine;
 	virtual void GameObjects() = 0;
 
 public:

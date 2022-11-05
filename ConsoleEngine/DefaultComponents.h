@@ -8,7 +8,11 @@
 #include "Color.h"
 #include "Vector.h"
 
+#include "Sprite.h"
+#include "Animation.h"
+
 using namespace std;
+using namespace chrono;
 
 namespace DefaultComponents {
 	class Camera : public Component {
@@ -40,20 +44,26 @@ namespace DefaultComponents {
 	};
 	class SpriteRenderer : public Component {
 	private:
-#if defined(DEBUG_MODE)
-		vector<CHAR_INFO> vsprite;
-#else
-		EnumColor* sprite;
-#endif
-		COORD size;
+		void Awake() override;
+		void Update() override;
+		void Remove() override;
+
+	public:
+		Sprite sprite;
 		bool isVisible;
+	};
+	class Animator : public Component {
+	private:
+		SpriteRenderer* spriterenderer;
+		float time;
+		size_t index;
 
 		void Awake() override;
 		void Update() override;
 		void Remove() override;
 
 	public:
-		void LoadSprite(string filename);
+		Animation animation;
 	};
 }
 

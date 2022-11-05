@@ -1,5 +1,5 @@
-#ifndef ___ConsoleColor___
-#define ___ConsoleColor___
+#ifndef ___COLOR___
+#define ___COLOR___
 
 #include "stdafx.h"
 #include "Vector.h"
@@ -43,4 +43,4 @@ public:
 	bool SetColor(Rgb255 _RGB, int num);
 };
 
-#endif // !___ConsoleColor___
+#endif // !___COLOR___

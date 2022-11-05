@@ -1,0 +1,9 @@
+[FPS] : 356
+[FPS] : 354
+[FPS] : 345
+[FPS] : 353
+[FPS] : 355
+[FPS] : 355
+[ Keyboard ] : Release
+[ Graphic ] : Release
+[ Debug ] : Release

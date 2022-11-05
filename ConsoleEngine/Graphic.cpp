@@ -10,8 +10,8 @@ Graphic::Graphic() {
 }
 Graphic::~Graphic() {
 #if defined(DEBUG_MODE)
-	m_vDepth.resize(0);
-	m_vScreen.resize(0);
+	m_vDepth.reserve(0);
+	m_vScreen.reserve(0);
 #else
 	if (m_Screen) { delete[] m_Screen; m_Screen = nullptr; }
 	if (m_Depth) { delete[] m_Depth; m_Depth = nullptr; }
@@ -313,27 +313,27 @@ void Graphic::Circle(Vector4 pos, EnumColor color, INT radius, INT curvature) {
 		DrawCircle(pos, tp, color);
 	}
 }
-void Graphic::Sprite(Vector4 pos, COORD size, EnumColor* sprite) {
+void Graphic::DrawSprite(Vector4 pos, Sprite& sprite) {
 	Vector4 Temp;
 	int index = 0;
 	int spindex = 0;
 	
-	pos.x += m_HalfScreenSize.x - CameraPos->x - (size.X * 0.5f);
-	pos.y += m_HalfScreenSize.y - CameraPos->y - (size.Y * 0.5f);
+	pos.x += m_HalfScreenSize.x - CameraPos->x - (sprite.size.X * 0.5f);
+	pos.y += m_HalfScreenSize.y - CameraPos->y - (sprite.size.Y * 0.5f);
 
 	pos.vround();
 
-	for (int i = 0; i < size.Y; i++) {
+	for (int i = 0; i < sprite.size.Y; i++) {
 		Temp.y = pos.y + i;
 		if (Temp.y < 0) { continue; }
 		if (Temp.y >= m_ScreenSize.y) { return; }
-		Temp.y = static_cast<float>(i * size.X);
+		Temp.y = static_cast<float>(i * sprite.size.X);
 
-		for (int j = 0; j < size.X; j++) {
+		for (int j = 0; j < sprite.size.X; j++) {
 			Temp.x = pos.x + j;
 			spindex = static_cast<int>(Temp.y + j);
 
-			if (Temp.x < 0 || sprite[spindex] == Color_NULL) { continue; }
+			if (Temp.x < 0 || sprite.sprite[spindex] == Color_NULL) { continue; }
 			if (Temp.x >= m_ScreenSize.x) { break; }
 
 			index = static_cast<int>(((i + pos.y) * m_ScreenSize.x) + Temp.x);
@@ -341,12 +341,12 @@ void Graphic::Sprite(Vector4 pos, COORD size, EnumColor* sprite) {
 #if defined(DEBUG_MODE)
 			if (m_vDepth[index] < pos.z) {
 				m_vDepth[index] = static_cast<int>(pos.z);
-				m_vScreen[index].Attributes = sprite[spindex];
+				m_vScreen[index].Attributes = sprite.sprite[spindex];
 			}
 #else
 			if (m_Depth[index] < pos.z) {
 				m_Depth[index] = static_cast<int>(pos.z);
-				m_Screen[index].Attributes = sprite[spindex];
+				m_Screen[index].Attributes = sprite.sprite[spindex];
 			}
 #endif
 		}

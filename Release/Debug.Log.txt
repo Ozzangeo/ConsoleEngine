@@ -1,9 +1,14 @@
-[FPS] : 356
-[FPS] : 354
-[FPS] : 345
-[FPS] : 353
-[FPS] : 355
-[FPS] : 355
+[FPS] : 249
+[FPS] : 248
+[FPS] : 246
+[FPS] : 248
+[FPS] : 248
+[FPS] : 248
+[FPS] : 249
+[FPS] : 248
+[FPS] : 248
+[FPS] : 248
+[FPS] : 248
 [ Keyboard ] : Release
 [ Graphic ] : Release
 [ Debug ] : Release

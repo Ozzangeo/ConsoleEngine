@@ -40,13 +40,13 @@ inline void Graphic::SetScreenScale(const COORD& Scale) {
 	SetCurrentConsoleFontEx(Handle::OUTPUT, FALSE, &cfi);
 }
 void Graphic::SetScreenSize(const COORD& Size) {
-	m_ScreenSize = { static_cast<float>(Size.X), static_cast<float>(Size.Y), static_cast<float>(Size.X * Size.Y), 0 };
-	m_HalfScreenSize = (m_ScreenSize * 0.5f).vround();
+	m_ScreenSize = { Size.X, Size.Y, Size.X * Size.Y };
+	m_HalfScreenSize = m_ScreenSize.operator Vector4f() * 0.5f;
 
 	m_rect = { 0, 0, Size.X, Size.Y };
 	m_size = { Size.X, Size.Y };
 
-	size_t length = m_ScreenSize.GetZ<size_t>();
+	size_t length = m_ScreenSize.z;
 
 #if defined(DEBUG_MODE)
 	m_vScreen.resize(0);
@@ -99,49 +99,46 @@ void Graphic::Render() {
 #endif
 }
 void Graphic::SetScreen() {
-	string System = "mode con: cols=" + to_string(m_ScreenSize.GetX<int>()) + " lines=" + to_string(m_ScreenSize.GetY<int>());
+	string System = "mode con: cols=" + to_string(m_ScreenSize.x) + " lines=" + to_string(m_ScreenSize.y);
 	system(System.c_str());
 }
 
-inline void Graphic::DrawCircle(Vector4& pos, Vector4& pos2, EnumColor& color) {
-	Pixel({ pos.x + pos2.x, pos.y + pos2.y, pos.z }, color);
-	Pixel({ pos.x - pos2.x, pos.y + pos2.y, pos.z }, color);
-	Pixel({ pos.x + pos2.x, pos.y - pos2.y, pos.z }, color);
-	Pixel({ pos.x - pos2.x, pos.y - pos2.y, pos.z }, color);
+inline void Graphic::DrawCircle(Vector4f& pos, Vector4f& pos2, EnumColor& color) {
+	Vector4f dpos;
+	Pixel(dpos = { pos.x + pos2.x, pos.y + pos2.y, pos.z }, color);
+	Pixel(dpos = { pos.x - pos2.x, pos.y + pos2.y, pos.z }, color);
+	Pixel(dpos = { pos.x + pos2.x, pos.y - pos2.y, pos.z }, color);
+	Pixel(dpos = { pos.x - pos2.x, pos.y - pos2.y, pos.z }, color);
 		
-	Pixel({ pos.x + pos2.y, pos.y + pos2.x, pos.z }, color);
-	Pixel({ pos.x - pos2.y, pos.y + pos2.x, pos.z }, color);
-	Pixel({ pos.x + pos2.y, pos.y - pos2.x, pos.z }, color);
-	Pixel({ pos.x - pos2.y, pos.y - pos2.x, pos.z }, color);
+	Pixel(dpos = { pos.x + pos2.y, pos.y + pos2.x, pos.z }, color);
+	Pixel(dpos = { pos.x - pos2.y, pos.y + pos2.x, pos.z }, color);
+	Pixel(dpos = { pos.x + pos2.y, pos.y - pos2.x, pos.z }, color);
+	Pixel(dpos = { pos.x - pos2.y, pos.y - pos2.x, pos.z }, color);
 }
-void Graphic::Pixel(Vector4 pos, EnumColor color) {
-	Vector4 Temp = { ((pos.x - CameraPos->x) + m_HalfScreenSize.x), ((pos.y - CameraPos->y) + m_HalfScreenSize.y), 0 };;
+void Graphic::Pixel(Vector4f& pos, EnumColor& color) {
+	Vector4i Temp = Vector4f{ ((pos.x - CameraPos->x) + m_HalfScreenSize.x), ((pos.y - CameraPos->y) + m_HalfScreenSize.y), pos.z };;
 
-	Temp.vround();
 	if (0 > Temp.y || m_ScreenSize.y <= Temp.y ||
 		0 > Temp.x || m_ScreenSize.x <= Temp.x) { return; }
 
-	int index = static_cast<int>((Temp.y * m_ScreenSize.x) + Temp.x);
+	int index = (Temp.y * m_ScreenSize.x) + Temp.x;
 	if (m_Depth[index] < pos.z) {
 #if defined(DEBUG_MODE)
 		m_vScreen.at(index).Attributes = color;
-		m_vDepth.at(index) = static_cast<int>(pos.z);
+		m_vDepth.at(index) = Temp.z;
 #else
 		m_Screen[index].Attributes = color;
-		m_Depth[index] = static_cast<int>(pos.z);
+		m_Depth[index] = Temp.z;
 #endif
 	}
 }
-void Graphic::Pixel(Vector4 pos, float depth, EnumColor color) {
-	Vector4 Temp = { ((pos.x - CameraPos->x) + m_HalfScreenSize.x), ((pos.y - CameraPos->y) + m_HalfScreenSize.y), 0 };;
+void Graphic::Pixel(Vector4f& pos, const float& depth, EnumColor& color) {
+	Vector4i Temp = Vector4f{ ((pos.x - CameraPos->x) + m_HalfScreenSize.x), ((pos.y - CameraPos->y) + m_HalfScreenSize.y), depth };;
 
-	Temp.vround();
 	if (0 > Temp.y || m_ScreenSize.y <= Temp.y ||
-		0 > Temp.x || m_ScreenSize.x <= Temp.x) {
-		return;
-	}
+		0 > Temp.x || m_ScreenSize.x <= Temp.x) { return; }
 
-	int index = static_cast<int>((Temp.y * m_ScreenSize.x) + Temp.x);
+	int index = (Temp.y * m_ScreenSize.x) + Temp.x;
 
 	if (m_Depth[index] < depth) {
 #if defined(DEBUG_MODE)
@@ -153,7 +150,7 @@ void Graphic::Pixel(Vector4 pos, float depth, EnumColor color) {
 #endif
 	}
 }
-void Graphic::Fill(Vector4 pos, Vector4 pos2, EnumColor color) {
+void Graphic::Fill(Vector4f pos, Vector4f pos2, EnumColor color) {
 	if (pos.x > pos2.x) { Change<float>(&pos.x, &pos2.x); }
 	if (pos.y > pos2.y) { Change<float>(&pos.y, &pos2.y); }
 
@@ -193,7 +190,7 @@ void Graphic::Fill(Vector4 pos, Vector4 pos2, EnumColor color) {
 		}
 	}
 }
-void Graphic::Line(Vector4 pos, Vector4 pos2, EnumColor color) {
+void Graphic::Line(Vector4f pos, Vector4f pos2, EnumColor color) {
 	pos.vround();
 	pos2.vround();
 	
@@ -242,7 +239,7 @@ void Graphic::Line(Vector4 pos, Vector4 pos2, EnumColor color) {
 		}
 	}
 }
-void Graphic::Line(Vector4 pos, Vector4 pos2, const float& depth, EnumColor color) {
+void Graphic::Line(Vector4f pos, Vector4f pos2, const float& depth, EnumColor color) {
 	pos.vround();
 	pos2.vround();
 
@@ -291,7 +288,7 @@ void Graphic::Line(Vector4 pos, Vector4 pos2, const float& depth, EnumColor colo
 		}
 	}
 }
-void Graphic::Circle(Vector4 pos, EnumColor color, INT radius, INT curvature) {
+void Graphic::Circle(Vector4f pos, EnumColor color, INT radius, INT curvature) {
 	pos.vround();
 
 	Vector4 tp = { 0, static_cast<float>(radius), 0 };
@@ -313,7 +310,7 @@ void Graphic::Circle(Vector4 pos, EnumColor color, INT radius, INT curvature) {
 		DrawCircle(pos, tp, color);
 	}
 }
-void Graphic::DrawSprite(Vector4 pos, Sprite& sprite) {
+void Graphic::DrawSprite(Vector4f pos, Sprite& sprite) {
 	Vector4 Temp;
 	int index = 0;
 	int spindex = 0;
@@ -347,55 +344,6 @@ void Graphic::DrawSprite(Vector4 pos, Sprite& sprite) {
 			if (m_Depth[index] < pos.z) {
 				m_Depth[index] = static_cast<int>(pos.z);
 				m_Screen[index].Attributes = sprite.sprite[spindex];
-			}
-#endif
-		}
-	}
-}
-
-void Graphic::NotSafePixel(const Vector4& pos, const EnumColor& color) {
-	int index = static_cast<int>((((pos.y - CameraPos->y) + m_HalfScreenSize.y) * m_ScreenSize.x) + ((pos.x - CameraPos->x) + m_HalfScreenSize.x));
-
-#if defined(DEBUG_MODE)
-	m_vScreen.at(index).Attributes = color;
-	m_vDepth.at(index) = static_cast<int>(pos.z);
-#else
-	m_Screen[index].Attributes = color;
-	m_Depth[index] = static_cast<int>(pos.z);
-#endif
-}
-void Graphic::NotSafeFill(Vector4 pos, Vector4 pos2, EnumColor color) {
-	Vector4 Temp;
-	int index = 0;
-
-	pos.x += m_HalfScreenSize.x - CameraPos->x;
-	pos2.x += m_HalfScreenSize.x - CameraPos->x;
-	pos.y += m_HalfScreenSize.y - CameraPos->y;
-	pos2.y += m_HalfScreenSize.y - CameraPos->y;
-
-	pos.vround();
-	pos2.vround();
-
-	for (int i = pos.GetY<int>(), id = pos2.GetY<int>(); i <= id; i++) {
-		if (i < 0) { continue; }
-		if (i >= m_ScreenSize.y) { return; }
-		Temp.y = i * m_ScreenSize.x;
-
-		for (int j = pos.GetX<int>(), jd = pos2.GetX<int>(); j <= jd; j++) {
-			if (j < 0) { continue; }
-			if (j >= m_ScreenSize.x) { break; }
-
-			index = static_cast<int>(Temp.y + j);
-
-#if defined(DEBUG_MODE)
-			if (m_vDepth[index] < pos.z) {
-				m_vDepth[index] = static_cast<int>(pos.z);
-				m_vScreen[index].Attributes = color;
-			}
-#else
-			if (m_Depth[index] < pos.z) {
-				m_Depth[index] = static_cast<int>(pos.z);
-				m_Screen[index].Attributes = color;
 			}
 #endif
 		}

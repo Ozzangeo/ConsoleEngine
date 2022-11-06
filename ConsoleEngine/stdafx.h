@@ -6,6 +6,7 @@
 
 #include <cstdlib>
 #include <string>
+#include <cmath>
 #include <Windows.h>
 
 #include <memory>
@@ -22,8 +23,7 @@
 #include <list>
 #include <queue>
 
-#include <xmmintrin.h>
-#include <fvec.h>
+#include <nmmintrin.h>
 
 namespace Handle {
 	const HANDLE OUTPUT = GetStdHandle(STD_OUTPUT_HANDLE);

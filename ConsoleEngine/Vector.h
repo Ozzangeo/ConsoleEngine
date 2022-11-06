@@ -5,191 +5,73 @@
 
 #include "stdafx.h"
 
-class Vector4 {
+class alignas(16) Vector4f;
+class alignas(16) Vector4i {
 public:
 	union {
-		struct { float vecp[4]; };
+		__m128i vecp;
+		struct { int x, y, z, w; };
+	};
+
+	Vector4i() : vecp(_mm_set1_epi32(0)) {}
+	Vector4i(int set, int w = 0) : vecp(_mm_set_epi32(w, set, set, set)) {}
+	Vector4i(__m128i other) : vecp(other) {}
+	Vector4i(__m128 other) : vecp(_mm_cvtps_epi32(other)) {}
+	Vector4i(int _x, int _y, int _z, int _w = 1) : vecp(_mm_set_epi32(_w, _z, _y, _x)) {}
+
+	Vector4i operator+(const Vector4i& ref);
+	Vector4i operator-(const Vector4i& ref);
+
+	Vector4i& operator+=(const Vector4i& ref);
+	Vector4i& operator-=(const Vector4i& ref);
+
+	void* operator new(const size_t size);
+	void* operator new[](const size_t size);
+
+	void operator delete(void* other);
+	void operator delete[](void* other);
+
+	operator Vector4f();
+};
+class alignas(16) Vector4f {
+public:
+	union {
+		__m128 vecp;
 		struct {
-			float x, y, z, w;
+			float x;
+			float y;
+			float z;
+			float w;
 		};
 	};
 
-	Vector4() : x(0), y(0), z(0), w(0) {}
-	Vector4(float _x, float _y, float _z, float _w = 0) : x(_x), y(_y), z(_z), w(_w) {}
-	Vector4(const __m128& vec) : x(vec.m128_f32[0]), y(vec.m128_f32[1]), z(vec.m128_f32[2]), w(vec.m128_f32[3]) {}
-#if defined(SIMD) 
-	Vector4 operator*(const float& ref) {
-		__m128 my = _mm_load_ps(vecp);
-		__m128 oth = _mm_set_ps1(ref);
-		__m128 res = _mm_mul_ps(my, oth);	// 왜 안되지
+	Vector4f() : vecp(_mm_set_ps1(0.0f)) {}
+	Vector4f(float set) : vecp(_mm_set_ps1(set)) {}
+	Vector4f(__m128 other) : vecp(other) {}
+	Vector4f(__m128i other) : vecp(_mm_cvtepi32_ps(other)) {}
+	Vector4f(float _x, float _y, float _z, float _w = 1.0f) : vecp(_mm_set_ps(_w, _z, _y, _x)) {}
 
-		return res;
-}
-	Vector4 operator/(const float& ref) {
-		__m128 my = _mm_load_ps(vecp);
-		__m128 oth = _mm_set_ps1(ref);
-		__m128 res = _mm_div_ps(my, oth);
+	Vector4f operator+(const Vector4f& ref);
+	Vector4f operator-(const Vector4f& ref);
+	Vector4f operator+(const __m128& ref);
+	Vector4f operator-(const __m128& ref);
+	Vector4f operator*(const float& ref);
+	Vector4f operator/(const float& ref);
 
-		return res;
-	}
-	Vector4 operator+(const Vector4& ref) {
-		__m128 my = _mm_load_ps(vecp);
-		__m128 oth = _mm_load_ps(ref.vecp);
-		__m128 res = _mm_add_ps(my, oth);
+	Vector4f& operator+=(const Vector4f& ref);
+	Vector4f& operator-=(const Vector4f& ref);
+	Vector4f& operator+=(const __m128& ref);
+	Vector4f& operator-=(const __m128& ref);
+	Vector4f operator*=(const float& ref);
+	Vector4f operator/=(const float& ref);
 
-		return res;
-	}
-	Vector4 operator-(const Vector4& ref) {
-		__m128 my = _mm_load_ps(vecp);
-		__m128 oth = _mm_load_ps(ref.vecp);
-		__m128 res = _mm_sub_ps(my, oth);
+	void* operator new(const size_t size);
+	void* operator new[](const size_t size);
 
-		return res;
-	}
+	void operator delete(void* other);
+	void operator delete[](void* other);
 
-	Vector4& operator*=(const float ref) {
-		__m128 my = _mm_load_ps(vecp);
-		__m128 oth = _mm_set_ps1(ref);
-		__m128 res = _mm_mul_ps(my, oth);
-		
-		*this = res;
-		return *this;
-	}
-	Vector4& operator/=(const float& ref) {
-		__m128 my = _mm_load_ps(vecp);
-		__m128 oth = _mm_set_ps1(ref);
-		__m128 res = _mm_div_ps(my, oth);
-
-		*this = res;
-		return *this;
-	}
-	Vector4& operator+=(const Vector4& ref) {
-		__m128 my = _mm_load_ps(vecp);
-		__m128 oth = _mm_load_ps(ref.vecp);
-		__m128 res = _mm_add_ps(my, oth);
-
-		*this = res;
-		return *this;
-	}
-	Vector4& operator-=(const Vector4& ref) {
-		__m128 my = _mm_load_ps(vecp);
-		__m128 oth = _mm_load_ps(ref.vecp);
-		__m128 res = _mm_sub_ps(my, oth);
-
-		*this = res;
-		return *this;
-	}
-
-	inline float size() const {
-		__m128 my = _mm_load_ps(vecp);
-		__m128 oth = _mm_set_ps1(2.0f);
-		__m128 res = _mm_sqrt_ps(_mm_pow_ps(my, oth));
-
-		return (res.m128_f32[0] + res.m128_f32[1] + res.m128_f32[2] + res.m128_f32[3]);
-	}
-	inline Vector4 normalization() const {
-		const float SIZE = size();
-		__m128 my = { _mm_load_ps(vecp) };
-		__m128 oth = { _mm_set_ps1(SIZE) };
-		__m128 res = { _mm_div_ps(my, oth) };
-
-		return res;
-	}
-	inline float inner_product(const Vector4& ref) const {
-		__m128 my = _mm_load_ps(vecp);
-		__m128 oth = _mm_load_ps(ref.vecp);
-		__m128 res = _mm_mul_ps(my, oth);
-
-		return (res.m128_f32[0] + res.m128_f32[1] + res.m128_f32[2] + res.m128_f32[3]);
-	}
-	inline Vector4 vround() {
-		__m128 my = _mm_load_ps(vecp);
-		*this = _mm_round_ps(my, 1);
-		return *this;
-	}
-#else
-	Vector4 operator*(const float& ref) {
-		return { this->x * ref, this->y * ref, this->z * ref, this->w * ref };
-	}
-	Vector4 operator/(const float& ref) {
-		return { this->x / ref, this->y / ref, this->z / ref, this->z / ref };
-	}
-	Vector4 operator+(const Vector4& ref) {
-		return { this->x + ref.x, this->y + ref.y, this->z + ref.z, this->w + ref.w };
-	}
-	Vector4 operator-(const Vector4& ref) {
-		return { this->x - ref.x, this->y - ref.y, this->z - ref.z, this->w - ref.w };
-	}
-
-	Vector4& operator*=(const float ref) {
-		this->x *= ref;
-		this->y *= ref;
-		this->z *= ref;
-		this->w *= ref;
-
-		return *this;
-	}
-	Vector4& operator/=(const float& ref) {
-		this->x /= ref;
-		this->y /= ref;
-		this->z /= ref;
-		this->w /= ref;
-
-		return *this;
-	}
-	Vector4& operator+=(const Vector4& ref) {
-		this->x += ref.x;
-		this->y += ref.y;
-		this->z += ref.z;
-		this->w += ref.w;
-
-		return *this;
-	}
-	Vector4& operator-=(const Vector4& ref) {
-		this->x -= ref.x;
-		this->y -= ref.y;
-		this->z -= ref.z;
-		this->w -= ref.w;
-
-		return *this;
-	}
-
-	inline float size() const {
-		return static_cast<float>(sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2) + pow(this->w, 2)));
-	}
-	inline Vector4 normalization() const {
-		const float SIZE = size();
-
-		return { this->x / SIZE, this->y / SIZE, this->z / SIZE, this->w / SIZE };
-	}
-	inline float inner_product(const Vector4& ref) const {
-		return (this->x * ref.x) + (this->y * ref.y) + (this->z * ref.z) + (this->w * ref.w);
-	}
-	inline Vector4 vround() {
-		return (*this = { round(this->x), round(this->y), round(this->z), round(this->w) });
-	}
-#endif
-
-	inline bool operator==(const Vector4& other) {
-		return (this->x == other.x) && (this->y == other.y) && (this->z == other.z) && (this->w == other.w);
-	}
-	inline bool operator!=(const Vector4& other) {
-		return (this->x != other.x) || (this->y != other.y) || (this->z != other.z) || (this->w != other.w);
-	}
-
-	inline Vector4 Set(float x, float y, float z, float w = 0) {
-		return *this = { x, y, z, w };
-	}
-	template<typename T> inline T GetX() { return static_cast<T>(this->x); }
-	template<typename T> inline T GetY() { return static_cast<T>(this->y); }
-	template<typename T> inline T GetZ() { return static_cast<T>(this->z); }
-	template<typename T> inline T GetW() { return static_cast<T>(this->w); }
-
-	inline void Change(Vector4* other) {
-		Vector4 Temp = *other;
-		*other = *this;
-		*this = Temp;
-	}
+	operator Vector4i();
 };
 
 #endif // !___VECTOR___

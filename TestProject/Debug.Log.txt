@@ -1,0 +1,11 @@
+[FPS] : 246
+[FPS] : 244
+[FPS] : 250
+[FPS] : 244
+[FPS] : 248
+[FPS] : 246
+[FPS] : 243
+[FPS] : 247
+[ Keyboard ] : Release
+[ Graphic ] : Release
+[ Debug ] : Release

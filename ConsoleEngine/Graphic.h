@@ -19,9 +19,9 @@ private:
 	Graphic();
 	~Graphic();
 
-	Vector4* CameraPos;
-	Vector4 m_ScreenSize;
-	Vector4 m_HalfScreenSize;
+	Vector4f* CameraPos;
+	Vector4i m_ScreenSize;
+	Vector4f m_HalfScreenSize;
 
 	COORD m_size;
 	SMALL_RECT m_rect;
@@ -44,24 +44,20 @@ private:
 	void SetScreenSize(const COORD& Size);
 	void SetScreen();
 
-	inline void DrawCircle(Vector4& pos, Vector4& pos2, EnumColor& color);
+	inline void DrawCircle(Vector4f& pos, Vector4f& pos2, EnumColor& color);
 
 	void Render();
 	static void Release();
 	static Graphic& GetInstance();
 
 public:
-	void Pixel(Vector4 pos, EnumColor color);
-	void Pixel(Vector4 pos, float depth, EnumColor color);
-	void Fill(Vector4 pos, Vector4 pos2, EnumColor color);
-	void Line(Vector4 pos, Vector4 pos2, EnumColor color);
-	void Line(Vector4 pos, Vector4 pos2, const float& depth, EnumColor color);
-	void Circle(Vector4 pos, EnumColor color, INT radius, INT curvature);
-	void DrawSprite(Vector4 pos, Sprite& sprite);
-
-	// NotSafe 시리즈 ( if문이 2개 생략되어 살짝 더 빠름 )
-	void NotSafePixel(const Vector4& pos, const EnumColor& color);
-	void NotSafeFill(Vector4 pos, Vector4 pos2, EnumColor color);
+	void Pixel(Vector4f& pos, EnumColor& color);
+	void Pixel(Vector4f& pos, const float& depth, EnumColor& color);
+	void Fill(Vector4f pos, Vector4f pos2, EnumColor color);
+	void Line(Vector4f pos, Vector4f pos2, EnumColor color);
+	void Line(Vector4f pos, Vector4f pos2, const float& depth, EnumColor color);
+	void Circle(Vector4f pos, EnumColor color, INT radius, INT curvature);
+	void DrawSprite(Vector4f pos, Sprite& sprite);
 };
 
 #endif // !___GRAPHIC___

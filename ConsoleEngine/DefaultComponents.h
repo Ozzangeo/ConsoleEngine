@@ -6,7 +6,9 @@
 #include "GameObject.h"
 #include "Graphic.h"
 #include "Color.h"
+#include "Math.h"
 #include "Vector.h"
+#include "Matrix.h"
 
 #include "Sprite.h"
 #include "Animation.h"
@@ -28,19 +30,22 @@ namespace DefaultComponents {
 	class PolygonRenderer : public Component {
 	private:
 		int vertexCount;
-		list<pair<int, Vector4>> vertexs;
+		list<pair<int, Vector4f*>> vertexs;
+
+		Vector4f* start;
+		Vector4f* end;
+		Vector4f* beforePos;
 
 		void Awake() override;
 		void Update() override;
 		void Remove() override;
 	public:
-		Vector4* AddVertex(Vector4 vertex);
-		Vector4* GetVertex(int index);
+		Vector4f* AddVertex(float x, float y);
+		Vector4f* GetVertex(int index);
 		void RemoveVertex();
 
 		EnumColor color;
 		bool isVisible;
-		float depth;
 	};
 	class SpriteRenderer : public Component {
 	private:

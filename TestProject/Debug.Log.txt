@@ -1,11 +1,34 @@
-[FPS] : 246
-[FPS] : 244
-[FPS] : 250
-[FPS] : 244
-[FPS] : 248
-[FPS] : 246
-[FPS] : 243
-[FPS] : 247
+[FPS] : 293
+[FPS] : 291
+[FPS] : 296
+[FPS] : 297
+[FPS] : 345
+[FPS] : 311
+[FPS] : 282
+[FPS] : 280
+[FPS] : 274
+[FPS] : 269
+[FPS] : 275
+[FPS] : 287
+[FPS] : 290
+[FPS] : 288
+[FPS] : 298
+[FPS] : 323
+[FPS] : 303
+[FPS] : 295
+[FPS] : 307
+[FPS] : 302
+[FPS] : 284
+[FPS] : 280
+[FPS] : 281
+[FPS] : 282
+[FPS] : 280
+[FPS] : 282
+[FPS] : 285
+[FPS] : 278
+[FPS] : 281
+[FPS] : 275
 [ Keyboard ] : Release
 [ Graphic ] : Release
+[ Math ] : Release
 [ Debug ] : Release

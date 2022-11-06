@@ -2,6 +2,7 @@
 #define ___GRAPHIC___
 
 #include "stdafx.h"
+#include "Matrix.h"
 #include "Vector.h"
 #include "Color.h"
 #include "Debug.h"
@@ -20,8 +21,8 @@ private:
 	~Graphic();
 
 	Vector4f* CameraPos;
-	Vector4i m_ScreenSize;
-	Vector4f m_HalfScreenSize;
+	Vector4i* m_ScreenSize;
+	Vector4f* m_HalfScreenSize;
 
 	COORD m_size;
 	SMALL_RECT m_rect;
@@ -44,20 +45,24 @@ private:
 	void SetScreenSize(const COORD& Size);
 	void SetScreen();
 
-	inline void DrawCircle(Vector4f& pos, Vector4f& pos2, EnumColor& color);
+	inline void DrawCircle(Vector4i& pos, Vector4i& pos2, EnumColor& color);
 
 	void Render();
 	static void Release();
 	static Graphic& GetInstance();
 
 public:
-	void Pixel(Vector4f& pos, EnumColor& color);
-	void Pixel(Vector4f& pos, const float& depth, EnumColor& color);
-	void Fill(Vector4f pos, Vector4f pos2, EnumColor color);
-	void Line(Vector4f pos, Vector4f pos2, EnumColor color);
-	void Line(Vector4f pos, Vector4f pos2, const float& depth, EnumColor color);
-	void Circle(Vector4f pos, EnumColor color, INT radius, INT curvature);
-	void DrawSprite(Vector4f pos, Sprite& sprite);
+	void Pixel(const   int& x, const   int& y, const   int& z, EnumColor& color);
+	void Pixel(const float& x, const float& y, const float& z, EnumColor& color);
+	void Pixel(const Vector4i& pos, EnumColor& color);
+	void Pixel(const Vector4f& pos, EnumColor& color);
+
+	void Fill(const float& x, const float& y, const float& z, EnumColor color, const float& x2 = 0, const float y2 = 0);
+	void Fill(Vector4f& pos, Vector4f& pos2, EnumColor color);
+	void Line(const float& x, const float& y, const float& z, EnumColor color, const float& x2 = 0, const float& y2 = 0);
+	void Line(Vector4f& pos, Vector4f& pos2, EnumColor color);
+	void Circle(Vector4f& pos, EnumColor color, const int& radius, const int& curvature);
+	void DrawSprite(Vector4f& pos, const Matrix4x4f& Trans, Sprite& sprite);
 };
 
 #endif // !___GRAPHIC___

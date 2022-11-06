@@ -14,17 +14,31 @@ private:
 
 	void Update();
 	void Remove();
+
+	Vector4i* rotate;
+
 protected:
 	bool isOnceGameObject = false;
 	virtual void Components() = 0;
 
 public:
+	GameObject();
+	virtual ~GameObject();
+
 	Scene* scene = nullptr;
 	wstring name;
 
-	Vector4 pos;
-	Vector4 scale;
-	Vector4 rotate;
+	Vector4f* pos;
+	Vector4f* scale;
+
+	void SetRotateX(float x);
+	void SetRotateY(float y);
+	void SetRotateZ(float z);
+
+	int GetRotateX();
+	int GetRotateY();
+	int GetRotateZ();
+	Vector4i GetRotate();
 
 	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> T* AddComponent();
 	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> T* GetComponent();

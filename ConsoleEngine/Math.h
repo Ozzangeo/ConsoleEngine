@@ -2,12 +2,18 @@
 #define ___MATH___
 
 #include "stdafx.h"
+#include "Debug.h"
 
 class Math {
-	static float* m_cos;
-	static float* m_sin;
-	static float* m_tan;
+	friend class ConsoleEngine;
+private:
+
+	static void Release();
 public:
+	static const float PI;
+	static const float* cosb;
+	static const float* sinb;
+	static const float* tanb;
 
 };
 

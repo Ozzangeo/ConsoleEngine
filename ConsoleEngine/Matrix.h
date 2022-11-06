@@ -19,6 +19,7 @@ public:
 	Matrix4x4f() : matp{ _mm_set_ps1(0.0f), _mm_set_ps1(0.0f), _mm_set_ps1(0.0f), _mm_set_ps1(0.0f) } {}
 	Matrix4x4f(float set) : matp{ _mm_set_ps1(set), _mm_set_ps1(set), _mm_set_ps1(set), _mm_set_ps1(set) } {}
 	Matrix4x4f(__m128 vec1, __m128 vec2, __m128 vec3, __m128 vec4) : matp{ vec1, vec2, vec3, vec4 } {}
+	Matrix4x4f(Vector4f& vec) : matp{ vec.vecp, vec.vecp, vec.vecp, vec.vecp } {}
 	Matrix4x4f(
 		float _f11, float _f12, float _f13, float _f14,
 		float _f21, float _f22, float _f23, float _f24,

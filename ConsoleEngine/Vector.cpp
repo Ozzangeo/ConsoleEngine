@@ -33,6 +33,7 @@ Vector4i::operator Vector4f() {
 	return _mm_cvtepi32_ps(vecp);
 }
 
+
 // [ Vector4f ]
 Vector4f Vector4f::operator+(const Vector4f& ref) {
 	return _mm_add_ps(vecp, ref.vecp);
@@ -74,6 +75,19 @@ Vector4f Vector4f::operator*=(const float& ref) {
 Vector4f Vector4f::operator/=(const float& ref) {
 	__m128 other = _mm_set1_ps(ref);
 	return (*this = _mm_div_ps(vecp, other));
+}
+
+bool Vector4f::operator==(const Vector4f& ref) {
+	return	((this->x == ref.x) &&
+			(this->y == ref.y) &&
+			(this->z == ref.z) &&
+			(this->z == ref.z));
+}
+bool Vector4f::operator!=(const Vector4f& ref) {
+	return	((this->x != ref.x) ||
+			(this->y != ref.y) ||
+			(this->z != ref.z) ||
+			(this->z != ref.z));
 }
 
 void* Vector4f::operator new(const size_t size) {

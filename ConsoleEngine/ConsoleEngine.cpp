@@ -15,5 +15,6 @@ ConsoleEngine::ConsoleEngine() : m_FPS(60), isDone(false) {
 void ConsoleEngine::Release() {
 	Keyboard::Release();
 	Graphic::Release();
+	Math::Release();
 	Debug::Release();
 }

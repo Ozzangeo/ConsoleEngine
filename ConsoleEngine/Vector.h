@@ -10,7 +10,12 @@ class alignas(16) Vector4i {
 public:
 	union {
 		__m128i vecp;
-		struct { int x, y, z, w; };
+		struct {
+			int x;
+			int y;
+			int z;
+			int w;
+		};
 	};
 
 	Vector4i() : vecp(_mm_set1_epi32(0)) {}
@@ -64,6 +69,9 @@ public:
 	Vector4f& operator-=(const __m128& ref);
 	Vector4f operator*=(const float& ref);
 	Vector4f operator/=(const float& ref);
+
+	bool operator==(const Vector4f& ref);
+	bool operator!=(const Vector4f& ref);
 
 	void* operator new(const size_t size);
 	void* operator new[](const size_t size);

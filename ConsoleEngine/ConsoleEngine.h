@@ -25,6 +25,7 @@
 #include "Color.h"
 #include "Debug.h"
 #include "Time.h"
+#include "Math.h"
 #include "DefaultComponents.h"
 #include "DefaultGameObjects.h"
 

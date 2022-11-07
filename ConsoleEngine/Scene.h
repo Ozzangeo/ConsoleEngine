@@ -16,7 +16,7 @@ private:
 	void Release();
 
 protected:
-	ConsoleEngine* Engine;
+	ConsoleEngine* Engine = nullptr;
 	virtual void GameObjects() = 0;
 
 public:

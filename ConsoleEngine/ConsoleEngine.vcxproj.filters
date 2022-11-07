@@ -38,10 +38,10 @@
     <ClCompile Include="Scene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="DefaultGameObjects.cpp">
+    <ClCompile Include="GameObjects.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="DefaultComponents.cpp">
+    <ClCompile Include="Components.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Debug.cpp">
@@ -91,10 +91,10 @@
     <ClInclude Include="Scene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultGameObjects.h">
+    <ClInclude Include="GameObjects.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultComponents.h">
+    <ClInclude Include="Components.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Debug.h">

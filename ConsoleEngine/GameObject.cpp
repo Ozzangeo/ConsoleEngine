@@ -2,8 +2,8 @@
 
 GameObject::GameObject() {
 	pos = new Vector4f(0.0f);
-	scale = new Vector4f(2.0f);
-	rotate = new Vector4i(0);
+	scale = new Vector4f(1.0f);
+	rotate = new Vector4i(0, 0, 90);
 }
 GameObject::~GameObject() {
 	if (pos) { delete pos; pos = nullptr; }
@@ -39,6 +39,11 @@ void GameObject::SetRotateZ(float z) {
 	while (z < -180) { z += 360; }
 
 	rotate->z = static_cast<int>(round(z)) + 180;
+}
+
+Vector4f GameObject::Reset() {
+	*rotate = { 0, 0, 90 };
+	return { 180, 180, -90 };
 }
 
 int GameObject::GetRotateX() { return rotate->x; }

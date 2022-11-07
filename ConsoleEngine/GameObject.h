@@ -35,6 +35,8 @@ public:
 	void SetRotateY(float y);
 	void SetRotateZ(float z);
 
+	Vector4f Reset();
+
 	int GetRotateX();
 	int GetRotateY();
 	int GetRotateZ();

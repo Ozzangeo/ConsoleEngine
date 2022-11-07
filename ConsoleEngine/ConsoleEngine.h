@@ -26,8 +26,8 @@
 #include "Debug.h"
 #include "Time.h"
 #include "Math.h"
-#include "DefaultComponents.h"
-#include "DefaultGameObjects.h"
+#include "Components.h"
+#include "GameObjects.h"
 
 using namespace std;
 using namespace chrono;

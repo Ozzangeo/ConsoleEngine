@@ -10,12 +10,12 @@
 
 using namespace std;
 
-namespace DefaultComponents { class Camera; }
+namespace Components { class Camera; }
 
 class Graphic {
 	friend class ConsoleEngine;
 	friend class Component;
-	friend class DefaultComponents::Camera;
+	friend class Components::Camera;
 private:
 	Graphic();
 	~Graphic();
@@ -27,13 +27,9 @@ private:
 	COORD m_size;
 	SMALL_RECT m_rect;
 
-#if defined(DEBUG_MODE)
-	vector<CHAR_INFO> m_vScreen;
-	vector<int> m_vDepth;
-#else
 	CHAR_INFO* m_Screen;
 	int* m_Depth;
-#endif
+
 	const WORD DEFAULT_BACKGROUND = Color_Black;
 	const CHAR_INFO DEFAULT_SCREEN = { ' ', DEFAULT_BACKGROUND };
 	const int DEFAULT_DEPTH = -100;

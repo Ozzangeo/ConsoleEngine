@@ -2,7 +2,9 @@
 
 using namespace std;
 using namespace chrono;
-using namespace DefaultComponents;
+using namespace Components;
+
+// Prefab ¸¸µé±â
 
 class Mover : public Component {
 private:
@@ -26,53 +28,62 @@ private:
 	void Remove() override {}
 };
 class Rotator : public Component {
-	float rotaX = 0.0f;
-	float rotaY = 0.0f;
-	float rotaZ = 0.0f;
+	Vector4f* rota = nullptr;
 	float speed = 300.0f;
 
-	void Awake() override {}
+	void Awake() override {
+		rota = new Vector4f(gameobject->Reset());
+	}
 	void Update() override {
 		switch (keyboard.isKey(KeyCode_R)) {
 		case KeyType_HOLD: {
-			rotaX -= Time::GetDeltaTime() * speed;
-			gameobject->SetRotateX(rotaX);
+			rota->x -= Time::GetDeltaTime() * speed;
+			gameobject->SetRotateX(rota->x);
 		} break;
 		}
 		switch (keyboard.isKey(KeyCode_T)) {
 		case KeyType_HOLD: {
-			rotaX += Time::GetDeltaTime() * speed;
-			gameobject->SetRotateX(rotaX);
+			rota->x += Time::GetDeltaTime() * speed;
+			gameobject->SetRotateX(rota->x);
 		} break;
 		}
 
 		switch (keyboard.isKey(KeyCode_F)) {
 		case KeyType_HOLD: {
-			rotaY -= Time::GetDeltaTime() * speed;
-			gameobject->SetRotateY(rotaY);
+			rota->y -= Time::GetDeltaTime() * speed;
+			gameobject->SetRotateY(rota->y);
 		} break;
 		}
 		switch (keyboard.isKey(KeyCode_G)) {
 		case KeyType_HOLD: {
-			rotaY += Time::GetDeltaTime() * speed;
-			gameobject->SetRotateY(rotaY);
+			rota->y += Time::GetDeltaTime() * speed;
+			gameobject->SetRotateY(rota->y);
 		} break;
 		}
 
 		switch (keyboard.isKey(KeyCode_V)) {
 		case KeyType_HOLD: {
-			rotaZ -= Time::GetDeltaTime() * speed;
-			gameobject->SetRotateZ(rotaZ);
+			rota->z -= Time::GetDeltaTime() * speed;
+			gameobject->SetRotateZ(rota->z);
 		} break;
 		}
 		switch (keyboard.isKey(KeyCode_B)) {
 		case KeyType_HOLD: {
-			rotaZ += Time::GetDeltaTime() * speed;
-			gameobject->SetRotateZ(rotaZ);
+			rota->z += Time::GetDeltaTime() * speed;
+			gameobject->SetRotateZ(rota->z);
+		} break;
+		}
+
+		switch (keyboard.isKey(KeyCode_Z))
+		{
+		case KeyType_DOWN: {
+			*rota = gameobject->Reset();
 		} break;
 		}
 	}
-	void Remove() override {}
+	void Remove() override {
+		if (rota) { delete rota; rota = nullptr; }
+	}
 };
 class SpriteObject : public GameObject {
 private:
@@ -82,40 +93,34 @@ private:
 
 		auto* ani = AddComponent<Animator>();
 		ani->animation.LoadAnimaition("Sans");
+		
+		*scale = Vector4f(2.5f);
 
 		AddComponent<Rotator>();
-
-		pos->x = 0;
-		pos->z = -1;
 	}
 };
 class PolygonObject : public GameObject {
 private:
 	void Components() override {
-		AddComponent<Rotator>();
 		auto* sprite = AddComponent<PolygonRenderer>();
 		sprite->AddVertex(-5, -5);
 		sprite->AddVertex(5, -5);
 		sprite->AddVertex(5, 5);
 		sprite->AddVertex(-5, 5);
 		sprite->color = Color_SkyBlue;
-
-		pos->x = 0;
-		pos->y = 0;
-		pos->z = 0;
 	}
 };
 class TestScene : public Scene {
 private:
-	void GameObjects() override {
-		auto* camera = AddGameObject<DefaultGameObjects::Camera>(L"Camera");
+	void GameObjects() final override {
+		auto* camera = AddGameObject<GameObjects::Camera>(L"Camera");
 		camera->AddComponent<Mover>();
 
 		auto* a = camera->GetComponent<Camera>();
-		a->SetCameraSize({ 256, 144 });
+		a->SetCameraSize({ 256, 144});
 		a->SetCameraScale({ 4, 4 });
 
-		//auto* obj = AddGameObject<SpriteObject>(L"SpriteObjectTest");
+		auto* obj = AddGameObject<SpriteObject>(L"SpriteObjectTest");
 		AddGameObject<PolygonObject>(L"PolygonObjectTest");
 	}
 };

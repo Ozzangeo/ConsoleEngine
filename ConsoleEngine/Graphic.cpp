@@ -333,6 +333,8 @@ void Graphic::DrawSprite(Vector4f& pos, const Matrix4x4f& Trans, Sprite& sprite)
 	
 	Vector4f posf = pos;
 
+	Matrix4x4f trans = Math::GetRotateMatrix(*CameraRotate);
+
 	posf.x -= (sprite.size.X * 0.5f);
 	posf.y -= (sprite.size.Y * 0.5f);
 

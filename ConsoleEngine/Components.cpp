@@ -6,6 +6,7 @@ void Camera::Awake() {
 	COORD CameraSize = { 128, 72 };
 	graphic.SetScreenSize(CameraSize);
 	graphic.CameraPos = gameobject->pos;
+	graphic.CameraRotate = gameobject->rotate;
 }
 void Camera::Update() {
 	graphic.Render();
@@ -36,32 +37,7 @@ void PolygonRenderer::Update() {
 	if (!isVisible || vertexs.size() == 0) { return; }
 	else { *beforePos = *vertexs.front().second; }
 
-	Vector4i rotate = gameobject->GetRotate();
-	Matrix4x4f Trans =
-		/*  Rotate Z */ Matrix4x4f{
-		Math::cosb[rotate.z], Math::sinb[rotate.z], 0, 0,
-		-Math::sinb[rotate.z], Math::cosb[rotate.z], 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
-	}	  
-		/*  Rotate Y */ *Matrix4x4f{
-		Math::cosb[rotate.y], 0, -Math::sinb[rotate.y], 0,
-		0, 1, 0, 0,
-		Math::sinb[rotate.y], 0, Math::cosb[rotate.y], 0,
-		0, 0, 0, 1
-	}
-		/*  Rotate X */ *Matrix4x4f{
-		1, 0, 0, 0,
-		0, Math::cosb[rotate.x], Math::sinb[rotate.x], 0,
-		0, -Math::sinb[rotate.x], Math::cosb[rotate.x], 0,
-		0, 0, 0, 1
-	}
-		/* Scale XYZ */ *Matrix4x4f{
-		gameobject->scale->x, 0, 0, 0,
-		0, gameobject->scale->y, 0, 0,
-		0, 0, gameobject->scale->z, 0,
-		0, 0, 0, 1
-	};	
+	Matrix4x4f Trans = Math::GetRotateMatrix(gameobject->GetRotate()) * Math::GetScaleMatrix(*gameobject->scale);
 
 	for (auto& item : vertexs) {
 		if (*item.second != *beforePos) {
@@ -113,35 +89,7 @@ void SpriteRenderer::Awake() {
 }
 void SpriteRenderer::Update() {
 	if (isVisible && sprite.sprite) {
-		Vector4i rotate = gameobject->GetRotate();
-
-		Matrix4x4f Trans =
-			/*  Rotate Z */ Matrix4x4f{
-			Math::cosb[rotate.z], Math::sinb[rotate.z], 0, 0,
-			-Math::sinb[rotate.z], Math::cosb[rotate.z], 0, 0,
-			0, 0, 1, 0,
-			0, 0, 0, 1
-		}
-			/*  Rotate Y */ *Matrix4x4f{
-			Math::cosb[rotate.y], 0, -Math::sinb[rotate.y], 0,
-			0, 1, 0, 0,
-			Math::sinb[rotate.y], 0, Math::cosb[rotate.y], 0,
-			0, 0, 0, 1
-		}
-			/*  Rotate X */ *Matrix4x4f{
-			1, 0, 0, 0,
-			0, Math::cosb[rotate.x], Math::sinb[rotate.x], 0,
-			0, -Math::sinb[rotate.x], Math::cosb[rotate.x], 0,
-			0, 0, 0, 1
-		}
-			/* Scale XYZ */ *Matrix4x4f{
-			gameobject->scale->x, 0, 0, 0,
-			0, gameobject->scale->y, 0, 0,
-			0, 0, gameobject->scale->z, 0,
-			0, 0, 0, 1
-		};
-
-		graphic.DrawSprite(*gameobject->pos, Trans, sprite);
+		graphic.DrawSprite(*gameobject->pos, (Math::GetRotateMatrix(gameobject->GetRotate()) * Math::GetScaleMatrix(*gameobject->scale)), sprite);
 	}
 }
 void SpriteRenderer::Remove() {}

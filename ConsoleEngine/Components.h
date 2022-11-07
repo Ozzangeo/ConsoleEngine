@@ -56,7 +56,7 @@ namespace Components {
 
 	public:
 		Sprite sprite;
-		bool isVisible = true
+		bool isVisible = true;
 	};
 	class Animator : public Component {
 	private:

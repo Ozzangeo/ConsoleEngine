@@ -2,6 +2,7 @@
 #define ___GRAPHIC___
 
 #include "stdafx.h"
+#include "Math.h"
 #include "Matrix.h"
 #include "Vector.h"
 #include "Color.h"
@@ -23,6 +24,7 @@ private:
 	Vector4f* CameraPos;
 	Vector4i* m_ScreenSize;
 	Vector4f* m_HalfScreenSize;
+	Vector4i* CameraRotate;
 
 	COORD m_size;
 	SMALL_RECT m_rect;
@@ -50,6 +52,7 @@ private:
 public:
 	void Pixel(const   int& x, const   int& y, const   int& z, EnumColor& color);
 	void Pixel(const float& x, const float& y, const float& z, EnumColor& color);
+	void Pixel(const float& x, const float& y, const float& z, EnumColor& color, Matrix4x4f& Trans);
 	void Pixel(const Vector4i& pos, EnumColor& color);
 	void Pixel(const Vector4f& pos, EnumColor& color);
 

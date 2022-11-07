@@ -95,8 +95,6 @@ private:
 		ani->animation.LoadAnimaition("Sans");
 		
 		*scale = Vector4f(2.5f);
-
-		AddComponent<Rotator>();
 	}
 };
 class PolygonObject : public GameObject {
@@ -115,10 +113,11 @@ private:
 	void GameObjects() final override {
 		auto* camera = AddGameObject<GameObjects::Camera>(L"Camera");
 		camera->AddComponent<Mover>();
+		camera->AddComponent<Rotator>();
 
 		auto* a = camera->GetComponent<Camera>();
-		a->SetCameraSize({ 256, 144});
-		a->SetCameraScale({ 4, 4 });
+		a->SetCameraSize({ 512, 288 });
+		a->SetCameraScale({ 1, 1 });
 
 		auto* obj = AddGameObject<SpriteObject>(L"SpriteObjectTest");
 		AddGameObject<PolygonObject>(L"PolygonObjectTest");

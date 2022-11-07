@@ -40,6 +40,22 @@ void GameObject::SetRotateZ(float z) {
 
 	rotate->z = static_cast<int>(round(z)) + 180;
 }
+Vector4i GameObject::SetRotate(float x, float y, float z) {
+	while (x > 180) { x -= 360; }
+	while (x < -180) { x += 360; }
+
+	while (y > 180) { y -= 360; }
+	while (y < -180) { y += 360; }
+
+
+	while (z > 180) { z -= 360; }
+	while (z < -180) { z += 360; }
+
+	return (*rotate = {
+		static_cast<int>(round(x)) + 180,
+		static_cast<int>(round(y)) + 180,
+		static_cast<int>(round(z)) + 180 });
+}
 
 Vector4f GameObject::Reset() {
 	*rotate = { 0, 0, 90 };

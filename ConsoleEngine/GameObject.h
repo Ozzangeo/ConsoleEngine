@@ -9,6 +9,7 @@ using namespace std;
 class Scene;
 class GameObject {
 	friend class Scene;
+	friend class Components::Camera;
 private:
 	list<Component*> m_Components;
 
@@ -34,6 +35,7 @@ public:
 	void SetRotateX(float x);
 	void SetRotateY(float y);
 	void SetRotateZ(float z);
+	Vector4i SetRotate(float x, float y, float z);
 
 	Vector4f Reset();
 

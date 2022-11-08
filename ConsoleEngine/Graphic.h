@@ -52,7 +52,6 @@ private:
 public:
 	void Pixel(const   int& x, const   int& y, const   int& z, EnumColor& color);
 	void Pixel(const float& x, const float& y, const float& z, EnumColor& color);
-	void Pixel(const float& x, const float& y, const float& z, EnumColor& color, Matrix4x4f& Trans);
 	void Pixel(const Vector4i& pos, EnumColor& color);
 	void Pixel(const Vector4f& pos, EnumColor& color);
 
@@ -62,6 +61,7 @@ public:
 	void Line(Vector4f& pos, Vector4f& pos2, EnumColor color);
 	void Circle(Vector4f& pos, EnumColor color, const int& radius, const int& curvature);
 	void DrawSprite(Vector4f& pos, const Matrix4x4f& Trans, Sprite& sprite);
+	void DrawSprite(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, Sprite& sprite);
 };
 
 #endif // !___GRAPHIC___

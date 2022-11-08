@@ -327,63 +327,50 @@ void Graphic::Circle(Vector4f& pos, EnumColor color, const int& radius, const in
 	}
 }
 void Graphic::DrawSprite(Vector4f& pos, const Matrix4x4f& Trans, Sprite& sprite) {
-	Vector4i Temp;
+	int Temp;
 	int index = 0;
 	int spindex = 0;
 	
 	Vector4f posf = pos;
 
-	Matrix4x4f trans = Math::GetRotateMatrix(*CameraRotate);
-
 	posf.x -= (sprite.size.X * 0.5f);
 	posf.y -= (sprite.size.Y * 0.5f);
 
-	Vector4f ver;
-
 	for (int i = 0; i < sprite.size.Y; i++) {
-		Temp.y = i * sprite.size.X;
+		Temp = i * sprite.size.X;
 
 		for (int j = 0; j < sprite.size.X; j++) {
-			spindex = Temp.y + j;
-
-			ver = Vector4f{ posf.x + i, posf.y + j, posf.z, 1 } * Trans;
+			spindex = Temp + j;
 
 			if (sprite.sprite[spindex] == Color_NULL) { continue; }
-			
+
+			Vector4f ver = Vector4f{ posf.x + i, posf.y + j, posf.z, 1 } *Trans;
+
+			Pixel(ver.x, ver.y, ver.z, sprite.sprite[spindex]);
+		}
+	}
+}
+void Graphic::DrawSprite(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, Sprite& sprite) {
+
+	Vector4f Pos = pos * Math::GetRotateMatrix(*CameraRotate);
+	Pos.x -= (sprite.size.X * 0.5f);
+	Pos.y -= (sprite.size.Y * 0.5f);
+
+	Matrix4x4f Trans = Math::GetRotateMatrix(rotate) * Math::GetScaleMatrix(scale);
+
+	int Temp = 0;
+	int spindex = 0;
+	for (int i = 0; i < sprite.size.Y; i++) {
+		Temp = i * sprite.size.X;
+
+		for (int j = 0; j < sprite.size.X; j++) {
+			spindex = Temp + j;
+
+			if (sprite.sprite[spindex] == Color_NULL) { continue; }
+
+			Vector4f ver = Vector4f{ Pos.x + i, Pos.y + j, Pos.z, 1 } * Trans;
+
 			Pixel(ver, sprite.sprite[spindex]);
 		}
 	}
 }
-
-/*
-Vector4i Temp;
-	int index = 0;
-	int spindex = 0;
-
-	Vector4f posf = pos;
-
-	posf.x -= CameraPos->x + (sprite.size.X * 0.5f);
-	posf.y -= CameraPos->y + (sprite.size.Y * 0.5f);
-
-	Vector4i posi = posf;
-
-	for (int i = 0; i < sprite.size.Y; i++) {
-		Temp.y = posi.y + i;
-
-		if (Temp.y < 0) { continue; }
-		if (Temp.y >= m_ScreenSize->y) { return; }
-		Temp.y = i * sprite.size.X;
-
-		for (int j = 0; j < sprite.size.X; j++) {
-			Temp.x = posi.x + j;
-			spindex = Temp.y + j;
-
-			if (Temp.x < 0 || sprite.sprite[spindex] == Color_NULL) { continue; }
-			if (Temp.x >= m_ScreenSize->x) { break; }
-
-			index = ((i + posi.y) * m_ScreenSize->x) + Temp.x;
-
-			SPRITE(index, spindex, posi.z)
-		}
-	}
-*/

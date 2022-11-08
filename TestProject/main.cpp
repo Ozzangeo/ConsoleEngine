@@ -85,6 +85,64 @@ class Rotator : public Component {
 		if (rota) { delete rota; rota = nullptr; }
 	}
 };
+class Rotator2 : public Component {
+	Vector4f* rota = nullptr;
+	float speed = 300.0f;
+
+	void Awake() override {
+		rota = new Vector4f(gameobject->Reset());
+	}
+	void Update() override {
+		switch (keyboard.isKey(KeyCode_Y)) {
+		case KeyType_HOLD: {
+			rota->x -= Time::GetDeltaTime() * speed;
+			gameobject->SetRotateX(rota->x);
+		} break;
+		}
+		switch (keyboard.isKey(KeyCode_U)) {
+		case KeyType_HOLD: {
+			rota->x += Time::GetDeltaTime() * speed;
+			gameobject->SetRotateX(rota->x);
+		} break;
+		}
+
+		switch (keyboard.isKey(KeyCode_H)) {
+		case KeyType_HOLD: {
+			rota->y -= Time::GetDeltaTime() * speed;
+			gameobject->SetRotateY(rota->y);
+		} break;
+		}
+		switch (keyboard.isKey(KeyCode_J)) {
+		case KeyType_HOLD: {
+			rota->y += Time::GetDeltaTime() * speed;
+			gameobject->SetRotateY(rota->y);
+		} break;
+		}
+
+		switch (keyboard.isKey(KeyCode_N)) {
+		case KeyType_HOLD: {
+			rota->z -= Time::GetDeltaTime() * speed;
+			gameobject->SetRotateZ(rota->z);
+		} break;
+		}
+		switch (keyboard.isKey(KeyCode_M)) {
+		case KeyType_HOLD: {
+			rota->z += Time::GetDeltaTime() * speed;
+			gameobject->SetRotateZ(rota->z);
+		} break;
+		}
+
+		switch (keyboard.isKey(KeyCode_Z))
+		{
+		case KeyType_DOWN: {
+			*rota = gameobject->Reset();
+		} break;
+		}
+	}
+	void Remove() override {
+		if (rota) { delete rota; rota = nullptr; }
+	}
+};
 class SpriteObject : public GameObject {
 private:
 	void Components() override {
@@ -120,6 +178,8 @@ private:
 		a->SetCameraScale({ 1, 1 });
 
 		auto* obj = AddGameObject<SpriteObject>(L"SpriteObjectTest");
+		obj->AddComponent<Rotator2>();
+
 		AddGameObject<PolygonObject>(L"PolygonObjectTest");
 	}
 };

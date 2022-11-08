@@ -61,13 +61,13 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 
 	int fps = 0;
 	float time = -1.0f;
-
+	
 	while (!isDone) {
 		system_clock::time_point start = system_clock::now();
 		/////////////Update/////////////
-
-		switch (Keyboard::isKey(KeyCode_ESC)) { case KeyType_DOWN: { isDone = true; } break; }
-	
+		
+		Keyboard::Update();
+		switch (Keyboard::isKey(KeyCode_ESC)) { case KeyType_HOLD: { isDone = true; } break; }
 		scene->Update();
 		
 		// FPS Debug

@@ -1,8 +1,4 @@
-[FPS] : 50
-[FPS] : 52
-[FPS] : 52
-[FPS] : 53
-[FPS] : 53
+[FPS] : 36
 [ Keyboard ] : Release
 [ Graphic ] : Release
 [ Math ] : Release

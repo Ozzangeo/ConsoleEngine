@@ -89,7 +89,7 @@ void SpriteRenderer::Awake() {
 }
 void SpriteRenderer::Update() {
 	if (isVisible && sprite.sprite) {
-		graphic.DrawSprite(*gameobject->pos, (Math::GetRotateMatrix(gameobject->GetRotate()) * Math::GetScaleMatrix(*gameobject->scale)), sprite);
+		graphic.DrawSprite(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale, sprite);
 	}
 }
 void SpriteRenderer::Remove() {}

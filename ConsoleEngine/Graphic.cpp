@@ -43,8 +43,6 @@ void Graphic::SetScreenSize(const COORD& Size) {
 	*m_ScreenSize = { Size.X, Size.Y, Size.X * Size.Y };
 	*m_HalfScreenSize = m_ScreenSize->operator Vector4f() * 0.5f;
 
-	if (CameraPos) { *CameraPos = { -m_HalfScreenSize->x, -m_HalfScreenSize->y, 0 }; }
-
 	m_rect = { 0, 0, Size.X, Size.Y };
 	m_size = { Size.X, Size.Y };
 
@@ -129,13 +127,11 @@ void Graphic::Pixel(const Vector4i& pos, EnumColor& color) {
 		m_Depth[index] = Pos.z;
 	}
 }
-void Graphic::Pixel(const  Vector4f& pos, EnumColor& color) {
-	Vector4i Pos = Vector4f{ (pos.x - CameraPos->x), (pos.y - CameraPos->y), pos.z };
+void Graphic::Pixel(Vector4f& pos, EnumColor& color) {
+	Vector4i Pos = pos;
 
 	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
-		0 > Pos.x || m_ScreenSize->x <= Pos.x) {
-		return;
-	}
+		0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }
 	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
 
 	if (m_Depth[index] < Pos.z) {
@@ -213,6 +209,8 @@ void Graphic::Fill(Vector4f& pos, Vector4f& pos2, EnumColor color) {
 		}
 	}
 }
+
+// https://m.blog.naver.com/kch8246/220823909990
 void Graphic::Line(const float& x, const float& y, const float& z, EnumColor color, const float& x2, const float& y2) {
 	Vector4i posi  = Vector4f{ x , y , z };
 	int counter = 0;
@@ -326,51 +324,45 @@ void Graphic::Circle(Vector4f& pos, EnumColor color, const int& radius, const in
 		DrawCircle(posi, tp, color);
 	}
 }
-void Graphic::DrawSprite(Vector4f& pos, const Matrix4x4f& Trans, Sprite& sprite) {
-	int Temp;
-	int index = 0;
-	int spindex = 0;
+void Graphic::Circle(Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, const int& radius, const int& curvature) {
+	Matrix4x4f Trans = Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
 	
-	Vector4f posf = pos;
+	// 여기서부터 Trans 곱하는거 생각해야함
+	Vector4i posi = pos;
 
-	posf.x -= (sprite.size.X * 0.5f);
-	posf.y -= (sprite.size.Y * 0.5f);
+	Vector4i TempPos = { 0, radius, 3 - (2 * radius) };
 
-	for (int i = 0; i < sprite.size.Y; i++) {
-		Temp = i * sprite.size.X;
+	if (TempPos.y >= TempPos.x) { DrawCircle(posi, TempPos, color); }
 
-		for (int j = 0; j < sprite.size.X; j++) {
-			spindex = Temp + j;
+	while (TempPos.y >= TempPos.x) {
+		TempPos.x++;
 
-			if (sprite.sprite[spindex] == Color_NULL) { continue; }
-
-			Vector4f ver = Vector4f{ posf.x + i, posf.y + j, posf.z, 1 } *Trans;
-
-			Pixel(ver.x, ver.y, ver.z, sprite.sprite[spindex]);
+		if (TempPos.z > 0) {
+			TempPos.y--;
+			TempPos.z += 4 * (TempPos.x - TempPos.y) + curvature;
 		}
+		else { TempPos.z += (4 * TempPos.x) + curvature; }
+
+		DrawCircle(posi, TempPos, color);
 	}
 }
-void Graphic::DrawSprite(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, Sprite& sprite) {
+void Graphic::DrawSprite(Vector4f pos, const Vector4i& rotate, const Vector4f& scale, Sprite& sprite) {
+	Matrix4x4f Trans = Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
 
-	Vector4f Pos = pos * Math::GetRotateMatrix(*CameraRotate);
-	Pos.x -= (sprite.size.X * 0.5f);
-	Pos.y -= (sprite.size.Y * 0.5f);
+	pos.x -= (sprite.size.X * 0.5f);
+	pos.y -= (sprite.size.Y * 0.5f);
 
-	Matrix4x4f Trans = Math::GetRotateMatrix(rotate) * Math::GetScaleMatrix(scale);
+	int Height = 0;
+	int SpriteIndex = 0;
 
-	int Temp = 0;
-	int spindex = 0;
 	for (int i = 0; i < sprite.size.Y; i++) {
-		Temp = i * sprite.size.X;
+		Height = i * sprite.size.X;
 
 		for (int j = 0; j < sprite.size.X; j++) {
-			spindex = Temp + j;
+			SpriteIndex = Height + j;
 
-			if (sprite.sprite[spindex] == Color_NULL) { continue; }
-
-			Vector4f ver = Vector4f{ Pos.x + i, Pos.y + j, Pos.z, 1 } * Trans;
-
-			Pixel(ver, sprite.sprite[spindex]);
+			if (sprite.sprite[SpriteIndex] == Color_NULL) { continue; }
+			else { Pixel(Vector4f{ pos.x + i, pos.y + j, pos.z, 1 } *Trans, sprite.sprite[SpriteIndex]); }
 		}
 	}
 }

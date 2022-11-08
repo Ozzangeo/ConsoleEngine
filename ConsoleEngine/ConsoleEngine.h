@@ -67,7 +67,8 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 		/////////////Update/////////////
 		
 		Keyboard::Update();
-		switch (Keyboard::isKey(KeyCode_ESC)) { case KeyType_HOLD: { isDone = true; } break; }
+		switch (Keyboard::isKey(KeyCode_ESC)) { case KeyType_DOWN: { isDone = true; } break; }
+
 		scene->Update();
 		
 		// FPS Debug

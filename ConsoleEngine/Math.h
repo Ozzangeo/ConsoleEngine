@@ -19,6 +19,10 @@ public:
 
 	inline static Matrix4x4f GetRotateMatrix(const Vector4i& rotate);
 	inline static Matrix4x4f GetScaleMatrix(const Vector4f& scale);
+    inline static Matrix4x4f GetPosMatrix(const Vector4f& pos);
+
+    inline static Vector4i RotateAdd(Vector4i& one, const Vector4i& two);
+    inline static Vector4i RotateSub(Vector4i& one, const Vector4i& two);
 };
 
 inline Matrix4x4f Math::GetRotateMatrix(const Vector4i& rotate) {
@@ -47,6 +51,43 @@ inline Matrix4x4f Math::GetScaleMatrix(const Vector4f& scale) {
             0, 0, scale.z, 0,
             0, 0, 0, 1
     };;
+}
+inline Matrix4x4f Math::GetPosMatrix(const Vector4f& pos) {
+    return Matrix4x4f{
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        pos.x, pos.y, pos.z, 1
+    };
+}
+
+inline Vector4i Math::RotateAdd(Vector4i& one, const Vector4i& two) {
+    Vector4i res = one + two;
+
+    while (res.x > 180) { res.x -= 360; }
+    while (res.x < -180) { res.x += 360; }
+
+    while (res.y > 180) { res.y -= 360; }
+    while (res.y < -180) { res.y += 360; }
+
+    while (res.z > 180) { res.z -= 360; }
+    while (res.z < -180) { res.z += 360; }
+
+    return res;
+}
+inline Vector4i Math::RotateSub(Vector4i& one, const Vector4i& two) {
+    Vector4i res = one - two;
+
+    while (res.x > 180) { res.x -= 360; }
+    while (res.x < -180) { res.x += 360; }
+
+    while (res.y > 180) { res.y -= 360; }
+    while (res.y < -180) { res.y += 360; }
+
+    while (res.z > 180) { res.z -= 360; }
+    while (res.z < -180) { res.z += 360; }
+
+    return res;
 }
 
 #endif // !___MATH___

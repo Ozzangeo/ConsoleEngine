@@ -79,8 +79,14 @@ public:
 	void operator delete(void* other);
 	void operator delete[](void* other);
 
+	inline Vector4f round();
+
 	operator Vector4i();
 };
+
+inline Vector4f Vector4f::round() {
+	return _mm_round_ps(vecp, 0);
+}
 
 #endif // !___VECTOR___
 

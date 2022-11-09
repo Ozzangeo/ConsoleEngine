@@ -68,11 +68,11 @@ Vector4f& Vector4f::operator+=(const __m128& ref) {
 Vector4f& Vector4f::operator-=(const __m128& ref) {
 	return (*this = _mm_sub_ps(vecp, ref));
 }
-Vector4f Vector4f::operator*=(const float& ref) {
+Vector4f& Vector4f::operator*=(const float& ref) {
 	__m128 other = _mm_set1_ps(ref);
 	return (*this = _mm_mul_ps(vecp, other));
 }
-Vector4f Vector4f::operator/=(const float& ref) {
+Vector4f& Vector4f::operator/=(const float& ref) {
 	__m128 other = _mm_set1_ps(ref);
 	return (*this = _mm_div_ps(vecp, other));
 }

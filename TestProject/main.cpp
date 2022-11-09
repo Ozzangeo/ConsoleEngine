@@ -143,6 +143,21 @@ class Rotator2 : public Component {
 		if (rota) { delete rota; rota = nullptr; }
 	}
 };
+class CircleRender : public Component {
+private:
+	float delta;
+
+	void Awake() override {
+		delta = 0;
+	}
+	void Update() override {
+		graphic.Circle(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale, Color_LightRed, 10, 0);
+	}
+	void Remove() override {
+
+	}
+};
+
 class SpriteObject : public GameObject {
 private:
 	void Components() override {
@@ -171,16 +186,17 @@ private:
 	void GameObjects() final override {
 		auto* camera = AddGameObject<GameObjects::Camera>(L"Camera");
 		camera->AddComponent<Mover>();
-		camera->AddComponent<Rotator>();
 
 		auto* a = camera->GetComponent<Camera>();
-		a->SetCameraSize({ 512, 288 });
-		a->SetCameraScale({ 1, 1 });
+		a->SetCameraSize({ 256, 144 });
+		a->SetCameraScale({ 4, 4 });
 
-		auto* obj = AddGameObject<SpriteObject>(L"SpriteObjectTest");
-		obj->AddComponent<Rotator2>();
+		//AddGameObject<SpriteObject>(L"SpriteObjectTest");
 
-		AddGameObject<PolygonObject>(L"PolygonObjectTest");
+		auto* obj = AddGameObject<PolygonObject>(L"PolygonObjectTest");
+		obj->AddComponent<Rotator>();
+		obj->AddComponent<CircleRender>();
+		*obj->scale = { 4, 4, 1 };
 	}
 };
 

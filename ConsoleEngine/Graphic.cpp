@@ -72,26 +72,24 @@ void Graphic::SetScreen() {
 	system(System.c_str());
 }
 
-inline void Graphic::DrawCircle(Vector4i& pos, Vector4i& pos2, EnumColor& color) {
-	Pixel((pos.x + pos2.x), (pos.y + pos2.y), pos.z, color);
-	Pixel((pos.x - pos2.x), (pos.y + pos2.y), pos.z, color);
-	Pixel((pos.x + pos2.x), (pos.y - pos2.y), pos.z, color);
-	Pixel((pos.x - pos2.x), (pos.y - pos2.y), pos.z, color);
+inline void Graphic::DrawCircle(const Vector4f& pos, const Vector4f& pos2, const Matrix4x4f& Trans, EnumColor& color) {
+	Pixel((pos.x + pos2.x), (pos.y + pos2.y), pos.z, Trans, color);
+	Pixel((pos.x - pos2.x), (pos.y + pos2.y), pos.z, Trans, color);
+	Pixel((pos.x + pos2.x), (pos.y - pos2.y), pos.z, Trans, color);
+	Pixel((pos.x - pos2.x), (pos.y - pos2.y), pos.z, Trans, color);
 
-	Pixel((pos.x + pos2.y), (pos.y + pos2.x), pos.z, color);
-	Pixel((pos.x - pos2.y), (pos.y + pos2.x), pos.z, color);
-	Pixel((pos.x + pos2.y), (pos.y - pos2.x), pos.z, color);
-	Pixel((pos.x - pos2.y), (pos.y - pos2.x), pos.z, color);
+	Pixel((pos.x + pos2.y), (pos.y + pos2.x), pos.z, Trans, color);
+	Pixel((pos.x - pos2.y), (pos.y + pos2.x), pos.z, Trans, color);
+	Pixel((pos.x + pos2.y), (pos.y - pos2.x), pos.z, Trans, color);
+	Pixel((pos.x - pos2.y), (pos.y - pos2.x), pos.z, Trans, color);
 }
 
 // 언젠가 시간되면 Pixel 코드 정리하기
-void Graphic::Pixel(const int& x, const int& y, const int& z, EnumColor& color) {
-	Vector4i Pos = Vector4f{ (x - CameraPos->x), (y - CameraPos->y), static_cast<float>(z) };
+void Graphic::Pixel(const int& x, const int& y, const int& z, const Matrix4x4f& Trans, EnumColor& color) {
+	Vector4i Pos = Vector4i{ x, y, z } * Trans;
 	
 	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
-		0 > Pos.x || m_ScreenSize->x <= Pos.x) {
-		return;
-	}
+		0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }
 	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
 
 	if (m_Depth[index] < Pos.z) {
@@ -99,13 +97,11 @@ void Graphic::Pixel(const int& x, const int& y, const int& z, EnumColor& color) 
 		m_Depth[index] = Pos.z;
 	}
 }
-void Graphic::Pixel(const float& x, const float& y, const float& z, EnumColor& color) {
-	Vector4i Pos = Vector4f{ (x - CameraPos->x), (y - CameraPos->y), z };
-	
+void Graphic::Pixel(const float& x, const float& y, const float& z, const Matrix4x4f& Trans, EnumColor& color) {
+	Vector4i Pos = Vector4f{ x, y, z } * Trans;
+
 	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
-		0 > Pos.x || m_ScreenSize->x <= Pos.x) {
-		return;
-	}
+		0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }
 	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
 
 	if (m_Depth[index] < Pos.z) {
@@ -113,13 +109,11 @@ void Graphic::Pixel(const float& x, const float& y, const float& z, EnumColor& c
 		m_Depth[index] = Pos.z;
 	}
 }
-void Graphic::Pixel(const Vector4i& pos, EnumColor& color) {
-	Vector4i Pos = Vector4f{ (pos.x - CameraPos->x), (pos.y - CameraPos->y), static_cast<float>(pos.z) };
+void Graphic::Pixel(Vector4i& pos, EnumColor& color) {
+	Vector4i Pos = pos;
 	
 	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
-		0 > Pos.x || m_ScreenSize->x <= Pos.x) {
-		return;
-	}
+		0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }
 	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
 
 	if (m_Depth[index] < Pos.z) {
@@ -144,8 +138,8 @@ void Graphic::Fill(const float& x, const float& y, const float& z, EnumColor col
 	Vector4f pos = { x, y, z };
 	Vector4f pos2 = { x2, y2, z };
 
-	if (pos.x > pos2.x) { Change<float>(&pos.x, &pos2.x); }
-	if (pos.y > pos2.y) { Change<float>(&pos.y, &pos2.y); }
+	if (pos.x > pos2.x) { Swap<float>(&pos.x, &pos2.x); }
+	if (pos.y > pos2.y) { Swap<float>(&pos.y, &pos2.y); }
 
 	int Height = 0;
 	int index = 0;
@@ -177,8 +171,8 @@ void Graphic::Fill(const float& x, const float& y, const float& z, EnumColor col
 	}
 }
 void Graphic::Fill(Vector4f& pos, Vector4f& pos2, EnumColor color) {
-	if (pos.x > pos2.x) { Change<float>(&pos.x, &pos2.x); }
-	if (pos.y > pos2.y) { Change<float>(&pos.y, &pos2.y); }
+	if (pos.x > pos2.x) { Swap<float>(&pos.x, &pos2.x); }
+	if (pos.y > pos2.y) { Swap<float>(&pos.y, &pos2.y); }
 
 	int Height = 0;
 	int index = 0;
@@ -211,59 +205,15 @@ void Graphic::Fill(Vector4f& pos, Vector4f& pos2, EnumColor color) {
 }
 
 // https://m.blog.naver.com/kch8246/220823909990
-void Graphic::Line(const float& x, const float& y, const float& z, EnumColor color, const float& x2, const float& y2) {
-	Vector4i posi  = Vector4f{ x , y , z };
+void Graphic::Line(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, Vector4f pos2) {
+	Matrix4x4f Trans = GetTranslate(rotate, scale);
 	int counter = 0;
 
 	COORD addr = { 0, 0 };
-	Vector4i d = Vector4f{ (x2 - posi.x), (y2 - posi.y), 0 };
 
-	if (d.x < 0) {
-		addr.X = -1;
-		d.x = -d.x;
-	}
-	else { addr.X = 1; }
-
-	if (d.y < 0) {
-		addr.Y = -1;
-		d.y = -d.y;
-	}
-	else { addr.Y = 1; }
-
-	Pixel(posi.x, posi.y, posi.z, color);
-	if (d.x >= d.y) {
-		for (int i = 0; i < d.x; i++) {
-			posi.x += addr.X;
-
-			counter += d.y;
-
-			if (counter >= d.x) {
-				posi.y += addr.Y;
-				counter -= d.x;
-			}
-			Pixel(posi, color);
-		}
-	}
-	else {
-		for (INT i = 0; i < d.y; i++) {
-			posi.y += addr.Y;
-
-			counter += d.x;
-
-			if (counter >= d.y) {
-				posi.x += addr.X;
-				counter -= d.y;
-			}
-			Pixel(posi, color);
-		}
-	}
-}
-void Graphic::Line(Vector4f& pos, Vector4f& pos2, EnumColor color) {
-	Vector4i posi = pos;
-	int counter = 0;
-
-	COORD addr = { 0, 0 };
-	Vector4i d = Vector4f{ (pos2.x - posi.x), (pos2.y - posi.y), 0 };
+	Vector4f posi = pos * Trans;
+			 pos2 = pos2 * Trans;
+	Vector4i d = Vector4f{ (pos2.x - posi.x), (pos2.x - posi.y), 0 };
 
 	if (d.x < 0) {
 		addr.X = -1;
@@ -292,7 +242,7 @@ void Graphic::Line(Vector4f& pos, Vector4f& pos2, EnumColor color) {
 		}
 	}
 	else {
-		for (int i = 0; i < d.y; i++) {
+		for (INT i = 0; i < d.y; i++) {
 			posi.y += addr.Y;
 
 			counter += d.x;
@@ -305,34 +255,58 @@ void Graphic::Line(Vector4f& pos, Vector4f& pos2, EnumColor color) {
 		}
 	}
 }
-void Graphic::Circle(Vector4f& pos, EnumColor color, const int& radius, const int& curvature) {
-	Vector4i posi = pos;
+void Graphic::Line(Vector4i pos, Vector4i pos2, const Matrix4x4f& Trans, EnumColor color) {
+	bool Longer = false;
+	Vector4i len = Vector4i{ pos2.x - pos.x, pos2.y - pos.y, 0 };
+	
+	if (abs(len.y) > abs(len.x)) {
+		Swap<int>(&len.x, &len.y);
+		Longer = true;
+	}
 
-	Vector4i tp = { 0, radius, 3 - (2 * radius) };
+	if (len.x == 0) { len.z = 0; }
+	else { len.z = (len.y << 16) / len.x; }
 
-	if (tp.y >= tp.x) { DrawCircle(posi, tp, color); }
-
-	while (tp.y >= tp.x) {
-		tp.x++;
-
-		if (tp.z > 0) {
-			tp.y--;
-			tp.z += 4 * (tp.x - tp.y) + curvature;
+	if (Longer) {
+		if (len.x > 0) {
+			len.x += pos.y;
+			// 0x8000 = 0.5
+			for (int i = 0x8000 + (pos.x << 16); pos.y <= len.x; pos.y++) {
+				Pixel(i >> 16, pos.y, pos.z, Trans, color);
+				i += len.z;
+			}
+			return;
 		}
-		else { tp.z += (4 * tp.x) + curvature; }
 
-		DrawCircle(posi, tp, color);
+		len.x += pos.y;
+		for (int i = 0x8000 + (pos.x << 16); pos.y >= len.x; pos.y--) {
+			Pixel(i >> 16, pos.y, pos.z, Trans, color);
+			i -= len.z;
+		}
+		return;
+	}
+
+	if (len.x > 0) {
+		len.x += pos.x;
+		for (int i = 0x8000 + (pos.y << 16); pos.x <= len.x; pos.x++) {
+			Pixel(pos.x, i >> 16, pos.z, Trans, color);
+			i += len.z;
+		}
+		return;
+	}
+
+	len.x += pos.x;
+	for (int i = 0x8000 + (pos.y << 16); pos.x >= len.x; pos.x--) {
+		Pixel(pos.x, i >> 16, pos.z, Trans, color);
+		i -= len.z;
 	}
 }
-void Graphic::Circle(Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, const int& radius, const int& curvature) {
-	Matrix4x4f Trans = Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
-	
-	// 여기서부터 Trans 곱하는거 생각해야함
-	Vector4i posi = pos;
+void Graphic::Circle(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, const int& radius, const int& curvature) {
+	Matrix4x4f Trans = GetTranslate(rotate, scale);
 
-	Vector4i TempPos = { 0, radius, 3 - (2 * radius) };
+	Vector4i TempPos = Vector4i{ 0, radius, 3 - (2 * radius) };
 
-	if (TempPos.y >= TempPos.x) { DrawCircle(posi, TempPos, color); }
+	if (TempPos.y >= TempPos.x) { DrawCircle(pos, TempPos, Trans, color); }
 
 	while (TempPos.y >= TempPos.x) {
 		TempPos.x++;
@@ -343,14 +317,15 @@ void Graphic::Circle(Vector4f& pos, const Vector4i& rotate, const Vector4f& scal
 		}
 		else { TempPos.z += (4 * TempPos.x) + curvature; }
 
-		DrawCircle(posi, TempPos, color);
+		DrawCircle(pos, TempPos, Trans, color);
 	}
 }
-void Graphic::DrawSprite(Vector4f pos, const Vector4i& rotate, const Vector4f& scale, Sprite& sprite) {
-	Matrix4x4f Trans = Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
+void Graphic::DrawSprite(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, Sprite& sprite) {
+	Matrix4x4f Trans = GetTranslate(rotate, scale);
+	Vector4f Pos = pos;
 
-	pos.x -= (sprite.size.X * 0.5f);
-	pos.y -= (sprite.size.Y * 0.5f);
+	Pos.x -= (sprite.size.X * 0.5f);
+	Pos.y -= (sprite.size.Y * 0.5f);
 
 	int Height = 0;
 	int SpriteIndex = 0;
@@ -362,7 +337,11 @@ void Graphic::DrawSprite(Vector4f pos, const Vector4i& rotate, const Vector4f& s
 			SpriteIndex = Height + j;
 
 			if (sprite.sprite[SpriteIndex] == Color_NULL) { continue; }
-			else { Pixel(Vector4f{ pos.x + i, pos.y + j, pos.z, 1 } *Trans, sprite.sprite[SpriteIndex]); }
+			else { Pixel(Pos.x + i, Pos.y + j, Pos.z, Trans, sprite.sprite[SpriteIndex]); }
 		}
 	}
+}
+
+inline Matrix4x4f Graphic::GetTranslate(const Vector4i& rotate, const Vector4f& scale) {
+	return Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
 }

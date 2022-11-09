@@ -36,14 +36,26 @@ class ConsoleEngine {
 private:
 	float m_FPS;
 	bool isDone;
+	Scene* nowScene;
 
 public:
 	ConsoleEngine();
 
+	template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool> = true> void ChangeScene();
 	template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool> = true> void Run(wstring title = L"Engine", int Frame = 60);
 
 	static void Release();
 };
+template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void ConsoleEngine::ChangeScene() {
+	if(nowScene) {
+		nowScene->Release();
+		delete nowScene;
+	}
+	nowScene = new T;
+	nowScene->Engine = this;
+	
+	nowScene->Awake();
+}
 template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void ConsoleEngine::Run(wstring title, int Frame) {
 	SetConsoleTitle(title.c_str());
 
@@ -51,14 +63,8 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 
 	isDone = false;
 
-	Scene* scene = new T;
-	scene->Engine = this;
-
-	if (scene) {
-		scene->Awake();
-		scene->GameObjects();
-	}
-
+	ChangeScene<T>();
+	
 	int fps = 0;
 	float time = -1.0f;
 	
@@ -69,7 +75,7 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 		Keyboard::Update();
 		switch (Keyboard::isKey(KeyCode_ESC)) { case KeyType_DOWN: { isDone = true; } break; }
 
-		scene->Update();
+		nowScene->Update();
 		
 		// FPS Debug
 		time += Time::DeltaTime;
@@ -86,6 +92,6 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 		Time::DeltaTime = duration<float>(system_clock::now() - start).count();
 	}
 
-	scene->Release();
+	nowScene->Release();
 }
 #endif // !___CONSOLEENGINE___

@@ -43,25 +43,26 @@ private:
 	void SetScreenSize(const COORD& Size);
 	void SetScreen();
 
-	inline void DrawCircle(Vector4i& pos, Vector4i& pos2, EnumColor& color);
+	inline void DrawCircle(const Vector4f& pos, const Vector4f& pos2, const Matrix4x4f& Trans, EnumColor& color);
 
 	void Render();
 	static void Release();
 	static Graphic& GetInstance();
 
-	void Pixel(const   int& x, const   int& y, const   int& z, EnumColor& color);
-	void Pixel(const float& x, const float& y, const float& z, EnumColor& color);
-	void Pixel(const Vector4i& pos, EnumColor& color);
+	void Pixel(const   int& x, const   int& y, const   int& z, const Matrix4x4f& Trans, EnumColor& color);
+	void Pixel(const float& x, const float& y, const float& z, const Matrix4x4f& Trans, EnumColor& color);
+	void Pixel(Vector4i& pos, EnumColor& color);
 	void Pixel(Vector4f& pos, EnumColor& color);
 
 public:
 	void Fill(const float& x, const float& y, const float& z, EnumColor color, const float& x2 = 0, const float y2 = 0);
 	void Fill(Vector4f& pos, Vector4f& pos2, EnumColor color);
-	void Line(const float& x, const float& y, const float& z, EnumColor color, const float& x2 = 0, const float& y2 = 0);
-	void Line(Vector4f& pos, Vector4f& pos2, EnumColor color);
-	void Circle(Vector4f& pos, EnumColor color, const int& radius, const int& curvature);
-	void Circle(Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, const int& radius, const int& curvature = 0);
-	void DrawSprite(Vector4f pos, const Vector4i& rotate, const Vector4f& scale, Sprite& sprite);
+	void Line		(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, Vector4f pos2 = 0);
+	void Line		(Vector4i pos, Vector4i pos2, const Matrix4x4f& Trans, EnumColor color);
+	void Circle		(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, const int& radius, const int& curvature = 0);
+	void DrawSprite	(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, Sprite& sprite);
+
+	inline Matrix4x4f GetTranslate(const Vector4i& rotate, const Vector4f& scale);
 };
 
 #endif // !___GRAPHIC___

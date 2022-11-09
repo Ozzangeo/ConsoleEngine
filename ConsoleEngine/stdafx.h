@@ -31,7 +31,7 @@ namespace Handle {
 };
 
 template<typename T>
-void Change(T* a, T* b) {
+void Swap(T* a, T* b) {
 	T temp = *a;
 	*a = *b;
 	*b = temp;

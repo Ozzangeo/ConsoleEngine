@@ -32,17 +32,17 @@ public:
 	Vector4f* pos;
 	Vector4f* scale;
 
-	void SetRotateX(float x);
-	void SetRotateY(float y);
-	void SetRotateZ(float z);
-	Vector4i SetRotate(float x, float y, float z);
+	inline void SetRotateX(float x);
+	inline void SetRotateY(float y);
+	inline void SetRotateZ(float z);
+	inline Vector4i SetRotate(float x, float y, float z);
 
-	Vector4f Reset();
+	inline Vector4f Reset();
 
-	int GetRotateX();
-	int GetRotateY();
-	int GetRotateZ();
-	Vector4i GetRotate();
+	inline int GetRotateX();
+	inline int GetRotateY();
+	inline int GetRotateZ();
+	inline Vector4i GetRotate();
 
 	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> T* AddComponent();
 	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> T* GetComponent();
@@ -80,5 +80,50 @@ template<typename T, enable_if_t<is_base_of_v<Component, T>, bool>> inline bool 
 
 	return true;
 }
+
+inline void GameObject::SetRotateX(float x) {
+	while (x > 180) { x -= 360; }
+	while (x < -180) { x += 360; }
+
+	rotate->x = static_cast<int>(round(x)) + 180;
+}
+inline void GameObject::SetRotateY(float y) {
+	while (y > 180) { y -= 360; }
+	while (y < -180) { y += 360; }
+
+	rotate->y = static_cast<int>(round(y)) + 180;
+}
+inline void GameObject::SetRotateZ(float z) {
+	while (z > 180) { z -= 360; }
+	while (z < -180) { z += 360; }
+
+	rotate->z = static_cast<int>(round(z)) + 180;
+}
+inline Vector4i GameObject::SetRotate(float x, float y, float z) {
+	while (x > 180) { x -= 360; }
+	while (x < -180) { x += 360; }
+
+	while (y > 180) { y -= 360; }
+	while (y < -180) { y += 360; }
+
+
+	while (z > 180) { z -= 360; }
+	while (z < -180) { z += 360; }
+
+	return (*rotate = {
+		static_cast<int>(round(x)) + 180,
+		static_cast<int>(round(y)) + 180,
+		static_cast<int>(round(z)) + 180 });
+}
+
+inline Vector4f GameObject::Reset() {
+	*rotate = { 0, 0, 90 };
+	return { 180, 180, -90 };
+}
+
+inline int GameObject::GetRotateX() { return rotate->x; }
+inline int GameObject::GetRotateY() { return rotate->y; }
+inline int GameObject::GetRotateZ() { return rotate->z; }
+inline Vector4i GameObject::GetRotate() { return { rotate->x, rotate->y, rotate->z, 0 }; }
 
 #endif // !___GAMEOBJECT___

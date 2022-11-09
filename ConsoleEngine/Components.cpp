@@ -37,22 +37,17 @@ void PolygonRenderer::Update() {
 	if (!isVisible || vertexs.size() == 0) { return; }
 	else { *beforePos = *vertexs.front().second; }
 
-	Matrix4x4f Trans = Math::GetRotateMatrix(gameobject->GetRotate()) * Math::GetScaleMatrix(*gameobject->scale);
+	Matrix4x4f Trans = graphic.GetTranslate(gameobject->GetRotate(), *gameobject->scale);
 
 	for (auto& item : vertexs) {
 		if (*item.second != *beforePos) {
-			*start = (*item.second * Trans) + *gameobject->pos;
-			*end   = ( *beforePos  * Trans) + *gameobject->pos;
-
-			graphic.Line(*start, *end, color);
+			graphic.Line(*item.second, *beforePos, Trans, color);
 
 			*beforePos = *item.second;
 		}
 	}
-	*start = (*vertexs. back().second * Trans) + *gameobject->pos;
-	*end   = (*vertexs.front().second * Trans) + *gameobject->pos;
 
-	graphic.Line(*start, *end, color);
+	graphic.Line(*vertexs.back().second, *vertexs.front().second, Trans, color);
 }
 void PolygonRenderer::Remove() {
 	if (start) { delete start; start = nullptr; }

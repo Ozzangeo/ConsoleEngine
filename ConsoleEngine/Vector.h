@@ -67,8 +67,8 @@ public:
 	Vector4f& operator-=(const Vector4f& ref);
 	Vector4f& operator+=(const __m128& ref);
 	Vector4f& operator-=(const __m128& ref);
-	Vector4f operator*=(const float& ref);
-	Vector4f operator/=(const float& ref);
+	Vector4f& operator*=(const float& ref);
+	Vector4f& operator/=(const float& ref);
 
 	bool operator==(const Vector4f& ref);
 	bool operator!=(const Vector4f& ref);

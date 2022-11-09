@@ -63,7 +63,7 @@ Vector4f operator*(const Vector4f& vec, const Matrix4x4f& mat) {
 		mat.f12, mat.f22, mat.f32, mat.f42,
 		mat.f13, mat.f23, mat.f33, mat.f43,
 		mat.f14, mat.f24, mat.f34, mat.f44);
-
+	
 	return { _mm_dp_ps(vec.vecp, transpose.matp[0], 0xFF).m128_f32[0],
 			 _mm_dp_ps(vec.vecp, transpose.matp[1], 0xFF).m128_f32[0],
 			 _mm_dp_ps(vec.vecp, transpose.matp[2], 0xFF).m128_f32[0],

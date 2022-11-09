@@ -85,7 +85,7 @@ inline void Graphic::DrawCircle(const Vector4f& pos, const Vector4f& pos2, const
 }
 
 // 언젠가 시간되면 Pixel 코드 정리하기
-void Graphic::Pixel(const int& x, const int& y, const int& z, const Matrix4x4f& Trans, EnumColor& color) {
+void Graphic::Pixel(const   int& x, const   int& y, const   int& z, const Matrix4x4f& Trans, EnumColor& color) {
 	Vector4i Pos = Vector4i{ x, y, z } * Trans;
 	
 	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
@@ -102,6 +102,34 @@ void Graphic::Pixel(const float& x, const float& y, const float& z, const Matrix
 
 	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
 		0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }
+	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
+
+	if (m_Depth[index] < Pos.z) {
+		m_Screen[index].Attributes = color;
+		m_Depth[index] = Pos.z;
+	}
+}
+void Graphic::Pixel(const   int& x, const   int& y,   const int& z, EnumColor& color) {
+	Vector4i Pos = Vector4i{ x, y, z };
+
+	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
+		0 > Pos.x || m_ScreenSize->x <= Pos.x) {
+		return;
+	}
+	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
+
+	if (m_Depth[index] < Pos.z) {
+		m_Screen[index].Attributes = color;
+		m_Depth[index] = Pos.z;
+	}
+}
+void Graphic::Pixel(const float& x, const float& y, const float& z, EnumColor& color) {
+	Vector4i Pos = Vector4f{ x, y, z };
+
+	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
+		0 > Pos.x || m_ScreenSize->x <= Pos.x) {
+		return;
+	}
 	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
 
 	if (m_Depth[index] < Pos.z) {
@@ -256,23 +284,26 @@ void Graphic::Line(const Vector4f& pos, const Vector4i& rotate, const Vector4f& 
 	}
 }
 void Graphic::Line(Vector4i pos, Vector4i pos2, const Matrix4x4f& Trans, EnumColor color) {
-	bool Longer = false;
+	pos = pos * Trans;
+	pos2 = pos2 * Trans;
+	
 	Vector4i len = Vector4i{ pos2.x - pos.x, pos2.y - pos.y, 0 };
+	bool isHeight = false;
 	
 	if (abs(len.y) > abs(len.x)) {
 		Swap<int>(&len.x, &len.y);
-		Longer = true;
+		isHeight = true;
 	}
 
 	if (len.x == 0) { len.z = 0; }
 	else { len.z = (len.y << 16) / len.x; }
 
-	if (Longer) {
+	if (isHeight) {
 		if (len.x > 0) {
 			len.x += pos.y;
 			// 0x8000 = 0.5
 			for (int i = 0x8000 + (pos.x << 16); pos.y <= len.x; pos.y++) {
-				Pixel(i >> 16, pos.y, pos.z, Trans, color);
+				Pixel(i >> 16, pos.y, pos.z, color);
 				i += len.z;
 			}
 			return;
@@ -280,7 +311,7 @@ void Graphic::Line(Vector4i pos, Vector4i pos2, const Matrix4x4f& Trans, EnumCol
 
 		len.x += pos.y;
 		for (int i = 0x8000 + (pos.x << 16); pos.y >= len.x; pos.y--) {
-			Pixel(i >> 16, pos.y, pos.z, Trans, color);
+			Pixel(i >> 16, pos.y, pos.z, color);
 			i -= len.z;
 		}
 		return;
@@ -289,7 +320,7 @@ void Graphic::Line(Vector4i pos, Vector4i pos2, const Matrix4x4f& Trans, EnumCol
 	if (len.x > 0) {
 		len.x += pos.x;
 		for (int i = 0x8000 + (pos.y << 16); pos.x <= len.x; pos.x++) {
-			Pixel(pos.x, i >> 16, pos.z, Trans, color);
+			Pixel(pos.x, i >> 16, pos.z, color);
 			i += len.z;
 		}
 		return;
@@ -297,7 +328,7 @@ void Graphic::Line(Vector4i pos, Vector4i pos2, const Matrix4x4f& Trans, EnumCol
 
 	len.x += pos.x;
 	for (int i = 0x8000 + (pos.y << 16); pos.x >= len.x; pos.x--) {
-		Pixel(pos.x, i >> 16, pos.z, Trans, color);
+		Pixel(pos.x, i >> 16, pos.z, color);
 		i -= len.z;
 	}
 }

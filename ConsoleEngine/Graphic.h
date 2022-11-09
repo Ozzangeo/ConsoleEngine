@@ -51,6 +51,8 @@ private:
 
 	void Pixel(const   int& x, const   int& y, const   int& z, const Matrix4x4f& Trans, EnumColor& color);
 	void Pixel(const float& x, const float& y, const float& z, const Matrix4x4f& Trans, EnumColor& color);
+	void Pixel(const   int& x, const   int& y, const   int& z, EnumColor& color);
+	void Pixel(const float& x, const float& y, const float& z, EnumColor& color);
 	void Pixel(Vector4i& pos, EnumColor& color);
 	void Pixel(Vector4f& pos, EnumColor& color);
 

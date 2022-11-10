@@ -151,7 +151,7 @@ private:
 		delta = 0;
 	}
 	void Update() override {
-		graphic.Circle(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale, Color_LightRed, 10, 0);
+		graphic.Circle(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale, Color_LightRed, 10.0f, 0);
 	}
 	void Remove() override {
 
@@ -191,12 +191,12 @@ private:
 		a->SetCameraSize({ 256, 144 });
 		a->SetCameraScale({ 4, 4 });
 
-		//AddGameObject<SpriteObject>(L"SpriteObjectTest");
+		AddGameObject<SpriteObject>(L"SpriteObjectTest");
 
 		auto* obj = AddGameObject<PolygonObject>(L"PolygonObjectTest");
 		obj->AddComponent<Rotator>();
 		obj->AddComponent<CircleRender>();
-		*obj->scale = { 4, 4, 1 };
+		*obj->scale = { 4, 4, 10 };
 	}
 };
 

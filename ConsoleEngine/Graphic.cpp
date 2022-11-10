@@ -332,10 +332,11 @@ void Graphic::Line(Vector4i pos, Vector4i pos2, const Matrix4x4f& Trans, EnumCol
 		i -= len.z;
 	}
 }
-void Graphic::Circle(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, const int& radius, const int& curvature) {
-	Matrix4x4f Trans = GetTranslate(rotate, scale);
-
-	Vector4i TempPos = Vector4i{ 0, radius, 3 - (2 * radius) };
+void Graphic::Circle(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, const float& radius, const int& curvature) {
+	Matrix4x4f Trans = GetTranslate(rotate);
+	float radiusf = radius * scale.z;
+	
+	Vector4i TempPos = Vector4f{ 0, radiusf, 3 - (2 * radiusf) };
 
 	if (TempPos.y >= TempPos.x) { DrawCircle(pos, TempPos, Trans, color); }
 
@@ -371,8 +372,4 @@ void Graphic::DrawSprite(const Vector4f& pos, const Vector4i& rotate, const Vect
 			else { Pixel(Pos.x + i, Pos.y + j, Pos.z, Trans, sprite.sprite[SpriteIndex]); }
 		}
 	}
-}
-
-inline Matrix4x4f Graphic::GetTranslate(const Vector4i& rotate, const Vector4f& scale) {
-	return Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
 }

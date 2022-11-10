@@ -61,10 +61,26 @@ public:
 	void Fill(Vector4f& pos, Vector4f& pos2, EnumColor color);
 	void Line		(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, Vector4f pos2 = 0);
 	void Line		(Vector4i pos, Vector4i pos2, const Matrix4x4f& Trans, EnumColor color);
-	void Circle		(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, const int& radius, const int& curvature = 0);
+	void Circle		(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, const float& radius, const int& curvature = 0);
 	void DrawSprite	(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, Sprite& sprite);
 
 	inline Matrix4x4f GetTranslate(const Vector4i& rotate, const Vector4f& scale);
+	inline Matrix4x4f GetTranslate(const Vector4i& rotate);
+	inline Matrix4x4f GetTranslate(const Vector4f& scale);
+	inline Matrix4x4f GetTranslate();
 };
+
+inline Matrix4x4f Graphic::GetTranslate(const Vector4i& rotate, const Vector4f& scale) {
+	return Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
+}
+inline Matrix4x4f Graphic::GetTranslate(const Vector4i& rotate) {
+	return Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
+}
+inline Matrix4x4f Graphic::GetTranslate(const Vector4f& scale) {
+	return Math::GetScaleMatrix(scale) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
+}
+inline Matrix4x4f Graphic::GetTranslate() {
+	return Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
+}
 
 #endif // !___GRAPHIC___

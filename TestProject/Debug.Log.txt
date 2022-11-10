@@ -1,14 +1,16 @@
-[FPS] : 209
-[FPS] : 197
-[FPS] : 202
-[FPS] : 206
-[FPS] : 231
-[FPS] : 212
-[FPS] : 213
-[FPS] : 191
-[FPS] : 194
-[FPS] : 191
-[FPS] : 195
+[FPS] : 76
+[FPS] : 78
+[FPS] : 77
+[FPS] : 71
+[FPS] : 76
+[FPS] : 81
+[FPS] : 85
+[FPS] : 85
+[FPS] : 83
+[FPS] : 87
+[FPS] : 85
+[FPS] : 85
+[FPS] : 84
 [ Keyboard ] : Release
 [ Graphic ] : Release
 [ Math ] : Release

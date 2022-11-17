@@ -18,7 +18,7 @@ Matrix4x4f Matrix4x4f::operator-(const Matrix4x4f& ref) {
 	};
 }
 Matrix4x4f Matrix4x4f::operator*(const float& ref) {
-	Vector4f vec(ref);
+	Vector3f vec(ref);
 
 	return {
 		_mm_mul_ps(matp[0], vec.vecp),
@@ -57,7 +57,7 @@ void Matrix4x4f::operator delete[](void* other) {
 	_aligned_free(other);
 }
 
-Vector4f operator*(const Vector4f& vec, const Matrix4x4f& mat) {
+Vector3f operator*(const Vector3f& vec, const Matrix4x4f& mat) {
 	Matrix4x4f transpose(
 		mat.f11, mat.f21, mat.f31, mat.f41,
 		mat.f12, mat.f22, mat.f32, mat.f42,

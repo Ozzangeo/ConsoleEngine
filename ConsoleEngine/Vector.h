@@ -5,8 +5,8 @@
 
 #include "stdafx.h"
 
-class alignas(16) Vector4f;
-class alignas(16) Vector4i {
+class alignas(16) Vector3f;
+class alignas(16) Vector3i {
 public:
 	union {
 		__m128i vecp;
@@ -18,17 +18,17 @@ public:
 		};
 	};
 
-	Vector4i() : vecp(_mm_set1_epi32(0)) {}
-	Vector4i(int set, int w = 0) : vecp(_mm_set_epi32(w, set, set, set)) {}
-	Vector4i(__m128i other) : vecp(other) {}
-	Vector4i(__m128 other) : vecp(_mm_cvtps_epi32(other)) {}
-	Vector4i(int _x, int _y, int _z, int _w = 1) : vecp(_mm_set_epi32(_w, _z, _y, _x)) {}
+	Vector3i() : vecp(_mm_set1_epi32(1)) {}
+	Vector3i(int set, int w = 1) : vecp(_mm_set_epi32(w, set, set, set)) {}
+	Vector3i(__m128i other) : vecp(other) {}
+	Vector3i(__m128 other) : vecp(_mm_cvtps_epi32(other)) {}
+	Vector3i(int _x, int _y, int _z, int _w = 1) : vecp(_mm_set_epi32(_w, _z, _y, _x)) {}
 
-	Vector4i operator+(const Vector4i& ref);
-	Vector4i operator-(const Vector4i& ref);
+	Vector3i operator+(const Vector3i& ref);
+	Vector3i operator-(const Vector3i& ref);
 
-	Vector4i& operator+=(const Vector4i& ref);
-	Vector4i& operator-=(const Vector4i& ref);
+	Vector3i& operator+=(const Vector3i& ref);
+	Vector3i& operator-=(const Vector3i& ref);
 
 	void* operator new(const size_t size);
 	void* operator new[](const size_t size);
@@ -36,9 +36,9 @@ public:
 	void operator delete(void* other);
 	void operator delete[](void* other);
 
-	operator Vector4f();
+	operator Vector3f();
 };
-class alignas(16) Vector4f {
+class alignas(16) Vector3f {
 public:
 	union {
 		__m128 vecp;
@@ -50,28 +50,28 @@ public:
 		};
 	};
 
-	Vector4f() : vecp(_mm_set_ps1(0.0f)) {}
-	Vector4f(float set) : vecp(_mm_set_ps1(set)) {}
-	Vector4f(__m128 other) : vecp(other) {}
-	Vector4f(__m128i other) : vecp(_mm_cvtepi32_ps(other)) {}
-	Vector4f(float _x, float _y, float _z, float _w = 1.0f) : vecp(_mm_set_ps(_w, _z, _y, _x)) {}
+	Vector3f() : vecp(_mm_set_ps1(1.0f)) {}
+	Vector3f(float set) : vecp(_mm_set_ps1(set)) {}
+	Vector3f(__m128 other) : vecp(other) {}
+	Vector3f(__m128i other) : vecp(_mm_cvtepi32_ps(other)) {}
+	Vector3f(float _x, float _y, float _z, float _w = 1.0f) : vecp(_mm_set_ps(_w, _z, _y, _x)) {}
 
-	Vector4f operator+(const Vector4f& ref);
-	Vector4f operator-(const Vector4f& ref);
-	Vector4f operator+(const __m128& ref);
-	Vector4f operator-(const __m128& ref);
-	Vector4f operator*(const float& ref);
-	Vector4f operator/(const float& ref);
+	Vector3f operator+(const Vector3f& ref);
+	Vector3f operator-(const Vector3f& ref);
+	Vector3f operator+(const __m128& ref);
+	Vector3f operator-(const __m128& ref);
+	Vector3f operator*(const float& ref);
+	Vector3f operator/(const float& ref);
 
-	Vector4f& operator+=(const Vector4f& ref);
-	Vector4f& operator-=(const Vector4f& ref);
-	Vector4f& operator+=(const __m128& ref);
-	Vector4f& operator-=(const __m128& ref);
-	Vector4f& operator*=(const float& ref);
-	Vector4f& operator/=(const float& ref);
+	Vector3f& operator+=(const Vector3f& ref);
+	Vector3f& operator-=(const Vector3f& ref);
+	Vector3f& operator+=(const __m128& ref);
+	Vector3f& operator-=(const __m128& ref);
+	Vector3f& operator*=(const float& ref);
+	Vector3f& operator/=(const float& ref);
 
-	bool operator==(const Vector4f& ref);
-	bool operator!=(const Vector4f& ref);
+	bool operator==(const Vector3f& ref);
+	bool operator!=(const Vector3f& ref);
 
 	void* operator new(const size_t size);
 	void* operator new[](const size_t size);
@@ -79,17 +79,18 @@ public:
 	void operator delete(void* other);
 	void operator delete[](void* other);
 
-	inline Vector4f round();
+	inline float Dot(const Vector3f& ref, const Vector3f& ref2);
+	inline Vector3f round();
 
-	operator Vector4i();
+	operator Vector3i();
 };
 
-inline Vector4f Vector4f::round() {
+inline float Vector3f::Dot(const Vector3f& ref, const Vector3f& ref2) {
+	Vector3f res = _mm_mul_ps(ref.vecp, ref2.vecp);
+	return res.x + res.y + res.z;
+}
+inline Vector3f Vector3f::round() {
 	return _mm_round_ps(vecp, 0);
 }
 
 #endif // !___VECTOR___
-
-
-
-

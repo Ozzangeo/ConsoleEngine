@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="2D">
-      <UniqueIdentifier>{edfeb4d4-3f48-456a-94b4-d265b4681f5e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Time.cpp">
@@ -22,9 +19,6 @@
     </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsoleEngine.cpp">
-      <Filter>2D</Filter>
     </ClCompile>
     <ClCompile Include="Vector.cpp">
       <Filter>소스 파일</Filter>
@@ -47,9 +41,6 @@
     <ClCompile Include="Debug.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Graphic.cpp">
-      <Filter>2D</Filter>
-    </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -60,6 +51,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Math.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleEngine.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,9 +72,6 @@
     </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleEngine.h">
-      <Filter>2D</Filter>
     </ClInclude>
     <ClInclude Include="Vector.h">
       <Filter>헤더 파일</Filter>
@@ -100,9 +94,6 @@
     <ClInclude Include="Debug.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Graphic.h">
-      <Filter>2D</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -113,6 +104,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Math.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleEngine.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

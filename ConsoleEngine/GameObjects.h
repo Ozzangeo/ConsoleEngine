@@ -8,8 +8,12 @@
 namespace GameObjects {
 	class Camera : public GameObject {
 	private:
-		void Components() override;
+		void Components() final override;
 	public:
+	};
+	class Rectangle : public GameObject {
+	private:
+		void Components() final override;
 	};
 }
 #endif // !___GAMEOBJECTS___ 

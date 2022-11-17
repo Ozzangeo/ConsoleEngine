@@ -1,11 +1,14 @@
 #ifndef ___STDAFX___
 #define ___STDAFX___
 
+#pragma comment(lib, "winmm.lib")
+
 #include <iostream>
 #include <fstream>
 
 #include <cstdlib>
 #include <string>
+#include <atlstr.h>
 #include <cmath>
 #include <Windows.h>
 
@@ -22,6 +25,10 @@
 #include <vector>
 #include <list>
 #include <queue>
+
+#include <mmsystem.h>
+#include <Digitalv.h>
+#include <mciapi.h>
 
 #include <nmmintrin.h>
 

@@ -17,15 +17,15 @@ public:
 	static const float* sinb;
 	static const float* tanb;
 
-	inline static Matrix4x4f GetRotateMatrix(const Vector4i& rotate);
-	inline static Matrix4x4f GetScaleMatrix(const Vector4f& scale);
-    inline static Matrix4x4f GetPosMatrix(const Vector4f& pos);
+	inline static Matrix4x4f GetRotateMatrix(const Vector3i& rotate);
+	inline static Matrix4x4f GetScaleMatrix(const Vector3f& scale);
+    inline static Matrix4x4f GetPosMatrix(const Vector3f& pos);
 
-    inline static Vector4i RotateAdd(Vector4i& one, const Vector4i& two);
-    inline static Vector4i RotateSub(Vector4i& one, const Vector4i& two);
+    inline static Vector3i RotateAdd(Vector3i& one, const Vector3i& two);
+    inline static Vector3i RotateSub(Vector3i& one, const Vector3i& two);
 };
 
-inline Matrix4x4f Math::GetRotateMatrix(const Vector4i& rotate) {
+inline Matrix4x4f Math::GetRotateMatrix(const Vector3i& rotate) {
     return
         /*  Rotate X */ Matrix4x4f{
             1, 0, 0, 0,
@@ -43,7 +43,7 @@ inline Matrix4x4f Math::GetRotateMatrix(const Vector4i& rotate) {
                     0, 0, 1, 0,
                     0, 0, 0, 1 };
 }
-inline Matrix4x4f Math::GetScaleMatrix(const Vector4f& scale) {
+inline Matrix4x4f Math::GetScaleMatrix(const Vector3f& scale) {
     return
         /* Scale XYZ */ Matrix4x4f{
             scale.x, 0, 0, 0,
@@ -52,7 +52,7 @@ inline Matrix4x4f Math::GetScaleMatrix(const Vector4f& scale) {
             0, 0, 0, 1
     };;
 }
-inline Matrix4x4f Math::GetPosMatrix(const Vector4f& pos) {
+inline Matrix4x4f Math::GetPosMatrix(const Vector3f& pos) {
     return Matrix4x4f{
         1, 0, 0, 0,
         0, 1, 0, 0,
@@ -61,8 +61,8 @@ inline Matrix4x4f Math::GetPosMatrix(const Vector4f& pos) {
     };
 }
 
-inline Vector4i Math::RotateAdd(Vector4i& one, const Vector4i& two) {
-    Vector4i res = one + two;
+inline Vector3i Math::RotateAdd(Vector3i& one, const Vector3i& two) {
+    Vector3i res = one + two;
 
     while (res.x > 180) { res.x -= 360; }
     while (res.x < -180) { res.x += 360; }
@@ -75,8 +75,8 @@ inline Vector4i Math::RotateAdd(Vector4i& one, const Vector4i& two) {
 
     return res;
 }
-inline Vector4i Math::RotateSub(Vector4i& one, const Vector4i& two) {
-    Vector4i res = one - two;
+inline Vector3i Math::RotateSub(Vector3i& one, const Vector3i& two) {
+    Vector3i res = one - two;
 
     while (res.x > 180) { res.x -= 360; }
     while (res.x < -180) { res.x += 360; }

@@ -17,6 +17,7 @@
 using namespace std;
 using namespace chrono;
 
+class Scene;
 namespace Components {
 	class Camera : public Component {
 	private:
@@ -26,23 +27,21 @@ namespace Components {
 
 	public:
 		void SetCameraScale(COORD Scale);
-		void SetCameraSize(COORD Size);
+		void SetCameraSize (COORD Size );
 	};
 	class PolygonRenderer : public Component {
+		friend class PolygonCollider;
 	private:
 		int vertexCount = 0;
-		list<pair<int, Vector4f*>> vertexs;
-
-		Vector4f* start = nullptr;
-		Vector4f* end = nullptr;
-		Vector4f* beforePos = nullptr;
+		vector<pair<int, Vector3f*>> vertexs;
+		Vector3f* beforePos = nullptr;
 
 		void Awake() final override;
 		void Update() final override;
 		void Remove() final override;
 	public:
-		Vector4f* AddVertex(float x, float y);
-		Vector4f* GetVertex(int index);
+		Vector3f* AddVertex(float x, float y);
+		Vector3f* GetVertex(int index);
 		void RemoveVertex();
 
 		EnumColor color = Color_NULL;
@@ -70,6 +69,56 @@ namespace Components {
 
 	public:
 		Animation animation;
+	};
+	class Audio : public Component {
+	private:
+		class SoundInfo {
+		public:
+			DWORD Sound;
+			UINT ID;
+			SoundInfo(DWORD Sound = NULL, UINT ID = 0) {
+				this->Sound = Sound;
+				this->ID = ID;
+			}
+		};
+
+		MCI_OPEN_PARMS mciOpen;
+		MCI_PLAY_PARMS mciPlay;
+
+		// mpegvideo : .mp3
+		// waveaudio : .wav
+		// avivideo  : .avi
+		CString AudioType = "mpegvideo";
+		list<SoundInfo> SoundList;
+
+		void Awake() final override;
+		void Update() final override;
+		void Remove() final override;
+	public:
+		enum SoundType {
+			MP3,
+			WAV,
+			AVI
+		};
+		void LoadAudio(CString path, SoundType Type = MP3);
+		bool PlayAudio	(UINT ID, bool isLoop = false);
+		void RePlayAudio(UINT ID);
+		void PauseAudio	(UINT ID);
+	};
+	class PolygonCollider : public Component {
+	private:
+		list<PolygonRenderer*> Polygons;
+		bool isCol;
+
+		void Awake() final override;
+		void Update() final override;
+		void Remove() final override;
+
+	public:
+		bool isCollision();
+
+		void AddPolygon(PolygonRenderer* polygon);
+		void RemovePolygon(PolygonRenderer* polygon);
 	};
 }
 

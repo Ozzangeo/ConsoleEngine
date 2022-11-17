@@ -28,11 +28,11 @@ private:
 	void Remove() override {}
 };
 class Rotator : public Component {
-	Vector4f* rota = nullptr;
+	Vector3f* rota = nullptr;
 	float speed = 300.0f;
 
 	void Awake() override {
-		rota = new Vector4f(gameobject->Reset());
+		rota = new Vector3f(gameobject->Reset());
 	}
 	void Update() override {
 		switch (keyboard.isKey(KeyCode_R)) {
@@ -86,11 +86,11 @@ class Rotator : public Component {
 	}
 };
 class Rotator2 : public Component {
-	Vector4f* rota = nullptr;
+	Vector3f* rota = nullptr;
 	float speed = 300.0f;
 
 	void Awake() override {
-		rota = new Vector4f(gameobject->Reset());
+		rota = new Vector3f(gameobject->Reset());
 	}
 	void Update() override {
 		switch (keyboard.isKey(KeyCode_Y)) {
@@ -151,12 +151,19 @@ private:
 		delta = 0;
 	}
 	void Update() override {
-		graphic.Circle(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale, Color_LightRed, 10.0f, 0);
+		graphic.Circle(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale, Color_LightRed, 6.0f, 0);
 	}
 	void Remove() override {
 
 	}
 };
+class Fills : public Component {
+	void Awake() override {}
+	void Update() override {
+		graphic.Fill({ -4, -4, 0 }, { 4, 4, 0 }, Color_Green);
+	}
+	void Remove() override {}
+}; 
 
 class SpriteObject : public GameObject {
 private:
@@ -167,7 +174,7 @@ private:
 		auto* ani = AddComponent<Animator>();
 		ani->animation.LoadAnimaition("Sans");
 		
-		*scale = Vector4f(2.5f);
+		*scale = Vector3f(2.5f);
 	}
 };
 class PolygonObject : public GameObject {
@@ -181,22 +188,34 @@ private:
 		sprite->color = Color_SkyBlue;
 	}
 };
+class FillObject : public GameObject {
+private:
+	void Components() override {
+		AddComponent<Fills>();
+	}
+};
 class TestScene : public Scene {
 private:
 	void GameObjects() final override {
 		auto* camera = AddGameObject<GameObjects::Camera>(L"Camera");
 		camera->AddComponent<Mover>();
+		auto* rect = AddGameObject<GameObjects::Rectangle>(L"Rectangle");
+		*rect->pos = { 150, 150, 0 };
+		rect->GetComponent<PolygonRenderer>()->color = Color_LightPerple;
 
 		auto* a = camera->GetComponent<Camera>();
 		a->SetCameraSize({ 256, 144 });
 		a->SetCameraScale({ 4, 4 });
 
-		AddGameObject<SpriteObject>(L"SpriteObjectTest");
+		//AddGameObject<SpriteObject>(L"SpriteObjectTest");
 
 		auto* obj = AddGameObject<PolygonObject>(L"PolygonObjectTest");
 		obj->AddComponent<Rotator>();
 		obj->AddComponent<CircleRender>();
-		*obj->scale = { 4, 4, 10 };
+		*obj->scale = { 4, 4, 1 };
+	
+		auto* obj2 = AddGameObject<FillObject>(L"Obje");
+		obj2->AddComponent<Rotator>();
 	}
 };
 

@@ -16,7 +16,7 @@ private:
 	void Update();
 	void Remove();
 
-	Vector4i* rotate;
+	Vector3i* rotate;
 
 protected:
 	bool isOnceGameObject = false;
@@ -28,21 +28,22 @@ public:
 
 	Scene* scene = nullptr;
 	wstring name;
+	wstring tag;
 
-	Vector4f* pos;
-	Vector4f* scale;
+	Vector3f* pos;
+	Vector3f* scale;
 
 	inline void SetRotateX(float x);
 	inline void SetRotateY(float y);
 	inline void SetRotateZ(float z);
-	inline Vector4i SetRotate(float x, float y, float z);
+	inline Vector3i SetRotate(float x, float y, float z);
 
-	inline Vector4f Reset();
+	inline Vector3f Reset();
 
 	inline int GetRotateX();
 	inline int GetRotateY();
 	inline int GetRotateZ();
-	inline Vector4i GetRotate();
+	inline Vector3i GetRotate();
 
 	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> T* AddComponent();
 	template<typename T, enable_if_t<is_base_of_v<Component, T>, bool> = true> T* GetComponent();
@@ -99,7 +100,7 @@ inline void GameObject::SetRotateZ(float z) {
 
 	rotate->z = static_cast<int>(round(z)) + 180;
 }
-inline Vector4i GameObject::SetRotate(float x, float y, float z) {
+inline Vector3i GameObject::SetRotate(float x, float y, float z) {
 	while (x > 180) { x -= 360; }
 	while (x < -180) { x += 360; }
 
@@ -116,7 +117,7 @@ inline Vector4i GameObject::SetRotate(float x, float y, float z) {
 		static_cast<int>(round(z)) + 180 });
 }
 
-inline Vector4f GameObject::Reset() {
+inline Vector3f GameObject::Reset() {
 	*rotate = { 0, 0, 90 };
 	return { 180, 180, -90 };
 }
@@ -124,6 +125,6 @@ inline Vector4f GameObject::Reset() {
 inline int GameObject::GetRotateX() { return rotate->x; }
 inline int GameObject::GetRotateY() { return rotate->y; }
 inline int GameObject::GetRotateZ() { return rotate->z; }
-inline Vector4i GameObject::GetRotate() { return { rotate->x, rotate->y, rotate->z, 0 }; }
+inline Vector3i GameObject::GetRotate() { return { rotate->x, rotate->y, rotate->z, 0 }; }
 
 #endif // !___GAMEOBJECT___

@@ -1,9 +1,12 @@
 #include "GameObject.h"
 
 GameObject::GameObject() {
-	pos = new Vector4f(0.0f);
-	scale = new Vector4f(1.0f);
-	rotate = new Vector4i(0, 0, 90);
+	name = L"";
+	tag = L"Default";
+
+	pos = new Vector3f(0.0f);
+	scale = new Vector3f(1.0f);
+	rotate = new Vector3i(0, 0, 90);
 }
 GameObject::~GameObject() {
 	if (pos) { delete pos; pos = nullptr; }

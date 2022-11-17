@@ -8,8 +8,8 @@ Graphic::Graphic() {
 	SetConsoleCursorInfo(Handle::OUTPUT, &cci);
 	SetScreenScale({ 1, 1 });
 
-	m_ScreenSize = new Vector4i;
-	m_HalfScreenSize = new Vector4f;
+	m_ScreenSize = new Vector3i;
+	m_HalfScreenSize = new Vector3f;
 }
 Graphic::~Graphic() {
 	if (m_Screen) { delete[] m_Screen; m_Screen = nullptr; }\
@@ -41,7 +41,7 @@ inline void Graphic::SetScreenScale(const COORD& Scale) {
 }
 void Graphic::SetScreenSize(const COORD& Size) {
 	*m_ScreenSize = { Size.X, Size.Y, Size.X * Size.Y };
-	*m_HalfScreenSize = m_ScreenSize->operator Vector4f() * 0.5f;
+	*m_HalfScreenSize = m_ScreenSize->operator Vector3f() * 0.5f;
 
 	m_rect = { 0, 0, Size.X, Size.Y };
 	m_size = { Size.X, Size.Y };
@@ -72,222 +72,63 @@ void Graphic::SetScreen() {
 	system(System.c_str());
 }
 
-inline void Graphic::DrawCircle(const Vector4f& pos, const Vector4f& pos2, const Matrix4x4f& Trans, EnumColor& color) {
-	Pixel((pos.x + pos2.x), (pos.y + pos2.y), pos.z, Trans, color);
-	Pixel((pos.x - pos2.x), (pos.y + pos2.y), pos.z, Trans, color);
-	Pixel((pos.x + pos2.x), (pos.y - pos2.y), pos.z, Trans, color);
-	Pixel((pos.x - pos2.x), (pos.y - pos2.y), pos.z, Trans, color);
-
-	Pixel((pos.x + pos2.y), (pos.y + pos2.x), pos.z, Trans, color);
-	Pixel((pos.x - pos2.y), (pos.y + pos2.x), pos.z, Trans, color);
-	Pixel((pos.x + pos2.y), (pos.y - pos2.x), pos.z, Trans, color);
-	Pixel((pos.x - pos2.y), (pos.y - pos2.x), pos.z, Trans, color);
-}
-
-// 언젠가 시간되면 Pixel 코드 정리하기
-void Graphic::Pixel(const   int& x, const   int& y, const   int& z, const Matrix4x4f& Trans, EnumColor& color) {
-	Vector4i Pos = Vector4i{ x, y, z } * Trans;
-	
-	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
-		0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }
-	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
-
-	if (m_Depth[index] < Pos.z) {
-		m_Screen[index].Attributes = color;
-		m_Depth[index] = Pos.z;
-	}
-}
-void Graphic::Pixel(const float& x, const float& y, const float& z, const Matrix4x4f& Trans, EnumColor& color) {
-	Vector4i Pos = Vector4f{ x, y, z } * Trans;
-
-	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
-		0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }
-	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
-
-	if (m_Depth[index] < Pos.z) {
-		m_Screen[index].Attributes = color;
-		m_Depth[index] = Pos.z;
-	}
-}
-void Graphic::Pixel(const   int& x, const   int& y,   const int& z, EnumColor& color) {
-	Vector4i Pos = Vector4i{ x, y, z };
-
-	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
-		0 > Pos.x || m_ScreenSize->x <= Pos.x) {
-		return;
-	}
-	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
-
-	if (m_Depth[index] < Pos.z) {
-		m_Screen[index].Attributes = color;
-		m_Depth[index] = Pos.z;
-	}
-}
-void Graphic::Pixel(const float& x, const float& y, const float& z, EnumColor& color) {
-	Vector4i Pos = Vector4f{ x, y, z };
-
-	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
-		0 > Pos.x || m_ScreenSize->x <= Pos.x) {
-		return;
-	}
-	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
-
-	if (m_Depth[index] < Pos.z) {
-		m_Screen[index].Attributes = color;
-		m_Depth[index] = Pos.z;
-	}
-}
-void Graphic::Pixel(Vector4i& pos, EnumColor& color) {
-	Vector4i Pos = pos;
-	
-	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
-		0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }
-	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
-
-	if (m_Depth[index] < Pos.z) {
-		m_Screen[index].Attributes = color;
-		m_Depth[index] = Pos.z;
-	}
-}
-void Graphic::Pixel(Vector4f& pos, EnumColor& color) {
-	Vector4i Pos = pos;
-
-	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
-		0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }
-	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
-
-	if (m_Depth[index] < Pos.z) {
-		m_Screen[index].Attributes = color;
-		m_Depth[index] = Pos.z;
-	}
-}
-
-void Graphic::Fill(const float& x, const float& y, const float& z, EnumColor color, const float& x2, const float y2) {
-	Vector4f pos = { x, y, z };
-	Vector4f pos2 = { x2, y2, z };
-
-	if (pos.x > pos2.x) { Swap<float>(&pos.x, &pos2.x); }
-	if (pos.y > pos2.y) { Swap<float>(&pos.y, &pos2.y); }
-
-	int Height = 0;
-	int index = 0;
-
-	pos.x  -= CameraPos->x;
-	pos2.x -= CameraPos->x;
-	pos.y  -= CameraPos->y;
-	pos2.y -= CameraPos->y;
-
-	Vector4i posi = pos;
-	Vector4i pos2i = pos2;
-
-	for (int i = posi.y; i <= pos2i.y; i++) {
-		if (i < 0) { continue; }
-		if (i >= m_ScreenSize->y) { return; }
-		Height = i * m_ScreenSize->x;
-
-		for (int j = posi.x; j <= pos2i.x; j++) {
-			if (j < 0) { continue; }
-			if (j >= m_ScreenSize->x) { break; }
-
-			index = Height + j;
-
-			if (m_Depth[index] < posi.z) {
-					m_Screen[index].Attributes = color;
-					m_Depth[index] = posi.z;
-			}
-		}
-	}
-}
-void Graphic::Fill(Vector4f& pos, Vector4f& pos2, EnumColor color) {
-	if (pos.x > pos2.x) { Swap<float>(&pos.x, &pos2.x); }
-	if (pos.y > pos2.y) { Swap<float>(&pos.y, &pos2.y); }
-
-	int Height = 0;
-	int index = 0;
-
-	pos.x  -= CameraPos->x;
-	pos2.x -= CameraPos->x;
-	pos.y  -= CameraPos->y;
-	pos2.y -= CameraPos->y;
-
-	Vector4i posi = pos;
-	Vector4i pos2i = pos2;
-
-	for (int i = posi.y; i <= pos2i.y; i++) {
-		if (i < 0)				{ continue; }
-		if (i >= m_ScreenSize->y) { return; }
-		Height = i * m_ScreenSize->x;
-
-		for (int j = posi.x; j <= pos2i.x; j++) {
-			if (j < 0)				{ continue; }
-			if (j >= m_ScreenSize->x) { break; }
-
-			index = Height + j;
-
-			if (m_Depth[index] < posi.z) {
-				m_Screen[index].Attributes = color;
-				m_Depth[index] = posi.z;
-			}
-		}
-	}
-}
-
-// https://m.blog.naver.com/kch8246/220823909990
-void Graphic::Line(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, Vector4f pos2) {
+// Extremely Fast Line Algorithm
+void Graphic::Line(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, Vector3f pos2) {
 	Matrix4x4f Trans = GetTranslate(rotate, scale);
-	int counter = 0;
 
-	COORD addr = { 0, 0 };
-
-	Vector4f posi = pos * Trans;
+	Vector3i posf = pos  * Trans;
 			 pos2 = pos2 * Trans;
-	Vector4i d = Vector4f{ (pos2.x - posi.x), (pos2.x - posi.y), 0 };
 
-	if (d.x < 0) {
-		addr.X = -1;
-		d.x = -d.x;
-	}
-	else { addr.X = 1; }
+			 Vector3i len = Vector3f{ pos2.x - pos.x, pos2.y - pos.y, 0 };
+			 bool isHeight = false;
 
-	if (d.y < 0) {
-		addr.Y = -1;
-		d.y = -d.y;
-	}
-	else { addr.Y = 1; }
+			 if (abs(len.y) > abs(len.x)) {
+				 Swap<int>(&len.x, &len.y);
+				 isHeight = true;
+			 }
 
-	Pixel(posi, color);
-	if (d.x >= d.y) {
-		for (int i = 0; i < d.x; i++) {
-			posi.x += addr.X;
+			 if (len.x == 0) { len.z = 0; }
+			 else { len.z = (len.y << 16) / len.x; }
 
-			counter += d.y;
+			 if (isHeight) {
+				 if (len.x > 0) {
+					 len.x += posf.y;
+					 // 0x8000 = 0.5
+					 for (int i = 0x8000 + (posf.x << 16); pos.y <= len.x; posf.y++) {
+						 Pixel(i >> 16, posf.y, posf.z, color);
+						 i += len.z;
+					 }
+					 return;
+				 }
 
-			if (counter >= d.x) {
-				posi.y += addr.Y;
-				counter -= d.x;
-			}
-			Pixel(posi, color);
-		}
-	}
-	else {
-		for (INT i = 0; i < d.y; i++) {
-			posi.y += addr.Y;
+				 len.x += posf.y;
+				 for (int i = 0x8000 + (posf.x << 16); pos.y >= len.x; posf.y--) {
+					 Pixel(i >> 16, posf.y, posf.z, color);
+					 i -= len.z;
+				 }
+				 return;
+			 }
 
-			counter += d.x;
+			 if (len.x > 0) {
+				 len.x += posf.x;
+				 for (int i = 0x8000 + (posf.y << 16); pos.x <= len.x; posf.x++) {
+					 Pixel(posf.x, i >> 16, posf.z, color);
+					 i += len.z;
+				 }
+				 return;
+			 }
 
-			if (counter >= d.y) {
-				posi.x += addr.X;
-				counter -= d.y;
-			}
-			Pixel(posi, color);
-		}
-	}
+			 len.x += posf.x;
+			 for (int i = 0x8000 + (posf.y << 16); pos.x >= len.x; posf.x--) {
+				 Pixel(posf.x, i >> 16, posf.z, color);
+				 i -= len.z;
+			 }
 }
-void Graphic::Line(Vector4i pos, Vector4i pos2, const Matrix4x4f& Trans, EnumColor color) {
-	pos = pos * Trans;
+void Graphic::Line(Vector3i pos, Vector3i pos2, const Matrix4x4f& Trans, EnumColor color) {
+	pos  = pos  * Trans;
 	pos2 = pos2 * Trans;
 	
-	Vector4i len = Vector4i{ pos2.x - pos.x, pos2.y - pos.y, 0 };
+	Vector3i len = Vector3i{ pos2.x - pos.x, pos2.y - pos.y, 0 };
 	bool isHeight = false;
 	
 	if (abs(len.y) > abs(len.x)) {
@@ -332,11 +173,12 @@ void Graphic::Line(Vector4i pos, Vector4i pos2, const Matrix4x4f& Trans, EnumCol
 		i -= len.z;
 	}
 }
-void Graphic::Circle(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, EnumColor color, const float& radius, const int& curvature) {
+// Bresenham's Midpoint Circle Algorithm
+void Graphic::Circle(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, const float& radius, const int& curvature) {
 	Matrix4x4f Trans = GetTranslate(rotate);
 	float radiusf = radius * scale.z;
 	
-	Vector4i TempPos = Vector4f{ 0, radiusf, 3 - (2 * radiusf) };
+	Vector3i TempPos = Vector3f{ 0, radiusf, 3 - (2 * radiusf) };
 
 	if (TempPos.y >= TempPos.x) { DrawCircle(pos, TempPos, Trans, color); }
 
@@ -352,9 +194,10 @@ void Graphic::Circle(const Vector4f& pos, const Vector4i& rotate, const Vector4f
 		DrawCircle(pos, TempPos, Trans, color);
 	}
 }
-void Graphic::DrawSprite(const Vector4f& pos, const Vector4i& rotate, const Vector4f& scale, Sprite& sprite) {
+// No Algorithm
+void Graphic::DrawSprite(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, Sprite& sprite) {
 	Matrix4x4f Trans = GetTranslate(rotate, scale);
-	Vector4f Pos = pos;
+	Vector3f Pos = pos;
 
 	Pos.x -= (sprite.size.X * 0.5f);
 	Pos.y -= (sprite.size.Y * 0.5f);
@@ -370,6 +213,36 @@ void Graphic::DrawSprite(const Vector4f& pos, const Vector4i& rotate, const Vect
 
 			if (sprite.sprite[SpriteIndex] == Color_NULL) { continue; }
 			else { Pixel(Pos.x + i, Pos.y + j, Pos.z, Trans, sprite.sprite[SpriteIndex]); }
+		}
+	}
+}
+void Graphic::Fill(Vector3f pos, Vector3f pos2, EnumColor color) {
+	Matrix4x4f Trans = GetTranslate();
+
+	if (pos.x > pos2.x) { Swap<float>(&pos.x, &pos2.x); }
+	if (pos.y > pos2.y) { Swap<float>(&pos.y, &pos2.y); }
+
+	int Height = 0;
+	int index = 0;
+
+	Vector3i posi = pos * Trans;
+	Vector3i pos2i = pos2 * Trans;
+
+	for (int i = posi.y; i <= pos2i.y; i++) {
+		if (i < 0) { continue; }
+		if (i >= m_ScreenSize->y) { return; }
+		Height = i * m_ScreenSize->x;
+
+		for (int j = posi.x; j <= pos2i.x; j++) {
+			if (j < 0) { continue; }
+			if (j >= m_ScreenSize->x) { break; }
+
+			index = Height + j;
+
+			if (m_Depth[index] < posi.z) {
+				m_Screen[index].Attributes = color;
+				m_Depth[index] = posi.z;
+			}
 		}
 	}
 }

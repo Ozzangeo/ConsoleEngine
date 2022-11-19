@@ -2,7 +2,7 @@
 
 GameObject::GameObject() {
 	name = L"";
-	tag = L"Default";
+	tag = INT_MIN;
 
 	pos = new Vector3f(0.0f);
 	scale = new Vector3f(1.0f);

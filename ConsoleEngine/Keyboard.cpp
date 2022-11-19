@@ -2,9 +2,7 @@
 
 bool* Keyboard::isHold = new bool[256]{ false, };
 KeyType* Keyboard::type = new KeyType[256]{ KeyType_NON, };
-KeyType Keyboard::isKey(KeyCode code) {
-	return type[code];
-}
+KeyType Keyboard::isKey(KeyCode code) { return type[code]; }
 void Keyboard::Update() {
 	bool Key;
 	for (int code = 0; code < 256; code++) {
@@ -27,7 +25,6 @@ void Keyboard::Release() {
 	Debug::Log("[ Keyboard ] : Release");
 }
 
-// Keyboard Beta 기능들 ( 불완전함 )
-bool Keyboard::Beta::isKeyDown(KeyCode code)	{ return isKey(code) == KeyType_DOWN; }
-bool Keyboard::Beta::isKeyHold(KeyCode code)	{ return isKey(code) == KeyType_HOLD; }
-bool Keyboard::Beta::isKeyUp  (KeyCode code)	{ return isKey(code) == KeyType_UP	; }
+bool Keyboard::isKeyDown(KeyCode code)	{ return type[code] == KeyType_DOWN; }
+bool Keyboard::isKeyHold(KeyCode code)	{ return type[code] == KeyType_HOLD; }
+bool Keyboard::isKeyUp  (KeyCode code)	{ return type[code] == KeyType_UP	; }

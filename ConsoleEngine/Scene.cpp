@@ -15,10 +15,3 @@ void Scene::Release() {
 	}
 	m_GameObjects.clear();
 }
-
-GameObject* Scene::GetGameObject(wstring name) {
-	for (auto& item : m_GameObjects) {
-		if (item->name == name) { return item; }
-	}
-	return nullptr;
-}

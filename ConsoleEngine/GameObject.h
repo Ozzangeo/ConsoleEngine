@@ -28,7 +28,7 @@ public:
 
 	Scene* scene = nullptr;
 	wstring name;
-	wstring tag;
+	int tag;
 
 	Vector3f* pos;
 	Vector3f* scale;

@@ -34,7 +34,7 @@ private:
 
 	const WORD DEFAULT_BACKGROUND = Color_Black;
 	const CHAR_INFO DEFAULT_SCREEN = { ' ', DEFAULT_BACKGROUND };
-	const int DEFAULT_DEPTH = -100;
+	const int DEFAULT_DEPTH = INT_MIN;
 	const COORD ZERO_POS = { 0, 0 };
 
 	static Graphic* m_Instance;
@@ -58,6 +58,7 @@ private:
 	inline void Pixel(Vector3f& pos, EnumColor& color);
 
 public:
+	// 기본 Graphic 함수
 	void Line		(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, Vector3f pos2 = 0);
 	void Circle		(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, const float& radius, const int& curvature = 0);
 	void DrawSprite	(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, Sprite& sprite);

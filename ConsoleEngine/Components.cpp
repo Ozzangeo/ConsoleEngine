@@ -3,21 +3,22 @@
 using namespace Components;
 
 // [ Camera Component ]
-void Camera::Awake () {
+void Camera::Awake() {
 	COORD CameraSize = { 128, 72 };
 	graphic.SetScreenSize(CameraSize);
 	graphic.CameraPos = gameobject->pos;
 	graphic.CameraRotate = gameobject->rotate;
 }
 void Camera::Update() { graphic.Render(); }
-void Camera::Remove() {}
 void Camera::SetCameraScale	(COORD Scale) { graphic.SetScreenScale(Scale); }
 void Camera::SetCameraSize	(COORD Size ) { graphic.SetScreenSize (Size ); }
 
 // [ PolygonRenderer Component ]
 void PolygonRenderer::Awake () {
 	gameobject->RemoveComponent<SpriteRenderer>();
-	vertexs.reserve(16);
+	vertices.reserve(32);
+	edges.reserve(32);
+	verticesRealPos.reserve(32);
 
 	vertexCount = 0;
 	color = Color_Black;
@@ -26,50 +27,215 @@ void PolygonRenderer::Awake () {
 	beforePos = new Vector3f;
 }
 void PolygonRenderer::Update() {
-	if (!isVisible || vertexs.size() == 0) { return; }
-	else { *beforePos = *vertexs.front().second; }
+	isUpdateEdge = false;
+	
+	if (!isVisible || vertexCount <= 0) { return; }
+	else { *beforePos = *vertices.front(); }
 
 	Matrix4x4f Trans = graphic.GetTranslate(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale);
 
-	for (auto& item : vertexs) {
-		if (*item.second != *beforePos) {
-			graphic.Line(*item.second, *beforePos, Trans, color);
+	for (unsigned int i = 0; i < vertexCount; i++) {
+		if (*vertices[i] != *beforePos) {
+			graphic.Line(*vertices[i], *beforePos, Trans, color);
 
-			*beforePos = *item.second;
+			*beforePos = *vertices[i];
 		}
+		*verticesRealPos[i] = *vertices[i] * Trans;
 	}
 
-	graphic.Line(*vertexs.back().second, *vertexs.front().second, Trans, color);
+	graphic.Line(*vertices[vertexCount - 1], *vertices[0], Trans, color);
 }
 void PolygonRenderer::Remove() {
 	if (beforePos) { delete beforePos; beforePos = nullptr; }
 
-	for (auto& item : vertexs) {
-		if (item.second) { delete item.second; item.second = nullptr; }
+	for (auto& item : vertices) {
+		if (item) { delete item; item = nullptr; }
 	}
-	vertexs.clear();
+	vertices.clear();
+	edges.clear();
+	verticesRealPos.clear();
 }
 Vector3f* PolygonRenderer::AddVertex(float x, float y) {
 	Vector3f* ver = new Vector3f(x, y, 0);
-	vertexs.push_back({ ++vertexCount, ver });
+	vertices	   .push_back(ver);
+	verticesRealPos.push_back(new Vector3f);
+	edges		   .push_back(new Vector3f);
 
-	return GetVertex(vertexCount);
+	vertexCount++;
+
+	return ver;
 }
-Vector3f* PolygonRenderer::GetVertex(int index) {
-	for (auto& item : vertexs) {
-		if (item.first == index) { return item.second; }
-	}
-	return nullptr;
+Vector3f* PolygonRenderer::GetVertex(unsigned int index) {
+	return (index >= vertexCount) ? nullptr : vertices[index];
 }
 void PolygonRenderer::RemoveVertex() {
-	Vector3f* tempv = GetVertex(vertexCount);
-	if (tempv) { delete tempv; tempv = nullptr; }
-	vertexs.pop_back();
-	vertexCount--;
+	if (vertexCount > 0) { 
+		int index = --vertexCount;
+
+		if (vertices	   [index]) { delete vertices		[index]; vertices		[index] = nullptr; }
+		if (verticesRealPos[index]) { delete verticesRealPos[index]; verticesRealPos[index] = nullptr; }
+		if (edges		   [index]) { delete edges			[index]; edges			[index] = nullptr; }
+
+		vertices	   .pop_back();
+		verticesRealPos.pop_back();
+		edges		   .pop_back();
+	}
+}
+const vector<Vector3f*>& PolygonRenderer::GetEdge() {
+	if (isUpdateEdge) { return edges; }
+	else {
+		// 점이 두개 이상 있을 때
+		if (vertexCount >= 2) {
+			edgeCount = 0;
+
+			for (unsigned int index = 1; index < vertexCount; index++) {
+				*edges[index - 1] = *verticesRealPos[index] - *verticesRealPos[index - 1];
+				edgeCount++;
+			}
+
+			*edges[edgeCount - 1] = (*verticesRealPos[0] - *verticesRealPos[vertexCount - 1]);
+		}
+
+		isUpdateEdge = true;
+		return edges;
+	}
 }
 
+// [ PolygonCollider ]
+void PolygonCollider::projectPolygon(Vector3f& axis, PolygonRenderer& polygon, Vector3f* maxmin) {
+#define minThis maxmin->x
+#define maxThis maxmin->y
+
+	float dp = axis.dotProduct(*polygon.verticesRealPos[0]);
+	minThis = dp;
+	maxThis = dp;
+
+	for (unsigned int i = 0; i < polygon.vertexCount; i++) {
+		dp = polygon.verticesRealPos[i]->dotProduct(axis);
+			 if (dp < minThis) { minThis = dp; }
+		else if (dp > maxThis) { maxThis = dp; }
+	}
+}
+float PolygonCollider::distance(Vector3f& maxminA, Vector3f& maxminB) {
+#define minA maxminA.x
+#define maxA maxminA.y
+#define minB maxminB.x
+#define maxB maxminB.y
+
+	return minA < minB ? minB - maxA : minA - maxB;
+}
+void PolygonCollider::Awake() {
+	Polygon = gameobject->AddComponent<PolygonRenderer>();
+
+}
+bool PolygonCollider::isCollision(GameObject* object) {
+	if (!object) { return false; }
+
+	PolygonRenderer* poly = object->GetComponent<PolygonRenderer>();
+	if (!poly || poly->vertexCount < 0) { return false; }
+
+	Vector3f axis, edge;
+	bool isCol = true;
+
+	const vector<Vector3f*>& edgeThis = Polygon->GetEdge();
+	const vector<Vector3f*>& edgeOther = poly->GetEdge();
+
+	Vector3f This(0), Other(0);
+
+	for (unsigned int edgeindex = 0, edgecount = Polygon->edgeCount + poly->edgeCount; edgeindex < edgecount; edgeindex++) {
+		edge =
+			edgeindex < Polygon->edgeCount ?
+			*edgeThis[edgeindex] :
+			*edgeOther[edgeindex - Polygon->edgeCount];
+
+		axis = edge.product2D().normalize();
+
+		projectPolygon(axis, *Polygon, &This);
+		projectPolygon(axis, *poly, &Other);
+
+		if (distance(This, Other) > 0) { isCol = false; break; }
+	}
+
+	return isCol;
+}
+bool PolygonCollider::isCollision(GameObject* object, const Vector3f& velocity) {
+	if (!object) { return false; }
+
+	PolygonRenderer* poly = object->GetComponent<PolygonRenderer>();
+	if (!poly || poly->vertexCount < 0) { return false; }
+
+	Vector3f axis, edge;
+	float velo = 0.0f;
+	bool isCol = true;
+
+	const vector<Vector3f*>& edgeThis = Polygon->GetEdge();
+	const vector<Vector3f*>& edgeOther = poly->GetEdge();
+
+	Vector3f This(0), Other(0);
+
+	for (unsigned int edgeindex = 0, edgecount = Polygon->edgeCount + poly->edgeCount; edgeindex < edgecount; edgeindex++) {
+		edge =
+			edgeindex < Polygon->edgeCount ?
+			*edgeThis[edgeindex] :
+			*edgeOther[edgeindex - Polygon->edgeCount];
+
+		axis = edge.product2D().normalize();
+
+
+		projectPolygon(axis, *Polygon, &This);
+		projectPolygon(axis, *poly, &Other);
+
+		velo = axis.dotProduct(velocity);
+
+		if (velo < 0) { This.x += velo; }
+		else { This.y += velo; }
+
+		if (distance(This, Other) > 0) { isCol = false; break; }
+	}
+
+	return isCol;
+}
+bool PolygonCollider::isCollision(list<GameObject*>& objects) {
+	for (auto& item : objects) {
+		if (!item) { return false; }
+
+		PolygonRenderer* poly = item->GetComponent<PolygonRenderer>();
+		if (!poly || poly->vertexCount < 0) { return false; }
+
+		Vector3f axis, edge;
+		bool isCol = true;
+
+		const vector<Vector3f*>& edgeThis = Polygon->GetEdge();
+		const vector<Vector3f*>& edgeOther = poly->GetEdge();
+
+		Vector3f This(0), Other(0);
+
+		for (unsigned int edgeindex = 0, edgecount = Polygon->edgeCount + poly->edgeCount; edgeindex < edgecount; edgeindex++) {
+			edge =
+				edgeindex < Polygon->edgeCount ?
+				*edgeThis[edgeindex] :
+				*edgeOther[edgeindex - Polygon->edgeCount];
+
+			axis = edge.product2D().normalize();
+
+			projectPolygon(axis, *Polygon, &This);
+			projectPolygon(axis, *poly, &Other);
+
+			if (distance(This, Other) > 0) { isCol = false; break; }
+		}
+
+		if (isCol) { return true; }
+	}
+	
+	return false;
+}
+bool PolygonCollider::isCollision(list<GameObject*>& objects, Vector3f& velocity) {
+	return false;
+}
+
+
 // [ SpriteRenderer Component ]
-void SpriteRenderer::Awake () {
+void SpriteRenderer::Awake() {
 	gameobject->RemoveComponent<PolygonRenderer>();
 	isVisible = true;
 }
@@ -78,10 +244,9 @@ void SpriteRenderer::Update() {
 		graphic.DrawSprite(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale, sprite);
 	}
 }
-void SpriteRenderer::Remove() {}
 
 // [ Animator Component ]
-void Animator::Awake () {
+void Animator::Awake() {
 	spriterenderer = gameobject->AddComponent<SpriteRenderer>();
 	
 	time = 0.0f;
@@ -102,11 +267,8 @@ void Animator::Update() {
 		time += Time::GetDeltaTime();
 	}
 }
-void Animator::Remove() {}
 
 // [ Audio Component ]
-void Audio::Awake () {}
-void Audio::Update() {}
 void Audio::Remove() {
 	for (const SoundInfo Item : SoundList) {
 		mciSendCommand(Item.ID, MCI_CLOSE, 0, NULL);
@@ -141,22 +303,3 @@ bool Audio::PlayAudio(UINT ID, bool isLoop) {
 }
 void Audio::RePlayAudio(UINT ID) { mciSendCommand(ID, MCI_RESUME, 0, NULL); }
 void Audio::PauseAudio (UINT ID) { mciSendCommand(ID, MCI_PAUSE, MCI_NOTIFY, (DWORD)(LPVOID)&mciPlay); }
-
-// [ PolygonCollider ]
-void PolygonCollider::Awake () {}	 
-void PolygonCollider::Update() {
-	isCol = false;
-
-	for (auto& item : Polygons) {
-		// 만약 충돌하지 않는다면
-		if (true) { continue; }
-
-		// 만약 충돌했다면
-		if (false) { isCol = true; return; }
-	}
-}	 
-void PolygonCollider::Remove() {}
-bool PolygonCollider::isCollision() { return isCol; }
-
-void PolygonCollider::AddPolygon	(PolygonRenderer* polygon)	{ Polygons.push_back(polygon); }
-void PolygonCollider::RemovePolygon	(PolygonRenderer* polygon)	{ Polygons.remove	(polygon); }

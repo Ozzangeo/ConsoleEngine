@@ -23,7 +23,7 @@ namespace Components {
 	private:
 		void Awake() final override;
 		void Update() final override;
-		void Remove() final override;
+		void Remove() final override {}
 
 	public:
 		void SetCameraScale(COORD Scale);
@@ -32,26 +32,51 @@ namespace Components {
 	class PolygonRenderer : public Component {
 		friend class PolygonCollider;
 	private:
-		int vertexCount = 0;
-		vector<pair<int, Vector3f*>> vertexs;
+		unsigned int vertexCount = 0;
+		vector<Vector3f*> vertices;
+		vector<Vector3f*> verticesRealPos;
+
+		bool isUpdateEdge = false;
+		unsigned int edgeCount = 0;
+		vector<Vector3f*> edges;
+
 		Vector3f* beforePos = nullptr;
 
 		void Awake() final override;
 		void Update() final override;
 		void Remove() final override;
 	public:
-		Vector3f* AddVertex(float x, float y);
-		Vector3f* GetVertex(int index);
-		void RemoveVertex();
-
 		EnumColor color = Color_NULL;
 		bool isVisible;
+
+		Vector3f* AddVertex(float x, float y);
+		Vector3f* GetVertex(unsigned int index);
+		void RemoveVertex();
+
+		const vector<Vector3f*>& GetEdge();
+	};
+	class PolygonCollider : public Component {
+	private:
+		PolygonRenderer* Polygon;
+
+		void projectPolygon(Vector3f& axis, PolygonRenderer& polygon, Vector3f* maxmin);
+		float distance(Vector3f& maxminA, Vector3f& maxminB);
+
+		void Awake() final override;
+		void Update() final override {}
+		void Remove() final override {}
+
+	public:
+		bool isCollision(GameObject* object);
+		bool isCollision(GameObject* object, const Vector3f& velocity);
+		bool isCollision(list<GameObject*>& objects);
+		bool isCollision(list<GameObject*>& objects, Vector3f& velocity);
 	};
 	class SpriteRenderer : public Component {
 	private:
 		void Awake() final override;
 		void Update() final override;
-		void Remove() final override;
+		void Remove() final override {}
 
 	public:
 		Sprite sprite;
@@ -65,7 +90,7 @@ namespace Components {
 
 		void Awake() final override;
 		void Update() final override;
-		void Remove() final override;
+		void Remove() final override {}
 
 	public:
 		Animation animation;
@@ -91,8 +116,8 @@ namespace Components {
 		CString AudioType = "mpegvideo";
 		list<SoundInfo> SoundList;
 
-		void Awake() final override;
-		void Update() final override;
+		void Awake() final override {}
+		void Update() final override {}
 		void Remove() final override;
 	public:
 		enum SoundType {
@@ -105,22 +130,7 @@ namespace Components {
 		void RePlayAudio(UINT ID);
 		void PauseAudio	(UINT ID);
 	};
-	class PolygonCollider : public Component {
-	private:
-		list<PolygonRenderer*> Polygons;
-		bool isCol;
-
-		void Awake() final override;
-		void Update() final override;
-		void Remove() final override;
-
-	public:
-		bool isCollision();
-
-		void AddPolygon(PolygonRenderer* polygon);
-		void RemovePolygon(PolygonRenderer* polygon);
-	};
-}
+};
 
 #endif // !___DEFAULTCOMPONENTS___
 

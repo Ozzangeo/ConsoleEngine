@@ -79,15 +79,29 @@ public:
 	void operator delete(void* other);
 	void operator delete[](void* other);
 
-	inline float Dot(const Vector3f& ref, const Vector3f& ref2);
+	inline Vector3f product2D();
+	inline float dotProduct(const Vector3f& ref);
+	inline float size();
+	inline Vector3f normalize();
 	inline Vector3f round();
 
 	operator Vector3i();
 };
 
-inline float Vector3f::Dot(const Vector3f& ref, const Vector3f& ref2) {
-	Vector3f res = _mm_mul_ps(ref.vecp, ref2.vecp);
+inline Vector3f Vector3f::product2D() {
+	return { -y, x, z, 0 };
+}
+inline float Vector3f::dotProduct(const Vector3f& ref) {
+	Vector3f res = _mm_mul_ps(this->vecp, ref.vecp);
 	return res.x + res.y + res.z;
+}
+inline float Vector3f::size() {
+	Vector3f size = _mm_sqrt_ps(_mm_pow_ps(this->vecp, _mm_set_ps1(2)));
+
+	return size.x + size.y + size.z;
+}
+inline Vector3f Vector3f::normalize() {
+	return _mm_div_ps(this->vecp, _mm_set_ps1(size()));
 }
 inline Vector3f Vector3f::round() {
 	return _mm_round_ps(vecp, 0);

@@ -141,14 +141,10 @@ private:
 
 public:
 	static KeyType isKey(KeyCode code);
-	
-	// Keyboard Beta 기능들 ( 불완전함 )
-	class Beta {
-	public:
-		static bool isKeyDown(KeyCode code);
-		static bool isKeyHold(KeyCode code);
-		static bool isKeyUp(KeyCode code);
-	};
+
+	static bool isKeyDown(KeyCode code);
+	static bool isKeyHold(KeyCode code);
+	static bool isKeyUp(KeyCode code);
 };
 
 #endif // !___KEYBOARD___

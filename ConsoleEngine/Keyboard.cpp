@@ -27,4 +27,4 @@ void Keyboard::Release() {
 
 bool Keyboard::isKeyDown(KeyCode code)	{ return type[code] == KeyType_DOWN; }
 bool Keyboard::isKeyHold(KeyCode code)	{ return type[code] == KeyType_HOLD; }
-bool Keyboard::isKeyUp  (KeyCode code)	{ return type[code] == KeyType_UP	; }
+bool Keyboard::isKeyUp  (KeyCode code)	{ return type[code] == KeyType_UP  ; }

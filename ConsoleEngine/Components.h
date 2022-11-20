@@ -19,16 +19,21 @@ using namespace chrono;
 
 class Scene;
 namespace Components {
-	class Camera : public Component {
-	private:
-		void Awake() final override;
-		void Update() final override;
-		void Remove() final override {}
-
-	public:
-		void SetCameraScale(COORD Scale);
-		void SetCameraSize (COORD Size );
-	};
+	// 이 컴포넌트는 프로그램당 웬만하면 하나만 있게 하는걸 추천
+	class Camera : public Component {					  
+	private:											  
+		void Awake() final override;					  
+		void Update() final override;					  
+		void Remove() final override {}					  
+														  
+	public:												  
+		void SetCameraScale(COORD Scale);				  
+		void SetCameraScale(short Scale);				  
+		void SetCameraScale(short ScaleW, short ScaleH);  
+		void SetCameraSize (COORD Size );				  
+	};													  
+	///////////////////////////////////////////////////////
+	
 	class PolygonRenderer : public Component {
 		friend class PolygonCollider;
 	private:
@@ -46,8 +51,8 @@ namespace Components {
 		void Update() final override;
 		void Remove() final override;
 	public:
-		EnumColor color = Color_NULL;
-		bool isVisible;
+		EnumColor color = Color_LightWhite;
+		bool isVisible = true;
 		bool isFill;
 
 		Vector3f* AddVertex(float x, float y);
@@ -87,6 +92,19 @@ namespace Components {
 		Sprite sprite;
 		bool isVisible = true;
 	};
+	class CircleRenderer : public Component {
+	private:
+		void Awake() override;
+		void Update() override;
+		void Remove() override {}
+		
+	public:
+		EnumColor color = Color_LightWhite;
+		bool isVisible = true;
+
+		float radius;
+		float curvature;
+	};
 	class Animator : public Component {
 	private:
 		SpriteRenderer* spriterenderer = nullptr;
@@ -119,9 +137,9 @@ namespace Components {
 		// waveaudio : .wav
 		// avivideo  : .avi
 		CString AudioType = "mpegvideo";
-		list<SoundInfo> SoundList;
+		vector<SoundInfo> SoundList;
 
-		void Awake() final override {}
+		void Awake() final override;
 		void Update() final override {}
 		void Remove() final override;
 	public:
@@ -134,6 +152,70 @@ namespace Components {
 		bool PlayAudio	(UINT ID, bool isLoop = false);
 		void RePlayAudio(UINT ID);
 		void PauseAudio	(UINT ID);
+	};
+	class Server : public Component {
+	private:
+		struct SOCKET_ {
+			SOCKET socket;
+			SOCKADDR_IN addr_in;
+			int addr_size;
+		};
+
+		WSADATA wsaData;
+		bool isServerOpen;
+
+		SOCKET_ server;
+		vector<SOCKET_> clients;
+
+		list<string> recvMsg;
+		string nowMsg;
+
+		void Awake() override;
+		void Update() override;
+		void Remove() override;
+
+		void acceptClient();
+		void recvClient(SOCKET_* Client);
+
+	public:
+		static const int PACKET_SIZE;
+
+		bool OpenServer(int port);
+		bool CloseServer();
+		
+		void sendClientAll(string msg);
+		string GetMsg();
+	};
+	class Client : public Component {
+	private:
+		struct SOCKET_ {
+			SOCKET socket;
+			SOCKADDR_IN addr_in;
+			int addr_size;
+		};
+
+		WSADATA wsaData;
+		bool isJoinServer;
+
+		SOCKET_ client;
+
+		list<string> recvMsg;
+		string nowMsg;
+
+		void Awake() override;
+		void Update() override;
+		void Remove() override;
+
+		void recvServer();
+
+	public:
+		static const int PACKET_SIZE;
+
+		bool JoinServer(string ip, int port);
+		bool ExitServer();
+
+		void sendServer(string msg);
+		string GetMsg();
 	};
 };
 

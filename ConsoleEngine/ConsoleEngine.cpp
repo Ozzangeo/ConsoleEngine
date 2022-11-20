@@ -11,6 +11,8 @@ ConsoleEngine::ConsoleEngine() : m_FPS(60), isDone(false), nowScene(nullptr) {
 	DWORD prevMode;
 	GetConsoleMode(Handle::OUTPUT, &prevMode);
 	SetConsoleMode(Handle::OUTPUT, prevMode & ~ENABLE_QUICK_EDIT_MODE);
+
+
 }
 void ConsoleEngine::Release() {
 	Keyboard::Release();

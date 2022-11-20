@@ -16,7 +16,7 @@ private:
 	void Release();
 
 protected:
-	// 여기서 가끔씩 빨간줄 뜨는데 이거 정상입니다
+	// 여기서 가끔씩 빨간줄(에러) 뜨는데 이거 정상입니다
 	ConsoleEngine* Engine = nullptr;
 	virtual void GameObjects() = 0;
 

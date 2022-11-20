@@ -246,12 +246,15 @@ void Graphic::Fill(Vector3f pos, Vector3f pos2, EnumColor color) {
 		}
 	}
 }
-void Graphic::Mark(Vector3i pos, EnumColor color) {
-	if (GetPixel(pos) != color) { Pixel(pos, color); }
-	else { return; }
+void Graphic::Mask(Vector3i pos, EnumColor color) {
+	bool isFail = false;
+	if (GetPixel(pos) != color) {
+		Pixel(pos, color, &isFail);
+		if (isFail) { return; }
+	} else { return; }
 	
-	Mark(Vector3i(pos.x - 1, pos.y, pos.z, 1), color);
-	Mark(Vector3i(pos.x + 1, pos.y, pos.z, 1), color);
-	Mark(Vector3i(pos.x, pos.y - 1, pos.z, 1), color);
-	Mark(Vector3i(pos.x, pos.y + 1, pos.z, 1), color);
+	Mask(Vector3i(pos.x - 1, pos.y, pos.z, 1), color);
+	Mask(Vector3i(pos.x + 1, pos.y, pos.z, 1), color);
+	Mask(Vector3i(pos.x, pos.y - 1, pos.z, 1), color);
+	Mask(Vector3i(pos.x, pos.y + 1, pos.z, 1), color);
 }

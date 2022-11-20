@@ -8,9 +8,13 @@ void Camera::Components() {
 }
 
 void Rectangle::Components() {
-	auto* Polygon = AddComponent<Components::PolygonRenderer>();
-	Polygon->AddVertex(5, 5);
-	Polygon->AddVertex(5, -5);
-	Polygon->AddVertex(-5, -5);
-	Polygon->AddVertex(-5, 5);
+	auto* polygon = AddComponent<Components::PolygonRenderer>();
+	polygon->AddVertex(5, 5);
+	polygon->AddVertex(5, -5);
+	polygon->AddVertex(-5, -5);
+	polygon->AddVertex(-5, 5);
+}
+void Circle::Components() {
+	auto* circle = AddComponent<Components::CircleRenderer>();
+	circle->radius = 10.0f;
 }

@@ -129,8 +129,6 @@ enum KeyType {
 	KeyType_UP
 };
 
-// 키보드 현재 서로 다른 컴포에서 사용하면 다른 문제 있음
-// 개선해야함
 class Keyboard {
 	friend class ConsoleEngine;
 private:

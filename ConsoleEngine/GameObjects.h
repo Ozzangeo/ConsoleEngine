@@ -15,5 +15,9 @@ namespace GameObjects {
 	private:
 		void Components() final override;
 	};
+	class Circle : public GameObject {
+	private:
+		void Components() final override;
+	};
 }
 #endif // !___GAMEOBJECTS___ 

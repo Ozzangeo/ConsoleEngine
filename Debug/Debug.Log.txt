@@ -1,0 +1,11 @@
+[FPS] : 2271
+[FPS] : 2077
+[FPS] : 2265
+[FPS] : 2623
+[FPS] : 2460
+[ Keyboard ] : Release
+[ Graphic ] : Release
+[ Math ] : Release
+[ Debug ] : ReleaseRelease
+[ Math ] : Release
+[ Debug ] : Release

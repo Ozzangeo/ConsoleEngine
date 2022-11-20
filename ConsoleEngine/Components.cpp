@@ -10,6 +10,8 @@ void Camera::Awake() {
 	graphic.CameraRotate = gameobject->rotate;
 }
 void Camera::Update() { graphic.Render(); }
+void Camera::SetCameraScale (short Scale) { graphic.SetScreenScale({ Scale, Scale }); }
+void Camera::SetCameraScale (short ScaleW, short ScaleH) { graphic.SetScreenScale({ ScaleW, ScaleH }); }
 void Camera::SetCameraScale	(COORD Scale) { graphic.SetScreenScale(Scale); }
 void Camera::SetCameraSize	(COORD Size ) { graphic.SetScreenSize (Size ); }
 
@@ -21,9 +23,7 @@ void PolygonRenderer::Awake () {
 	verticesRealPos.reserve(32);
 
 	vertexCount = 0;
-	color = Color_Black;
-	isVisible = true;
-	isFill = false;
+	isFill = true;
 	
 	beforePos = new Vector3f;
 }
@@ -47,7 +47,7 @@ void PolygonRenderer::Update() {
 	graphic.Line(*vertices[vertexCount - 1], *vertices[0], Trans, color);
 
 	if (isFill) {
-		graphic.Mark(Vector3f::ONE * Trans, color);
+		graphic.Mask(Vector3f::ONE * Trans, color);
 	}
 }
 void PolygonRenderer::Remove() {
@@ -376,6 +376,17 @@ void SpriteRenderer::Update() {
 	}
 }
 
+// [ CircleRenderer Component ]
+void CircleRenderer::Awake() {
+	radius = 0.0f;
+	curvature = 0.0f;
+}
+void CircleRenderer::Update() {
+	if (isVisible) {
+		graphic.Circle(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale, color, radius, static_cast<int>(curvature));
+	}
+}
+
 // [ Animator Component ]
 void Animator::Awake() {
 	spriterenderer = gameobject->AddComponent<SpriteRenderer>();
@@ -400,6 +411,9 @@ void Animator::Update() {
 }
 
 // [ Audio Component ]
+void Audio::Awake() {
+	SoundList.reserve(16);
+}
 void Audio::Remove() {
 	for (const SoundInfo Item : SoundList) {
 		mciSendCommand(Item.ID, MCI_CLOSE, 0, NULL);
@@ -422,11 +436,11 @@ void Audio::LoadAudio(CString path, SoundType Type) {
 	SoundList.push_back(soundinfo);
 }
 bool Audio::PlayAudio(UINT ID, bool isLoop) {
-	for (SoundInfo Item : SoundList) {
-		if (ID == Item.ID) {
+	for (auto& Sound : SoundList) {
+		if (ID == Sound.ID) {
 			mciSendCommand(ID, MCI_SEEK, MCI_SEEK_TO_START, NULL);
-			if (isLoop) { Item.Sound = mciSendCommand(ID, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay); }
-			else		{ Item.Sound = mciSendCommand(ID, MCI_PLAY, MCI_NOTIFY		   , (DWORD)(LPVOID)&mciPlay); }
+			if (isLoop) { Sound.Sound = mciSendCommand(ID, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)&mciPlay); }
+			else		{ Sound.Sound = mciSendCommand(ID, MCI_PLAY, MCI_NOTIFY		   , (DWORD)(LPVOID)&mciPlay); }
 			return true;
 		}
 	}
@@ -434,3 +448,196 @@ bool Audio::PlayAudio(UINT ID, bool isLoop) {
 }
 void Audio::RePlayAudio(UINT ID) { mciSendCommand(ID, MCI_RESUME, 0, NULL); }
 void Audio::PauseAudio (UINT ID) { mciSendCommand(ID, MCI_PAUSE, MCI_NOTIFY, (DWORD)(LPVOID)&mciPlay); }
+
+// [ Server Component ]
+const int Server::PACKET_SIZE = 4096;
+void Server::Awake() {
+#define sSocket server.socket
+#define sAddrIn server.addr_in
+#define sAddrSz server.addr_size
+	gameobject->RemoveComponent<Client>();
+	clients.reserve(16);
+	isServerOpen = false;
+}
+void Server::Update() {
+	if (!recvMsg.empty()) {
+		nowMsg = recvMsg.front();
+		recvMsg.pop_front();
+	}
+	else { nowMsg.clear(); }
+}
+void Server::Remove() {
+	CloseServer();
+}
+void Server::acceptClient() {
+	while (!WSAGetLastError()) {
+		SOCKET_ Client{};
+		Client.addr_in = {};
+		Client.addr_size = sizeof(Client.addr_in);
+		Client.socket = accept(sSocket, (SOCKADDR*)&Client.addr_in, &Client.addr_size);
+
+		if (Client.socket == INVALID_SOCKET) {
+			Debug::Log("[ Server ] Client Connect Error!");
+			closesocket(Client.socket);
+			continue;
+		}
+		clients.push_back(Client);
+
+		thread([&]() { recvClient(&clients[clients.size() - 1]); }).detach();
+	}
+}
+void Server::recvClient(SOCKET_* Client) {
+	int recvResult = 0;
+	char Msg[PACKET_SIZE];
+
+	while (!WSAGetLastError()) {
+		ZeroMemory(Msg, PACKET_SIZE);
+		recvResult = recv(Client->socket, Msg, PACKET_SIZE, 0);
+
+		if (recvResult == 0 || recvResult == SOCKET_ERROR) { break; }
+
+		recvMsg.push_back(Msg);
+	}
+}
+bool Server::OpenServer(int port) {
+	if (isServerOpen) { return true; }
+
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData)) {
+		Debug::Log("[ Server ] WSA Error!");
+		WSACleanup();
+		return false;
+	}
+
+	sSocket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (sSocket == INVALID_SOCKET) {
+		Debug::Log("[ Server ] Socket Error!");
+		WSACleanup();
+		return false;
+	}
+
+	sAddrIn.sin_family = AF_INET;
+	sAddrIn.sin_port = htons(port);
+	sAddrIn.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	sAddrSz = sizeof(sAddrIn);
+	if (bind(sSocket, (SOCKADDR*)&sAddrIn, sAddrSz)) {
+		Debug::Log("[ Server ] bind Error!");
+		closesocket(sSocket);
+		WSACleanup();
+		return false;
+	}
+	if (listen(sSocket, SOMAXCONN)) {
+		Debug::Log("[ Server ] listen Error!");
+		closesocket(sSocket);
+		WSACleanup();
+		return false;
+	}
+	
+	thread([&]() { acceptClient(); }).detach();
+
+	isServerOpen = true;
+	return true;
+}
+bool Server::CloseServer() {
+	if (!isServerOpen) { return true; }
+
+	closesocket(sSocket);
+	for (auto& Client : clients) { closesocket(Client.socket); }
+	
+	WSACleanup();
+	isServerOpen = false;
+	return true;
+}
+void Server::sendClientAll(string msg) {
+	if (msg.length() > PACKET_SIZE) { msg.erase(PACKET_SIZE, msg.length()); }
+
+	for (auto& Client : clients) {
+		send(Client.socket, msg.c_str(), msg.length(), 0);
+	}
+}
+string Server::GetMsg() {
+	return nowMsg;
+}
+
+// [ Client Component ]
+const int Client::PACKET_SIZE = 4096;
+void Client::Awake() {
+#define cSocket client.socket
+#define cAddrIn client.addr_in
+#define cAddrSz client.addr_size
+	gameobject->RemoveComponent<Server>();
+	isJoinServer = false;
+}
+void Client::Update() {
+	if (!recvMsg.empty()) {
+		nowMsg = recvMsg.front();
+		recvMsg.pop_front();
+	}
+	else { nowMsg.clear(); }
+}
+void Client::Remove() {
+	ExitServer();
+}
+void Client::recvServer() {
+	int recvResult = 0;
+	char Msg[PACKET_SIZE];
+
+	while (!WSAGetLastError()) {
+		ZeroMemory(Msg, PACKET_SIZE);
+		recvResult = recv(cSocket, Msg, PACKET_SIZE, 0);
+
+		if (recvResult == 0 || recvResult == SOCKET_ERROR) { break; }
+
+		recvMsg.push_back(Msg);
+	}
+}
+bool Client::JoinServer(string ip, int port) {
+	if (isJoinServer) { return true; }
+
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData)) {
+		Debug::Log("[ Client ] WSA Error! in" + ip + " [port:" + to_string(port) + "]");
+		WSACleanup();
+		return false;
+	}
+
+	cSocket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (cSocket == INVALID_SOCKET) {
+		Debug::Log("[ Client ] Socket Error! in " + ip + " [port:" + to_string(port) + "]");
+		closesocket(cSocket);
+		WSACleanup();
+		return false;
+	}
+
+	cAddrIn.sin_family = AF_INET;
+	cAddrIn.sin_port = htons(port);
+	cAddrIn.sin_addr.s_addr = inet_addr(ip.c_str());
+
+	cAddrSz = sizeof(client.addr_in);
+	if (connect(cSocket, (SOCKADDR*)&cAddrIn, cAddrSz)) {
+		Debug::Log("[ Client ] Connect Error! in " + ip + " [port:" + to_string(port) + "]");
+		closesocket(cSocket);
+		WSACleanup();
+		return false;
+	}
+
+	thread([&]() { recvServer(); }).detach();
+
+	isJoinServer = true;
+	return true;
+}
+bool Client::ExitServer() {
+	if (!isJoinServer) { return true; }
+
+	closesocket(cSocket);
+
+	WSACleanup();
+	isJoinServer = false;
+	return true;
+}
+void Client::sendServer(string msg) {
+	if (msg.length() > PACKET_SIZE) { msg.erase(PACKET_SIZE, msg.length()); }
+	send(cSocket, msg.c_str(), msg.length(), 0);
+}
+string Client::GetMsg() {
+	return nowMsg;
+}

@@ -39,8 +39,6 @@ private:
 
 	static Graphic* m_Instance;
 
-	inline void SetScreenScale(const COORD& Scale);
-	void SetScreenSize(const COORD& Size);
 	void SetScreen();
 
 
@@ -56,14 +54,19 @@ private:
 	inline void Pixel(const float& x, const float& y, const float& z, EnumColor& color);
 	inline void Pixel(Vector3i& pos, EnumColor& color);
 	inline void Pixel(Vector3f& pos, EnumColor& color);
+	inline void Pixel(Vector3i& pos, EnumColor& color, bool* isFail);
 	inline EnumColor GetPixel(Vector3i pos);
 
 public:
+	// 기본 화면 조절 함수 ( 카메라 오브젝트 존재시, 가능한 카메라의 함수를 이용하길 추천 )
+	inline void SetScreenScale(const COORD& Scale);
+	void SetScreenSize(const COORD& Size);
+
 	// 기본 Graphic 함수
 	void Line		(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, Vector3f pos2 = 0);
 	void Circle		(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, const float& radius, const int& curvature = 0);
 	void DrawSprite	(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, Sprite& sprite);
-	void Mark		(Vector3i pos, EnumColor color);
+	void Mask		(Vector3i pos, EnumColor color);
 	void Fill		(Vector3f pos, Vector3f pos2, EnumColor color);
 
 	// Polygon Renderer 성능 최적화 용도
@@ -76,7 +79,7 @@ public:
 	inline Matrix4x4f GetTranslate();
 };
 inline void Graphic::DrawCircle(const Vector3f& pos, const Vector3f& pos2, const Matrix4x4f& Trans, EnumColor& color) {
-	Pixel((pos.x + pos2.x), (pos.y + pos2.y), pos.z, Trans, color);
+	/*Pixel((pos.x + pos2.x), (pos.y + pos2.y), pos.z, Trans, color);
 	Pixel((pos.x - pos2.x), (pos.y + pos2.y), pos.z, Trans, color);
 	Pixel((pos.x + pos2.x), (pos.y - pos2.y), pos.z, Trans, color);
 	Pixel((pos.x - pos2.x), (pos.y - pos2.y), pos.z, Trans, color);
@@ -84,7 +87,17 @@ inline void Graphic::DrawCircle(const Vector3f& pos, const Vector3f& pos2, const
 	Pixel((pos.x + pos2.y), (pos.y + pos2.x), pos.z, Trans, color);
 	Pixel((pos.x - pos2.y), (pos.y + pos2.x), pos.z, Trans, color);
 	Pixel((pos.x + pos2.y), (pos.y - pos2.x), pos.z, Trans, color);
-	Pixel((pos.x - pos2.y), (pos.y - pos2.x), pos.z, Trans, color);
+	Pixel((pos.x - pos2.y), (pos.y - pos2.x), pos.z, Trans, color);*/
+
+	Pixel((pos.y + pos2.y), (-pos.x + pos2.x), pos.z, Trans, color);
+	Pixel((pos.y + pos2.y), (-pos.x - pos2.x), pos.z, Trans, color);
+	Pixel((pos.y - pos2.y), (-pos.x + pos2.x), pos.z, Trans, color);
+	Pixel((pos.y - pos2.y), (-pos.x - pos2.x), pos.z, Trans, color);
+
+	Pixel((pos.y + pos2.x), (-pos.x + pos2.y), pos.z, Trans, color);
+	Pixel((pos.y + pos2.x), (-pos.x - pos2.y), pos.z, Trans, color);
+	Pixel((pos.y - pos2.x), (-pos.x + pos2.y), pos.z, Trans, color);
+	Pixel((pos.y - pos2.x), (-pos.x - pos2.y), pos.z, Trans, color);
 }
 
 /////////////////////////////////////////////////////////
@@ -129,6 +142,22 @@ inline void Graphic::Pixel(Vector3f& pos, EnumColor& color) {
 	Vector3i Pos = pos;
 
 	PutPixel(Pos, color)
+}
+inline void Graphic::Pixel(Vector3i& pos, EnumColor& color, bool* isFail) {
+	Vector3i Pos = pos;
+
+	if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||
+		0 > Pos.x || m_ScreenSize->x <= Pos.x) {
+		*isFail = true;
+		return;
+	}
+
+	int index = (Pos.y * m_ScreenSize->x) + Pos.x;
+
+	if (m_Depth[index] < Pos.z) {
+		m_Screen[index].Attributes = color;
+		m_Depth[index] = Pos.z;
+	}
 }
 inline EnumColor Graphic::GetPixel(Vector3i pos) {
 	if (0 > pos.y || m_ScreenSize->y <= pos.y ||

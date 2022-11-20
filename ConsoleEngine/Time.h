@@ -10,8 +10,11 @@ private:
 	static float ExecutionTime;
 public:
 	static void Delay(float millisecond);
-	static float GetDeltaTime();
-	static float GetExecutionTime();
+	inline static float GetDeltaTime();
+	inline static float GetExecutionTime();
 };
+
+inline float Time::GetDeltaTime() { return DeltaTime; }
+inline float Time::GetExecutionTime() { return ExecutionTime; }
 
 #endif // !___TIME___

@@ -48,6 +48,7 @@ namespace Components {
 	public:
 		EnumColor color = Color_NULL;
 		bool isVisible;
+		bool isFill;
 
 		Vector3f* AddVertex(float x, float y);
 		Vector3f* GetVertex(unsigned int index);
@@ -67,10 +68,14 @@ namespace Components {
 		void Remove() final override {}
 
 	public:
-		bool isCollision(GameObject* object);
+		// OBB(SAT) 알고리즘 이용
+		bool isCollision(GameObject* object, float* Distance = nullptr);
 		bool isCollision(GameObject* object, const Vector3f& velocity);
-		bool isCollision(list<GameObject*>& objects);
-		bool isCollision(list<GameObject*>& objects, Vector3f& velocity);
+		bool isCollision(list<GameObject*>& objects, float* Distance = nullptr);
+		bool isCollision(list<GameObject*>& objects, const Vector3f& velocity);
+
+		Vector3f isCollisionVec(GameObject* object, const Vector3f& velocity);
+		Vector3f isCollisionVec(list<GameObject*>& objects, const Vector3f& velocity);
 	};
 	class SpriteRenderer : public Component {
 	private:

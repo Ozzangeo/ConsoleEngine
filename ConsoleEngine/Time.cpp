@@ -11,6 +11,3 @@ void Time::Delay(float millisecond) {
 
 	while (duration<float>(system_clock::now() - start).count() < millisecond);
 }
-
-float Time::GetDeltaTime() { return DeltaTime; }
-float Time::GetExecutionTime() { return ExecutionTime; }

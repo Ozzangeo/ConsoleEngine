@@ -4,30 +4,40 @@ using namespace std;
 using namespace chrono;
 using namespace Components;
 
+// 폴리곤 채우기 구현만 하면! 드디어 리듬게임 만들 수 있다! 그리고.. 그 이후 개발기간 3일.. 찌발
+//
+
+enum Tag {
+	Poly
+};
+
 class Mover : public Component {
 private:
 	Vector3f* move;
 	float speed = 150.0f;
+
 	PolygonCollider* Collider = nullptr;
 	PolygonRenderer* Renderer = nullptr;
-	GameObject* target = nullptr;
+	list<GameObject*> targets;
 
 	void Awake() override {
 		Collider = gameobject->AddComponent<PolygonCollider>();
 		Renderer = gameobject->AddComponent<PolygonRenderer>();
 		move = new Vector3f;
 	}
+	void Start() override {
+		targets = scene->GetGameObjectList(Poly);
+	}
 	void Update() override {
-		target = scene->GetGameObject(L"PolygonObjectTest");
 		*move = 0.0f;
 
-		if (Collider->isCollision(target)) { Renderer->color = Color_LightRed; }
+		if (Collider->isCollision(targets)) { Renderer->color = Color_LightRed; }
 		else { Renderer->color = Color_LightBlue; }
 
-		if (keyboard.isKeyHold(KeyCode_W)) { *move += Vector3f(0, -speed, 0) * Time::GetDeltaTime(); }
-		if (keyboard.isKeyHold(KeyCode_S)) { *move += Vector3f(0,  speed, 0) * Time::GetDeltaTime(); }
-		if (keyboard.isKeyHold(KeyCode_A)) { *move += Vector3f(-speed, 0, 0) * Time::GetDeltaTime(); }
-		if (keyboard.isKeyHold(KeyCode_D)) { *move += Vector3f( speed, 0, 0) * Time::GetDeltaTime(); }
+		if (keyboard.isKeyHold(KeyCode_W)) { *move += Collider->isCollisionVec(targets, Vector3f(0, -speed, 0) * Time::GetDeltaTime()); }
+		if (keyboard.isKeyHold(KeyCode_S)) { *move += Collider->isCollisionVec(targets, Vector3f(0,  speed, 0) * Time::GetDeltaTime()); }
+		if (keyboard.isKeyHold(KeyCode_A)) { *move += Collider->isCollisionVec(targets, Vector3f(-speed, 0, 0) * Time::GetDeltaTime()); }
+		if (keyboard.isKeyHold(KeyCode_D)) { *move += Collider->isCollisionVec(targets, Vector3f( speed, 0, 0) * Time::GetDeltaTime()); }
 
 		*gameobject->pos += *move;
 	}
@@ -128,7 +138,12 @@ private:
 		a->SetCameraSize({ 256, 144 });
 		a->SetCameraScale({ 4, 4 });
 
-		AddGameObject<PolygonObject>(L"PolygonObjectTest");
+		*AddGameObject<PolygonObject>(L"PolygonObjectTest", Poly)->scale = Vector3f(1.5, 2, 0);
+		*AddGameObject<PolygonObject>(L"PolygonObjectTest", Poly)->pos = Vector3f(-30, -20, 0);
+		auto* c = AddGameObject<PolygonObject>(L"PolygonObjectTest", Poly);
+		*c->pos = Vector3f(50, 30, 0);
+		c->SetRotate(0, 0, 45);
+
 		auto* obj = AddGameObject<PolygonObject>(L"PolygonObjectTest2");
 		obj->AddComponent<Mover>();
 		obj->AddComponent<Rotator>();

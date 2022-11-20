@@ -14,6 +14,9 @@ GameObject::~GameObject() {
 	if (rotate) { delete rotate; rotate = nullptr; }
 }
 
+void GameObject::Start() {
+	for (auto& Component : m_Components) { Component->Start(); }
+}
 void GameObject::Update() {
 	for (auto& item : m_Components) { item->Update(); }
 }

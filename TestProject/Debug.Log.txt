@@ -1,14 +1,8 @@
-[FPS] : 289
-[FPS] : 300
-[FPS] : 310
-[FPS] : 309
-[FPS] : 310
-[FPS] : 306
-[FPS] : 309
-[FPS] : 309
-[FPS] : 310
-[FPS] : 297
-[FPS] : 290
+[FPS] : 204
+[FPS] : 203
+[FPS] : 200
+[FPS] : 212
+[FPS] : 209
 [ Keyboard ] : Release
 [ Graphic ] : Release
 [ Math ] : Release

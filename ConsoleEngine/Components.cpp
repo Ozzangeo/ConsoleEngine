@@ -23,6 +23,7 @@ void PolygonRenderer::Awake () {
 	vertexCount = 0;
 	color = Color_Black;
 	isVisible = true;
+	isFill = true;
 	
 	beforePos = new Vector3f;
 }
@@ -128,13 +129,15 @@ void PolygonCollider::Awake() {
 	Polygon = gameobject->AddComponent<PolygonRenderer>();
 
 }
-bool PolygonCollider::isCollision(GameObject* object) {
+bool PolygonCollider::isCollision(GameObject* object, float* Distance) {
 	if (!object) { return false; }
 
 	PolygonRenderer* poly = object->GetComponent<PolygonRenderer>();
 	if (!poly || poly->vertexCount < 0) { return false; }
 
 	Vector3f axis, edge;
+	
+	float dis = 0.0f;
 	bool isCol = true;
 
 	const vector<Vector3f*>& edgeThis = Polygon->GetEdge();
@@ -153,7 +156,12 @@ bool PolygonCollider::isCollision(GameObject* object) {
 		projectPolygon(axis, *Polygon, &This);
 		projectPolygon(axis, *poly, &Other);
 
-		if (distance(This, Other) > 0) { isCol = false; break; }
+		dis = distance(This, Other);
+		if (dis > 0) { isCol = false; break; }
+	}
+	if (Distance) {
+		if (isCol) { *Distance = dis; }
+		else	   { *Distance = 0.0f; }
 	}
 
 	return isCol;
@@ -165,6 +173,7 @@ bool PolygonCollider::isCollision(GameObject* object, const Vector3f& velocity) 
 	if (!poly || poly->vertexCount < 0) { return false; }
 
 	Vector3f axis, edge;
+
 	float velo = 0.0f;
 	bool isCol = true;
 
@@ -195,20 +204,22 @@ bool PolygonCollider::isCollision(GameObject* object, const Vector3f& velocity) 
 
 	return isCol;
 }
-bool PolygonCollider::isCollision(list<GameObject*>& objects) {
-	for (auto& item : objects) {
-		if (!item) { return false; }
+bool PolygonCollider::isCollision(list<GameObject*>& objects, float* Distance) {
+	float dis = 0.0f;
+	bool isCol = true;
 
-		PolygonRenderer* poly = item->GetComponent<PolygonRenderer>();
+	Vector3f axis, edge;
+	Vector3f This(0), Other(0);
+	for (auto& object : objects) {
+		if (!object) { return false; }
+
+		PolygonRenderer* poly = object->GetComponent<PolygonRenderer>();
 		if (!poly || poly->vertexCount < 0) { return false; }
-
-		Vector3f axis, edge;
-		bool isCol = true;
 
 		const vector<Vector3f*>& edgeThis = Polygon->GetEdge();
 		const vector<Vector3f*>& edgeOther = poly->GetEdge();
 
-		Vector3f This(0), Other(0);
+		isCol = true;
 
 		for (unsigned int edgeindex = 0, edgecount = Polygon->edgeCount + poly->edgeCount; edgeindex < edgecount; edgeindex++) {
 			edge =
@@ -221,18 +232,143 @@ bool PolygonCollider::isCollision(list<GameObject*>& objects) {
 			projectPolygon(axis, *Polygon, &This);
 			projectPolygon(axis, *poly, &Other);
 
+			dis = distance(This, Other);
+			if (dis > 0) { isCol = false; break; }
+		}
+
+		if (Distance) {
+			if (isCol) { *Distance = dis; return true; }
+			else	   { *Distance = 0.0f; }
+		}
+	}
+	
+	return false;
+}
+bool PolygonCollider::isCollision(list<GameObject*>& objects, const Vector3f& velocity) {
+	float velo = 0.0f;
+	bool isCol = true;
+
+	Vector3f axis, edge;
+	Vector3f This(0), Other(0);
+
+	for (auto& object : objects) {
+		if (!object) { return false; }
+
+		PolygonRenderer* poly = object->GetComponent<PolygonRenderer>();
+		if (!poly || poly->vertexCount < 0) { return false; }
+
+		isCol = true;
+
+		const vector<Vector3f*>& edgeThis = Polygon->GetEdge();
+		const vector<Vector3f*>& edgeOther = poly->GetEdge();
+
+		for (unsigned int edgeindex = 0, edgecount = Polygon->edgeCount + poly->edgeCount; edgeindex < edgecount; edgeindex++) {
+			edge =
+				edgeindex < Polygon->edgeCount ?
+				*edgeThis[edgeindex] :
+				*edgeOther[edgeindex - Polygon->edgeCount];
+
+			axis = edge.product2D().normalize();
+
+
+			projectPolygon(axis, *Polygon, &This);
+			projectPolygon(axis, *poly, &Other);
+
+			velo = axis.dotProduct(velocity);
+
+			if (velo < 0) { This.x += velo; }
+			else { This.y += velo; }
+
 			if (distance(This, Other) > 0) { isCol = false; break; }
 		}
 
 		if (isCol) { return true; }
 	}
-	
-	return false;
-}
-bool PolygonCollider::isCollision(list<GameObject*>& objects, Vector3f& velocity) {
-	return false;
-}
 
+	return false;
+}
+Vector3f PolygonCollider::isCollisionVec(GameObject* object, const Vector3f& velocity) {
+	if (!object) { return false; }
+
+	PolygonRenderer* poly = object->GetComponent<PolygonRenderer>();
+	if (!poly || poly->vertexCount < 0) { return false; }
+
+	Vector3f axis, edge;
+
+	float velo = 0.0f;
+	bool isCol = true;
+
+	const vector<Vector3f*>& edgeThis = Polygon->GetEdge();
+	const vector<Vector3f*>& edgeOther = poly->GetEdge();
+
+	Vector3f This(0), Other(0);
+
+	for (unsigned int edgeindex = 0, edgecount = Polygon->edgeCount + poly->edgeCount; edgeindex < edgecount; edgeindex++) {
+		edge =
+			edgeindex < Polygon->edgeCount ?
+			*edgeThis[edgeindex] :
+			*edgeOther[edgeindex - Polygon->edgeCount];
+
+		axis = edge.product2D().normalize();
+
+
+		projectPolygon(axis, *Polygon, &This);
+		projectPolygon(axis, *poly, &Other);
+
+		velo = axis.dotProduct(velocity);
+
+		if (velo < 0) { This.x += velo; }
+		else { This.y += velo; }
+
+		if (distance(This, Other) > 0) { isCol = false; break; }
+	}
+
+	if (isCol)	{ return Vector3f(0, 0, 0); }
+	else		{ return velocity; }
+}
+Vector3f PolygonCollider::isCollisionVec(list<GameObject*>& objects, const Vector3f& velocity) {
+	float velo = 0.0f;
+	bool isCol = true;
+
+	Vector3f axis, edge;
+	Vector3f This(0), Other(0);
+
+	for (auto& object : objects) {
+		if (!object) { return false; }
+
+		PolygonRenderer* poly = object->GetComponent<PolygonRenderer>();
+		if (!poly || poly->vertexCount < 0) { return false; }
+
+		isCol = true;
+
+		const vector<Vector3f*>& edgeThis = Polygon->GetEdge();
+		const vector<Vector3f*>& edgeOther = poly->GetEdge();
+
+		for (unsigned int edgeindex = 0, edgecount = Polygon->edgeCount + poly->edgeCount; edgeindex < edgecount; edgeindex++) {
+			edge =
+				edgeindex < Polygon->edgeCount ?
+				*edgeThis[edgeindex] :
+				*edgeOther[edgeindex - Polygon->edgeCount];
+
+			axis = edge.product2D().normalize();
+
+
+			projectPolygon(axis, *Polygon, &This);
+			projectPolygon(axis, *poly, &Other);
+
+			velo = axis.dotProduct(velocity);
+
+			if (velo < 0) { This.x += velo; }
+			else { This.y += velo; }
+
+			if (distance(This, Other) > 0) { isCol = false; break; }
+		}
+
+		if (isCol) { return Vector3f(0, 0, 0); }
+	}
+
+	return velocity;
+}
 
 // [ SpriteRenderer Component ]
 void SpriteRenderer::Awake() {

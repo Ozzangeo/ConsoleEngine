@@ -27,6 +27,10 @@ protected:
 	Color color;
 	Time time;
 
+	// 씬의 오브젝트가 모두 로드되었을 때 작동
+	virtual void Start() {};
+
+	// 컴포넌트 추가될 때 작동
 	virtual void Awake() = 0;
 	virtual void Update() = 0;
 	virtual void Remove() = 0;

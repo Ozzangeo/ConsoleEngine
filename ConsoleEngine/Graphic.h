@@ -84,7 +84,7 @@ inline void Graphic::DrawCircle(const Vector3f& pos, const Vector3f& pos2, const
 	Pixel((pos.x + pos2.y), (pos.y - pos2.x), pos.z, Trans, color);
 	Pixel((pos.x - pos2.y), (pos.y - pos2.x), pos.z, Trans, color);
 }
-#pragma region Pixels
+
 #define PutPixel(Pos, color)							\
 if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||			\
 	0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }	\
@@ -125,8 +125,7 @@ inline void Graphic::Pixel(Vector3f& pos, EnumColor& color) {
 
 	PutPixel(Pos, color)
 }
-#pragma endregion
-#pragma region Translates
+
 inline Matrix4x4f Graphic::GetTranslate(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale) {
 	return Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix((*m_HalfScreenSize - *CameraPos) + pos);
 }
@@ -142,6 +141,5 @@ inline Matrix4x4f Graphic::GetTranslate(const Vector3f& scale) {
 inline Matrix4x4f Graphic::GetTranslate() {
 	return Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
 }
-#pragma endregion
 
 #endif // !___GRAPHIC___

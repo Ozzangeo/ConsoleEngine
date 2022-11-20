@@ -13,6 +13,7 @@ class GameObject {
 private:
 	list<Component*> m_Components;
 
+	void Start();
 	void Update();
 	void Remove();
 

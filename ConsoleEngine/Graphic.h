@@ -56,12 +56,14 @@ private:
 	inline void Pixel(const float& x, const float& y, const float& z, EnumColor& color);
 	inline void Pixel(Vector3i& pos, EnumColor& color);
 	inline void Pixel(Vector3f& pos, EnumColor& color);
+	inline EnumColor GetPixel(Vector3i pos);
 
 public:
 	// 기본 Graphic 함수
 	void Line		(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, Vector3f pos2 = 0);
 	void Circle		(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, const float& radius, const int& curvature = 0);
 	void DrawSprite	(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, Sprite& sprite);
+	void Mark		(Vector3i pos, EnumColor color);
 	void Fill		(Vector3f pos, Vector3f pos2, EnumColor color);
 
 	// Polygon Renderer 성능 최적화 용도
@@ -85,6 +87,7 @@ inline void Graphic::DrawCircle(const Vector3f& pos, const Vector3f& pos2, const
 	Pixel((pos.x - pos2.y), (pos.y - pos2.x), pos.z, Trans, color);
 }
 
+/////////////////////////////////////////////////////////
 #define PutPixel(Pos, color)							\
 if (0 > Pos.y || m_ScreenSize->y <= Pos.y ||			\
 	0 > Pos.x || m_ScreenSize->x <= Pos.x) { return; }	\
@@ -94,7 +97,9 @@ int index = (Pos.y * m_ScreenSize->x) + Pos.x;			\
 if (m_Depth[index] < Pos.z) {							\
 	m_Screen[index].Attributes = color;					\
 	m_Depth[index] = Pos.z;								\
-}
+}														\
+/////////////////////////////////////////////////////////
+
 inline void Graphic::Pixel(const   int& x, const   int& y, const   int& z, const Matrix4x4f& Trans, EnumColor& color) {
 	Vector3i Pos = Vector3i{ x, y, z } * Trans;
 
@@ -124,6 +129,12 @@ inline void Graphic::Pixel(Vector3f& pos, EnumColor& color) {
 	Vector3i Pos = pos;
 
 	PutPixel(Pos, color)
+}
+inline EnumColor Graphic::GetPixel(Vector3i pos) {
+	if (0 > pos.y || m_ScreenSize->y <= pos.y ||
+		0 > pos.x || m_ScreenSize->x <= pos.x) { return Color_NULL; }
+
+	return static_cast<EnumColor>(m_Screen[(pos.y * m_ScreenSize->x) + pos.x].Attributes);
 }
 
 inline Matrix4x4f Graphic::GetTranslate(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale) {

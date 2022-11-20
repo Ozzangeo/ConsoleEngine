@@ -69,9 +69,9 @@ namespace Components {
 
 	public:
 		// OBB(SAT) 알고리즘 이용
-		bool isCollision(GameObject* object, float* Distance = nullptr);
+		bool isCollision(GameObject* object);
 		bool isCollision(GameObject* object, const Vector3f& velocity);
-		bool isCollision(list<GameObject*>& objects, float* Distance = nullptr);
+		bool isCollision(list<GameObject*>& objects);
 		bool isCollision(list<GameObject*>& objects, const Vector3f& velocity);
 
 		Vector3f isCollisionVec(GameObject* object, const Vector3f& velocity);

@@ -23,7 +23,7 @@ void PolygonRenderer::Awake () {
 	vertexCount = 0;
 	color = Color_Black;
 	isVisible = true;
-	isFill = true;
+	isFill = false;
 	
 	beforePos = new Vector3f;
 }
@@ -45,6 +45,10 @@ void PolygonRenderer::Update() {
 	}
 
 	graphic.Line(*vertices[vertexCount - 1], *vertices[0], Trans, color);
+
+	if (isFill) {
+		graphic.Mark(Vector3f::ONE * Trans, color);
+	}
 }
 void PolygonRenderer::Remove() {
 	if (beforePos) { delete beforePos; beforePos = nullptr; }
@@ -129,7 +133,7 @@ void PolygonCollider::Awake() {
 	Polygon = gameobject->AddComponent<PolygonRenderer>();
 
 }
-bool PolygonCollider::isCollision(GameObject* object, float* Distance) {
+bool PolygonCollider::isCollision(GameObject* object) {
 	if (!object) { return false; }
 
 	PolygonRenderer* poly = object->GetComponent<PolygonRenderer>();
@@ -137,7 +141,6 @@ bool PolygonCollider::isCollision(GameObject* object, float* Distance) {
 
 	Vector3f axis, edge;
 	
-	float dis = 0.0f;
 	bool isCol = true;
 
 	const vector<Vector3f*>& edgeThis = Polygon->GetEdge();
@@ -156,13 +159,10 @@ bool PolygonCollider::isCollision(GameObject* object, float* Distance) {
 		projectPolygon(axis, *Polygon, &This);
 		projectPolygon(axis, *poly, &Other);
 
-		dis = distance(This, Other);
-		if (dis > 0) { isCol = false; break; }
+		if (distance(This, Other) > 0) { isCol = false; break; }
 	}
-	if (Distance) {
-		if (isCol) { *Distance = dis; }
-		else	   { *Distance = 0.0f; }
-	}
+
+	if (isCol) { return true; }
 
 	return isCol;
 }
@@ -204,8 +204,7 @@ bool PolygonCollider::isCollision(GameObject* object, const Vector3f& velocity) 
 
 	return isCol;
 }
-bool PolygonCollider::isCollision(list<GameObject*>& objects, float* Distance) {
-	float dis = 0.0f;
+bool PolygonCollider::isCollision(list<GameObject*>& objects) {
 	bool isCol = true;
 
 	Vector3f axis, edge;
@@ -232,16 +231,12 @@ bool PolygonCollider::isCollision(list<GameObject*>& objects, float* Distance) {
 			projectPolygon(axis, *Polygon, &This);
 			projectPolygon(axis, *poly, &Other);
 
-			dis = distance(This, Other);
-			if (dis > 0) { isCol = false; break; }
+			if (distance(This, Other) > 0) { isCol = false; break; }
 		}
 
-		if (Distance) {
-			if (isCol) { *Distance = dis; return true; }
-			else	   { *Distance = 0.0f; }
-		}
+		if (isCol) { return true; }
 	}
-	
+
 	return false;
 }
 bool PolygonCollider::isCollision(list<GameObject*>& objects, const Vector3f& velocity) {

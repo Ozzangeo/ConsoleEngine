@@ -56,6 +56,9 @@ public:
 	Vector3f(__m128i other) : vecp(_mm_cvtepi32_ps(other)) {}
 	Vector3f(float _x, float _y, float _z, float _w = 1.0f) : vecp(_mm_set_ps(_w, _z, _y, _x)) {}
 
+	static const Vector3f ZERO;
+	static const Vector3f ONE;
+
 	Vector3f operator+(const Vector3f& ref);
 	Vector3f operator-(const Vector3f& ref);
 	Vector3f operator+(const __m128& ref);

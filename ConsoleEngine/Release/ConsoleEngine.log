@@ -1,8 +1,2 @@
-﻿  Component.cpp
-  Components.cpp
-  ConsoleEngine.cpp
-  GameObject.cpp
-  GameObjects.cpp
-  Scene.cpp
-  Time.cpp
+﻿  Components.cpp
   ConsoleEngine.vcxproj -> F:\Github Project\ConsoleEngine\Release\ConsoleEngine.lib

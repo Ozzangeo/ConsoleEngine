@@ -1,3 +1,5 @@
 ﻿  Components.cpp
-F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(38,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  ConsoleEngine.cpp
+  GameObjects.cpp
+  코드를 생성하고 있습니다...
   ConsoleEngine.vcxproj -> F:\Github Project\ConsoleEngine\Debug\ConsoleEngine.lib

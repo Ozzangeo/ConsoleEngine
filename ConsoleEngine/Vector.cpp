@@ -1,6 +1,6 @@
 #include "Vector.h"
 
-// [ Vector4i ]
+// [ Vector3i ]
 Vector3i Vector3i::operator+(const Vector3i& ref) {
 	return _mm_add_epi32(vecp, ref.vecp);
 }
@@ -34,7 +34,9 @@ Vector3i::operator Vector3f() {
 }
 
 
-// [ Vector4f ]
+// [ Vector3f ]
+const Vector3f Vector3f::ZERO = Vector3f(0.0f);
+const Vector3f Vector3f::ONE = Vector3f(1.0f);
 Vector3f Vector3f::operator+(const Vector3f& ref) {
 	return _mm_add_ps(vecp, ref.vecp);
 }

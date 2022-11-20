@@ -32,12 +32,18 @@ private:
 		*move = 0.0f;
 
 		if (Collider->isCollision(targets)) { Renderer->color = Color_LightRed; }
-		else { Renderer->color = Color_LightBlue; }
+		else { Renderer->color = Color_SkyBlue; }
 
-		if (keyboard.isKeyHold(KeyCode_W)) { *move += Collider->isCollisionVec(targets, Vector3f(0, -speed, 0) * Time::GetDeltaTime()); }
-		if (keyboard.isKeyHold(KeyCode_S)) { *move += Collider->isCollisionVec(targets, Vector3f(0,  speed, 0) * Time::GetDeltaTime()); }
-		if (keyboard.isKeyHold(KeyCode_A)) { *move += Collider->isCollisionVec(targets, Vector3f(-speed, 0, 0) * Time::GetDeltaTime()); }
-		if (keyboard.isKeyHold(KeyCode_D)) { *move += Collider->isCollisionVec(targets, Vector3f( speed, 0, 0) * Time::GetDeltaTime()); }
+		if (keyboard.isKeyHold(KeyCode_W)) { *move += Vector3f(0, -speed, 0) * Time::GetDeltaTime(); }
+		if (keyboard.isKeyHold(KeyCode_S)) { *move += Vector3f(0,  speed, 0) * Time::GetDeltaTime(); }
+		if (keyboard.isKeyHold(KeyCode_A)) { *move += Vector3f(-speed, 0, 0) * Time::GetDeltaTime(); }
+		if (keyboard.isKeyHold(KeyCode_D)) { *move += Vector3f( speed, 0, 0) * Time::GetDeltaTime(); }
+		if (keyboard.isKeyDown(KeyCode_1)) { *gameobject->pos = Vector3f(15.0f, 15.0f, 0); }
+
+		/*Collider->isCollisionVec(targets, Vector3f(0, -speed, 0) * Time::GetDeltaTime())
+		Collider->isCollisionVec(targets, Vector3f(0, speed, 0) * Time::GetDeltaTime())
+		Collider->isCollisionVec(targets, Vector3f(-speed, 0, 0) * Time::GetDeltaTime())
+		Collider->isCollisionVec(targets, Vector3f(speed, 0, 0) * Time::GetDeltaTime())*/
 
 		*gameobject->pos += *move;
 	}
@@ -147,8 +153,9 @@ private:
 		auto* obj = AddGameObject<PolygonObject>(L"PolygonObjectTest2");
 		obj->AddComponent<Mover>();
 		obj->AddComponent<Rotator>();
-		*obj->pos = Vector3f(15, 15, 0);
+		*obj->pos = Vector3f(15, 15, 5);
 		*obj->scale = Vector3f(0.5f, 0.5f, 1);
+		obj->GetComponent<PolygonRenderer>()->isFill = true;
 	}
 };
 

@@ -3,7 +3,7 @@
 
 #include "GameObjects.h"
 
-class Dalma : public Scene {
+class DalmaMain : public Scene {
 private:
 	void GameObjects() override;
 };

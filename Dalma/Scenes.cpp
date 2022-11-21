@@ -1,6 +1,6 @@
 #include "Scenes.h"
 
-void Dalma::GameObjects() {
+void DalmaMain::GameObjects() {
 	auto* camera = AddGameObject<GameObjects::Camera>(L"Camera", Tag_Camera);
 	auto* cameracomp = camera->GetComponent<Components::Camera>();
 	if (cameracomp) { cameracomp->SetCameraScale(8); }

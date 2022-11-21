@@ -4,7 +4,7 @@
 int main() {
 	ConsoleEngine engine;
 
-	engine.Run<Dalma>(L"Dalma[RE]");
+	engine.Run<DalmaMain>(L"Dalma[RE]");
 
 	engine.Release();
 

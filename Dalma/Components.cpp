@@ -1,23 +1,29 @@
 #include "Components.h"
 
-void A::Update() {
+using namespace std;
+using namespace Components;
+
+void Mover::Awake() {
+	move = new Vector3f;
+}
+void Mover::Start() {
+	server = scene->GetGameObject(Tag_Server)->GetComponent<Server>();
+}
+void Mover::Update() {
 	*move = Vector3f::ZERO;
-	if (keyboard.isKeyDown(KeyCode_W)) {
-		client->sendServer("W");
-		*move += Vector3f(0, -speed, 0) * Time::GetDeltaTime();
-	}
-	if (keyboard.isKeyDown(KeyCode_S)) {
-		client->sendServer("S");
-		*move += Vector3f(0, speed, 0) * Time::GetDeltaTime();
-	}
-	if (keyboard.isKeyDown(KeyCode_A)) {
-		client->sendServer("A");
-		*move += Vector3f(-speed, 0, 0) * Time::GetDeltaTime();
-	}
-	if (keyboard.isKeyDown(KeyCode_D)) {
-		client->sendServer("D");
-		*move += Vector3f(speed, 0, 0) * Time::GetDeltaTime();
-	}
+
+	if (keyboard.isKeyHold(KeyCode_W)) { *move += Vector3f(0, -speed, 0) * Time::GetDeltaTime(); server->sendMsgAll("위"); }
+	if (keyboard.isKeyHold(KeyCode_A)) { *move += Vector3f(-speed, 0, 0) * Time::GetDeltaTime(); server->sendMsgAll("왼쪽"); }
+	if (keyboard.isKeyHold(KeyCode_S)) { *move += Vector3f(0,  speed, 0) * Time::GetDeltaTime(); server->sendMsgAll("아래"); }
+	if (keyboard.isKeyHold(KeyCode_D)) { *move += Vector3f( speed, 0, 0) * Time::GetDeltaTime(); server->sendMsgAll("오른쪽"); }
 
 	*gameobject->pos += *move;
+}
+void Mover::Remove() {
+	delete move;
+}
+
+void DownNote::Update() {
+	*gameobject->pos += Vector3f(0, speed, 0) * Time::GetDeltaTime();
+	// 이거 화면 끝을 어떻게 감지하지
 }

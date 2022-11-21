@@ -16,6 +16,8 @@ class GameObject;
 * Graphic graphic
 * Color color
 * Time time
+* 
+* Awake - Start - Update - Remove
 */
 class Component {
 	friend class GameObject;
@@ -31,9 +33,9 @@ protected:
 	virtual void Start() {};
 
 	// 컴포넌트 추가될 때 작동
-	virtual void Awake() = 0;
-	virtual void Update() = 0;
-	virtual void Remove() = 0;
+	virtual void Awake() {};
+	virtual void Update() {};
+	virtual void Remove() {};
 
 public:
 	GameObject* GetGameObject();

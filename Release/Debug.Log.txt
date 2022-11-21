@@ -1,14 +1,6 @@
-[FPS] : 249
-[FPS] : 248
-[FPS] : 246
-[FPS] : 248
-[FPS] : 248
-[FPS] : 248
-[FPS] : 249
-[FPS] : 248
-[FPS] : 248
-[FPS] : 248
-[FPS] : 248
+[FPS] : 60
+[FPS] : 60
 [ Keyboard ] : Release
 [ Graphic ] : Release
+[ Math ] : Release
 [ Debug ] : Release

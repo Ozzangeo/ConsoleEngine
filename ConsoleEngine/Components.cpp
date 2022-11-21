@@ -548,7 +548,7 @@ bool Server::CloseServer() {
 	isServerOpen = false;
 	return true;
 }
-void Server::sendClientAll(string msg) {
+void Server::sendMsgAll(string msg) {
 	if (msg.length() > PACKET_SIZE) { msg.erase(PACKET_SIZE, msg.length()); }
 
 	for (auto& Client : clients) {
@@ -567,11 +567,23 @@ void Client::Awake() {
 #define cAddrSz client.addr_size
 	gameobject->RemoveComponent<Server>();
 	isJoinServer = false;
+
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData)) {
+		Debug::Log("[ Client ] WSA Error!");
+		WSACleanup();
+	}
 }
 void Client::Update() {
 	if (!recvMsg.empty()) {
-		nowMsg = recvMsg.front();
-		recvMsg.pop_front();
+		try {
+			nowMsg = recvMsg.front();
+			recvMsg.pop_front();
+		}
+		catch (exception e) {
+			cout << e.what();
+			return;
+		}
+		
 	}
 	else { nowMsg.clear(); }
 }
@@ -593,12 +605,6 @@ void Client::recvServer() {
 }
 bool Client::JoinServer(string ip, int port) {
 	if (isJoinServer) { return true; }
-
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData)) {
-		Debug::Log("[ Client ] WSA Error! in" + ip + " [port:" + to_string(port) + "]");
-		WSACleanup();
-		return false;
-	}
 
 	cSocket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (cSocket == INVALID_SOCKET) {
@@ -634,10 +640,26 @@ bool Client::ExitServer() {
 	isJoinServer = false;
 	return true;
 }
-void Client::sendServer(string msg) {
+void Client::sendMsg(string msg) {
 	if (msg.length() > PACKET_SIZE) { msg.erase(PACKET_SIZE, msg.length()); }
 	send(cSocket, msg.c_str(), msg.length(), 0);
 }
 string Client::GetMsg() {
 	return nowMsg;
+}
+
+string Client::GetMyIP() {
+	char HostName[255];
+	if (gethostname(HostName, sizeof(HostName))) { return ""; }
+
+	PHOSTENT Info = gethostbyname(HostName);
+	if (!Info) { return ""; }
+
+	in_addr* pAddr = (in_addr*)Info->h_addr_list[0];
+	if (!pAddr) { return ""; }
+
+	return to_string(pAddr->s_net) + "." + to_string(pAddr->s_host) + "." + to_string(pAddr->s_lh) + "." + to_string(pAddr->s_impno);
+}
+bool Client::isJoin() {
+	return isJoinServer;
 }

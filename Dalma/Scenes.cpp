@@ -7,5 +7,7 @@ void Dalma::GameObjects() {
 
 	auto* rect = AddGameObject<GameObjects::Rectangle>(L"Rectangle", Tag_Rectangle);
 	auto* circle = AddGameObject<GameObjects::Circle>(L"Circle", Tag_Circle);
-	circle->AddComponent<A>();
+	circle->AddComponent<Mover>();
+
+	auto* server = AddGameObject<ServerObject>(L"Server", Tag_Server);
 }

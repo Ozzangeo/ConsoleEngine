@@ -88,7 +88,7 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 		
 		////////////////////////////////
 		Time::ExecutionTime = duration<float>(system_clock::now() - start).count() * 1000.0f;
-		if (m_FPS > Time::ExecutionTime) { /*Time::Delay(m_FPS - Time::ExecutionTime);*/ }
+		if (m_FPS > Time::ExecutionTime) { Time::Delay(m_FPS - Time::ExecutionTime); }
 		Time::DeltaTime = duration<float>(system_clock::now() - start).count();
 	}
 

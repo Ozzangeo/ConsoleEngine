@@ -3,20 +3,35 @@
 
 #include "stdafx.h"
 
-class A : public Component {
-private:
-	Components::Client* client;
-	float speed = 50.0f;
-	Vector3f* move;
+using namespace std;
+using namespace Components;
 
-	void Awake() override { move = new Vector3f; }
-	void Start() override {
-		client = gameobject->AddComponent<Components::Client>();
-		client->JoinServer("192.168.219.105", 8080);
-	}
-	void Update() override;
-	void Remove() override { delete move; }
+enum Tags {
+	Tag_Camera,
+	Tag_Rectangle,
+	Tag_Circle,
+	Tag_Server
 };
 
+class Mover : public Component {
+private:
+	Server* server;
+	Vector3f* move;
+
+	void Awake() override;
+	void Start() override;
+	void Update() override;
+	void Remove() override;
+
+public:
+	float speed = 50.0f;
+};
+class DownNote : public Component {
+private:
+	void Update() override;
+
+public:
+	float speed = 5.0f;
+};
 
 #endif // !_COMPONENTS_

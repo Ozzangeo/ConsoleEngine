@@ -19,12 +19,11 @@ using namespace chrono;
 
 class Scene;
 namespace Components {
-	// 이 컴포넌트는 프로그램당 웬만하면 하나만 있게 하는걸 추천
+	// 이 컴포넌트는 씬당 웬만하면 하나만 있게 하는걸 추천
 	class Camera : public Component {					  
 	private:											  
 		void Awake() final override;					  
-		void Update() final override;					  
-		void Remove() final override {}					  
+		void Update() final override;			  
 														  
 	public:												  
 		void SetCameraScale(COORD Scale);				  
@@ -69,8 +68,6 @@ namespace Components {
 		float distance(Vector3f& maxminA, Vector3f& maxminB);
 
 		void Awake() final override;
-		void Update() final override {}
-		void Remove() final override {}
 
 	public:
 		// OBB(SAT) 알고리즘 이용
@@ -86,7 +83,6 @@ namespace Components {
 	private:
 		void Awake() final override;
 		void Update() final override;
-		void Remove() final override {}
 
 	public:
 		Sprite sprite;
@@ -96,7 +92,6 @@ namespace Components {
 	private:
 		void Awake() override;
 		void Update() override;
-		void Remove() override {}
 		
 	public:
 		EnumColor color = Color_LightWhite;
@@ -113,7 +108,6 @@ namespace Components {
 
 		void Awake() final override;
 		void Update() final override;
-		void Remove() final override {}
 
 	public:
 		Animation animation;
@@ -140,7 +134,6 @@ namespace Components {
 		vector<SoundInfo> SoundList;
 
 		void Awake() final override;
-		void Update() final override {}
 		void Remove() final override;
 	public:
 		enum SoundType {
@@ -183,7 +176,7 @@ namespace Components {
 		bool OpenServer(int port);
 		bool CloseServer();
 		
-		void sendClientAll(string msg);
+		void sendMsgAll(string msg);
 		string GetMsg();
 	};
 	class Client : public Component {
@@ -214,8 +207,11 @@ namespace Components {
 		bool JoinServer(string ip, int port);
 		bool ExitServer();
 
-		void sendServer(string msg);
+		void sendMsg(string msg);
 		string GetMsg();
+
+		string GetMyIP();
+		bool isJoin();
 	};
 };
 

@@ -16,7 +16,7 @@ private:
 	void Release();
 
 protected:
-	// 여기서 가끔씩 빨간줄(에러) 뜨는데 이거 정상입니다
+	 //여기서 가끔씩 빨간줄(에러) 뜨는데 이거 정상입니다
 	ConsoleEngine* Engine = nullptr;
 	virtual void GameObjects() = 0;
 
@@ -39,6 +39,7 @@ public:
 	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true>	list<GameObject*> GetGameObjectList(int tag);
 	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true>	list<GameObject*> GetGameObjectList(wstring name, int tag);
 
+	bool RemoveGameObject(GameObject* gameobject);
 	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true> bool RemoveGameObject();
 	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true> bool RemoveGameObject(wstring name);
 	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true> bool RemoveGameObject(int tag);
@@ -133,6 +134,16 @@ template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>> inline list
 	return objectList;
 }
 
+inline bool Scene::RemoveGameObject(GameObject* gameobject) {
+	for (auto& object : m_GameObjects) {
+		if (object == gameobject) {
+			object->isRemove = true;
+
+			return true;
+		}
+	}
+	return false;
+}
 template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>> inline bool Scene::RemoveGameObject() {
 	list<T*> gameobjects = GetGameObject<T>();
 

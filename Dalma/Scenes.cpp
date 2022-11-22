@@ -6,6 +6,8 @@ void DalmaMain::GameObjects() {
 	if (cameracomp) { cameracomp->SetCameraScale(8); }
 
 	auto* rect = AddGameObject<GameObjects::Rectangle>(L"Rectangle", Tag_Rectangle);
+	rect->AddComponent<DownNote>();
+
 	auto* circle = AddGameObject<GameObjects::Circle>(L"Circle", Tag_Circle);
 	circle->AddComponent<Mover>();
 

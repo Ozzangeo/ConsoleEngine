@@ -1,17 +1,3 @@
-﻿  Animation.cpp
-  Color.cpp
-  Component.cpp
-  Components.cpp
-  ConsoleEngine.cpp
-  Debug.cpp
-  GameObject.cpp
-  GameObjects.cpp
-  Graphic.cpp
-  Keyboard.cpp
-  Math.cpp
-  Matrix.cpp
+﻿  ConsoleEngine.cpp
   Scene.cpp
-  Sprite.cpp
-  Time.cpp
-  Vector.cpp
-  ConsoleEngine.vcxproj -> F:\Github Project\ConsoleEngine\Release\ConsoleEngine.lib
+  ConsoleEngine.vcxproj -> C:\Users\My\Documents\GitHub\ConsoleEngine\Release\ConsoleEngine.lib

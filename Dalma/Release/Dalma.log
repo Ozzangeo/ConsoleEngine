@@ -3,8 +3,8 @@
   main.cpp
   Scenes.cpp
   코드를 생성하고 있습니다.
-  914 of 924 functions (98.9%) were compiled, the rest were copied from previous compilation.
-    74 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+  47 of 940 functions ( 5.0%) were compiled, the rest were copied from previous compilation.
+    15 functions were new in current compilation
+    33 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
-  Dalma.vcxproj -> F:\Github Project\ConsoleEngine\Release\Dalma.exe
+  Dalma.vcxproj -> C:\Users\My\Documents\GitHub\ConsoleEngine\Release\Dalma.exe

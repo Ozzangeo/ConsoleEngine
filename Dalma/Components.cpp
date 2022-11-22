@@ -25,5 +25,5 @@ void Mover::Remove() {
 
 void DownNote::Update() {
 	*gameobject->pos += Vector3f(0, speed, 0) * Time::GetDeltaTime();
-	// 이거 화면 끝을 어떻게 감지하지
+	if (gameobject->pos->y >= 30) { scene->RemoveGameObject(this->gameobject); }
 }

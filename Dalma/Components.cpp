@@ -17,7 +17,7 @@ void AmladPlayer::Update() {
 
 			for (auto& effect : note.Effects) {
 				switch (effect) {
-				case /*모시깽이*/1: { /* 대충 이펙트 컴포 추가 */ /*gameobject->AddComponent<>();*/ } break;
+				case /*모시깽이*/1: { /* 대충 번호에 맞는 이펙트 컴포 추가 */ /*gameobject->AddComponent<>();*/ } break;
 				}
 			}
 

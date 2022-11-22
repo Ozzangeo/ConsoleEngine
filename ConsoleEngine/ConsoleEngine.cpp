@@ -2,7 +2,7 @@
 
 using namespace std::chrono;
 
-ConsoleEngine::ConsoleEngine() : m_FPS(60), isDone(false), nowScene(nullptr) {
+ConsoleEngine::ConsoleEngine() : m_FPS(60), isDone(false) {
 	// 스타일 설정
 	LONG style = GetWindowLong(GetConsoleWindow(), GWL_STYLE);
 	SetWindowLong(GetConsoleWindow(), GWL_STYLE, style & ~WS_SIZEBOX);
@@ -15,8 +15,9 @@ ConsoleEngine::ConsoleEngine() : m_FPS(60), isDone(false), nowScene(nullptr) {
 
 }
 void ConsoleEngine::Release() {
-	Keyboard::Release();
+	SceneManager::Release();
 	Graphic::Release();
 	Math::Release();
+	Keyboard::Release();
 	Debug::Release();
 }

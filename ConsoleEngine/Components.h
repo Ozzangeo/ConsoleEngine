@@ -52,6 +52,8 @@ namespace Components {
 	public:
 		EnumColor color = Color_LightWhite;
 		bool isVisible = true;
+
+		// 사실상 베타적 기능
 		bool isFill;
 
 		Vector3f* AddVertex(float x, float y);

@@ -11,7 +11,6 @@ class GameObject {
 	friend class Scene;
 	friend class Components::Camera;
 private:
-	bool isRemove = false;
 	list<Component*> m_Components;
 
 	void Start();

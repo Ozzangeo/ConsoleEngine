@@ -5,11 +5,7 @@ void DalmaMain::GameObjects() {
 	auto* cameracomp = camera->GetComponent<Components::Camera>();
 	if (cameracomp) { cameracomp->SetCameraScale(8); }
 
-	auto* rect = AddGameObject<GameObjects::Rectangle>(L"Rectangle", Tag_Rectangle);
-	rect->AddComponent<DownNote>();
-
-	auto* circle = AddGameObject<GameObjects::Circle>(L"Circle", Tag_Circle);
-	circle->AddComponent<Mover>();
+	auto* spawner = AddGameObject<NoteSpawner>(L"Spawner", Tag_NoteSpawner);
 
 	auto* server = AddGameObject<ServerObject>(L"Server", Tag_Server);
 }

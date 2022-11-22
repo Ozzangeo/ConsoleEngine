@@ -8,13 +8,20 @@ void Scene::Awake() {
 void Scene::Update() {
 	for (auto& item : m_GameObjects) {
 		item->Update();
-		if (item->isRemove) {
-			item->Remove();
-			m_GameObjects.remove(item);
-			
-			delete item;
-			item = nullptr;
-		}
+	}
+
+	for (auto& Remove : m_RemoveObjectList) {
+		Remove->Remove();
+		m_GameObjects.remove(Remove);
+
+		delete Remove;
+		Remove = nullptr;
+	}
+	m_RemoveObjectList.clear();
+
+	if (isEnd) {
+		Release();
+		delete this;
 	}
 }
 void Scene::Release() {

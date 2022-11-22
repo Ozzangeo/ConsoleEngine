@@ -6,18 +6,20 @@
 
 using namespace std;
 
+class SceneManager;
 class Scene {
-	friend class ConsoleEngine;
+	friend class SceneManager;
 private:
+	bool isEnd = false;
+
 	list<GameObject*> m_GameObjects;
+	list<GameObject*> m_RemoveObjectList;
 
 	void Awake();
 	void Update();
 	void Release();
 
 protected:
-	 //여기서 가끔씩 빨간줄(에러) 뜨는데 이거 정상입니다
-	ConsoleEngine* Engine = nullptr;
 	virtual void GameObjects() = 0;
 
 public:
@@ -45,7 +47,6 @@ public:
 	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true> bool RemoveGameObject(int tag);
 	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true> bool RemoveGameObject(wstring name, int tag);
 };
-
 template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>> inline T* Scene::AddGameObject(wstring name, int tag) {
 	GameObject* GameObject = GetGameObject<T>();
 	if (GameObject && GameObject->isOnceGameObject) { return dynamic_cast<T*>(GameObject); }
@@ -137,7 +138,7 @@ template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>> inline list
 inline bool Scene::RemoveGameObject(GameObject* gameobject) {
 	for (auto& object : m_GameObjects) {
 		if (object == gameobject) {
-			object->isRemove = true;
+			m_RemoveObjectList.push_back(object);
 
 			return true;
 		}
@@ -145,57 +146,41 @@ inline bool Scene::RemoveGameObject(GameObject* gameobject) {
 	return false;
 }
 template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>> inline bool Scene::RemoveGameObject() {
-	list<T*> gameobjects = GetGameObject<T>();
+	list<T*> gameobjects = GetGameObjectList<T>();
+	if (gameobjects.empty()) { return false; }
 
 	for (auto& RObject : gameobjects) {
-		GameObject* RGameObject = dynamic_cast<GameObject*>(RObject);
-		RGameObject->Remove();
-		m_GameObjects.remove(RGameObject);
-
-		delete RGameObject;
-		RGameObject = nullptr;
+		m_RemoveObjectList.push_back(dynamic_cast<GameObject*>(RObject));
 	}
 
 	return true;
 }
 template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>> inline bool Scene::RemoveGameObject(wstring name) {
 	list<T*> gameobjects = GetGameObject<T>(name);
+	if (gameobjects.empty()) { return false; }
 
 	for (auto& RObject : gameobjects) {
-		GameObject* RGameObject = dynamic_cast<GameObject*>(RObject);
-		RGameObject->Remove();
-		m_GameObjects.remove(RGameObject);
-
-		delete RGameObject;
-		RGameObject = nullptr;
+		m_RemoveObjectList.push_back(dynamic_cast<GameObject*>(RObject));
 	}
 
 	return true;
 }
 template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>> inline bool Scene::RemoveGameObject(int tag) {
 	list<T*> gameobjects = GetGameObject<T>(tag);
+	if (gameobjects.empty()) { return false; }
 
 	for (auto& RObject : gameobjects) {
-		GameObject* RGameObject = dynamic_cast<GameObject*>(RObject);
-		RGameObject->Remove();
-		m_GameObjects.remove(RGameObject);
-
-		delete RGameObject;
-		RGameObject = nullptr;
+		m_RemoveObjectList.push_back(dynamic_cast<GameObject*>(RObject));
 	}
 
 	return true;
 }
 template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>> inline bool Scene::RemoveGameObject(wstring name, int tag) {
 	list<T*> gameobjects = GetGameObject<T>(name, tag);
+	if (gameobjects.empty()) { return false; }
 
 	for (auto& RObject : gameobjects) {
-		GameObject* RGameObject = dynamic_cast<GameObject*>(RObject);
-		RGameObject->Remove();
-		m_GameObjects.remove(RGameObject);
-
-		delete RGameObject;
-		RGameObject = nullptr;
+		m_RemoveObjectList.push_back(dynamic_cast<GameObject*>(RObject));
 	}
 
 	return true;

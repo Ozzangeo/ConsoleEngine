@@ -23,7 +23,7 @@ void PolygonRenderer::Awake () {
 	verticesRealPos.reserve(32);
 
 	vertexCount = 0;
-	isFill = true;
+	isFill = false;
 	
 	beforePos = new Vector3f;
 }
@@ -61,7 +61,7 @@ void PolygonRenderer::Remove() {
 	verticesRealPos.clear();
 }
 Vector3f* PolygonRenderer::AddVertex(float x, float y) {
-	Vector3f* ver = new Vector3f(x, y, 0);
+	Vector3f* ver = new Vector3f(y, x, 0);
 	vertices	   .push_back(ver);
 	verticesRealPos.push_back(new Vector3f);
 	edges		   .push_back(new Vector3f);

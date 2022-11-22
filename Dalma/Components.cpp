@@ -3,27 +3,65 @@
 using namespace std;
 using namespace Components;
 
-void Mover::Awake() {
-	move = new Vector3f;
-}
-void Mover::Start() {
-	server = scene->GetGameObject(Tag_Server)->GetComponent<Server>();
-}
-void Mover::Update() {
-	*move = Vector3f::ZERO;
-
-	if (keyboard.isKeyHold(KeyCode_W)) { *move += Vector3f(0, -speed, 0) * Time::GetDeltaTime(); server->sendMsgAll("위"); }
-	if (keyboard.isKeyHold(KeyCode_A)) { *move += Vector3f(-speed, 0, 0) * Time::GetDeltaTime(); server->sendMsgAll("왼쪽"); }
-	if (keyboard.isKeyHold(KeyCode_S)) { *move += Vector3f(0,  speed, 0) * Time::GetDeltaTime(); server->sendMsgAll("아래"); }
-	if (keyboard.isKeyHold(KeyCode_D)) { *move += Vector3f( speed, 0, 0) * Time::GetDeltaTime(); server->sendMsgAll("오른쪽"); }
-
-	*gameobject->pos += *move;
-}
-void Mover::Remove() {
-	delete move;
-}
-
 void DownNote::Update() {
 	*gameobject->pos += Vector3f(0, speed, 0) * Time::GetDeltaTime();
-	if (gameobject->pos->y >= 30) { scene->RemoveGameObject(this->gameobject); }
+	if (gameobject->pos->y >= 64) { scene->RemoveGameObject(this->gameobject); }
+}
+
+void AmladPlayer::Update() {
+	if (!Notes.empty()) {
+		NoteInfo note = Notes.front();
+
+		if (note.Time >= ExTime) {
+			/* 대충 노트 출력 */ note.Line;
+
+			for (auto& effect : note.Effects) {
+				switch (effect) {
+				case /*모시깽이*/1: { /* 대충 이펙트 컴포 추가 */ /*gameobject->AddComponent<>();*/ } break;
+				}
+			}
+
+			ExTime -= note.Time;
+			Notes.pop_front();
+		}
+
+		ExTime += Time::GetDeltaTime();
+	}
+}
+bool AmladPlayer::OpenAmlad(wstring path) {
+	wifstream Amlad(L"Amlads/" + path + L".amlad");
+	if (Amlad.fail()) { Amlad.close(); return false; }
+
+	int dcount = 0;
+
+	wstring text;
+	wstring buf;
+
+	while (!Amlad.eof()) {
+		NoteInfo note;
+
+		getline(Amlad, text);
+		wstringstream ss(text);
+		// Amlad 파일 저장 형식 아이디어
+		// (위치, 시간), 이펙트..
+
+		getline(ss, buf, L',');	// 위치
+		note.Line = stoi(buf);
+
+		getline(ss, buf, L',');	// 시간
+		note.Line = stof(buf);
+
+		while (getline(ss, buf, L',')) {	// 이펙트
+			switch (buf[0]) // 앞자리 문자 감지해서 그에 맞는 이펙트 함수 번호 추가 ( 근데 추가 매개변수는 어떻게 받지 ) <- 고민해야할거
+			{
+			default:
+				break;
+			}
+			
+		}
+	}
+
+	Amlad.close();
+
+	return false;
 }

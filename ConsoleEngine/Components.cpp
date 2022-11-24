@@ -46,9 +46,7 @@ void PolygonRenderer::Update() {
 
 	graphic.Line(*vertices[vertexCount - 1], *vertices[0], Trans, color);
 
-	if (isFill) {
-		graphic.Mask(Vector3f::ONE * Trans, color);
-	}
+	if (isFill) { graphic.Mask(Vector3f::ONE * Trans, color); }
 }
 void PolygonRenderer::Remove() {
 	if (beforePos) { delete beforePos; beforePos = nullptr; }
@@ -61,7 +59,7 @@ void PolygonRenderer::Remove() {
 	verticesRealPos.clear();
 }
 Vector3f* PolygonRenderer::AddVertex(float x, float y) {
-	Vector3f* ver = new Vector3f(y, x, 0);
+	Vector3f* ver = new Vector3f(x, y, 0);
 	vertices	   .push_back(ver);
 	verticesRealPos.push_back(new Vector3f);
 	edges		   .push_back(new Vector3f);
@@ -131,7 +129,6 @@ float PolygonCollider::distance(Vector3f& maxminA, Vector3f& maxminB) {
 }
 void PolygonCollider::Awake() {
 	Polygon = gameobject->AddComponent<PolygonRenderer>();
-
 }
 bool PolygonCollider::isCollision(GameObject* object) {
 	if (!object) { return false; }
@@ -384,6 +381,7 @@ void CircleRenderer::Awake() {
 void CircleRenderer::Update() {
 	if (isVisible) {
 		graphic.Circle(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale, color, radius, static_cast<int>(curvature));
+		if (isFill) { graphic.Mask(*gameobject->pos, color); }
 	}
 }
 
@@ -462,7 +460,7 @@ void Server::Awake() {
 void Server::Update() {
 	if (!recvMsg.empty()) {
 		nowMsg = recvMsg.front();
-		recvMsg.pop_front();
+		recvMsg.pop();
 	}
 	else { nowMsg.clear(); }
 }
@@ -496,7 +494,7 @@ void Server::recvClient(SOCKET_* Client) {
 
 		if (recvResult == 0 || recvResult == SOCKET_ERROR) { break; }
 
-		recvMsg.push_back(Msg);
+		recvMsg.push(Msg);
 	}
 }
 bool Server::OpenServer(int port) {
@@ -577,13 +575,13 @@ void Client::Update() {
 	if (!recvMsg.empty()) {
 		try {
 			nowMsg = recvMsg.front();
-			recvMsg.pop_front();
+			recvMsg.pop();
 		}
 		catch (exception e) {
 			cout << e.what();
+			nowMsg.clear();
 			return;
 		}
-		
 	}
 	else { nowMsg.clear(); }
 }
@@ -600,7 +598,7 @@ void Client::recvServer() {
 
 		if (recvResult == 0 || recvResult == SOCKET_ERROR) { break; }
 
-		recvMsg.push_back(Msg);
+		recvMsg.push(Msg);
 	}
 }
 bool Client::JoinServer(string ip, int port) {

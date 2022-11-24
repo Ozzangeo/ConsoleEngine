@@ -98,6 +98,7 @@ namespace Components {
 	public:
 		EnumColor color = Color_LightWhite;
 		bool isVisible = true;
+		bool isFill = false;
 
 		float radius;
 		float curvature;
@@ -162,7 +163,7 @@ namespace Components {
 		SOCKET_ server;
 		vector<SOCKET_> clients;
 
-		list<string> recvMsg;
+		queue<string> recvMsg;
 		string nowMsg;
 
 		void Awake() override;
@@ -194,7 +195,7 @@ namespace Components {
 
 		SOCKET_ client;
 
-		list<string> recvMsg;
+		queue<string> recvMsg;
 		string nowMsg;
 
 		void Awake() override;

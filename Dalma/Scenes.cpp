@@ -1,11 +1,20 @@
 #include "Scenes.h"
 
 void DalmaMain::GameObjects() {
-	auto* camera = AddGameObject<GameObjects::Camera>(L"Camera", Tag_Camera);
-	auto* cameracomp = camera->GetComponent<Components::Camera>();
-	if (cameracomp) { cameracomp->SetCameraScale(8); }
+	AddGameObject<ServerObject>(L"Server", Tag_Server);
+	AddGameObject<GameObjects::Camera>(L"Camera", Tag_Camera);
+	AddGameObject<NoteSpawner>(L"Spawner", Tag_NoteSpawner);
+	AddGameObject<NoneObject>(L"Effector", Tag_Effector);
 
-	auto* spawner = AddGameObject<NoteSpawner>(L"Spawner", Tag_NoteSpawner);
+	AddGameObject<Gear>(L"Gear");
+}
 
-	auto* server = AddGameObject<ServerObject>(L"Server", Tag_Server);
+void DalmaMain::Work() {
+	auto* spawner = GetGameObject<NoteSpawner>(Tag_NoteSpawner);
+	spawner->GetComponent<AmladPlayer>()->OpenAmlad(L"TestMap");
+
+	auto* camera = GetGameObject<GameObjects::Camera>(Tag_Camera)->GetComponent<Components::Camera>();
+	camera->SetCameraScale(8);
+
+	auto* jug = GetGameObject<JudgmentLine>(Tag_JudgmentLine);
 }

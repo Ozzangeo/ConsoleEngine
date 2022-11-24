@@ -1,10 +1,10 @@
 ﻿  Components.cpp
   GameObjects.cpp
-  main.cpp
   Scenes.cpp
+  main.cpp
   코드를 생성하고 있습니다.
-  0 of 794 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  162 of 862 functions (18.8%) were compiled, the rest were copied from previous compilation.
+    87 functions were new in current compilation
+    43 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
-  TextBox.vcxproj -> C:\Users\My\Documents\GitHub\ConsoleEngine\Release\TextBox.exe
+  TextBox.vcxproj -> F:\Github Project\ConsoleEngine\Release\TextBox.exe

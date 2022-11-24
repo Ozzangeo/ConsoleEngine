@@ -1,1 +1,15 @@
 English
+Korean
+Musics/AlexiAction - Fashion Deeps House ( Galaxy ).mp3
+125
+1250
+
+(라인, 거리)
+[ Start ]
+(1, 1), g((255, 102, 153), (0, 0, 0), 0.75, 0)
+(2, 4), g((153, 153, 255), (0, 0, 0), 0.75, 0)
+(3, 1.25)
+(4, 3)
+(3, 0.5)
+(2, 0.5)
+[ End ]

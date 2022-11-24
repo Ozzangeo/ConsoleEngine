@@ -73,56 +73,56 @@ void Graphic::SetScreen() {
 }
 
 // Extremely Fast Line Algorithm
-void Graphic::Line(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, Vector3f pos2) {
+void Graphic::Line(Vector3i pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, Vector3i pos2) {
 	Matrix4x4f Trans = GetTranslate(rotate, scale);
 
-	Vector3i posf = pos  * Trans;
-			 pos2 = pos2 * Trans;
+	pos  = pos  * Trans;
+	pos2 = pos2 * Trans;
 
-			 Vector3i len = Vector3f{ pos2.x - pos.x, pos2.y - pos.y, 0 };
-			 bool isHeight = false;
+	Vector3i len = { pos2.x - pos.x, pos2.y - pos.y, 0 };
+	bool isHeight = false;
 
-			 if (abs(len.y) > abs(len.x)) {
-				 Swap<int>(&len.x, &len.y);
-				 isHeight = true;
-			 }
+	if (abs(len.y) > abs(len.x)) {
+		Swap<int>(&len.x, &len.y);
+		isHeight = true;
+	}
 
-			 if (len.x == 0) { len.z = 0; }
-			 else { len.z = (len.y << 16) / len.x; }
+	if (len.x == 0) { len.z = 0; }
+	else { len.z = (len.y << 16) / len.x; }
 
-			 if (isHeight) {
-				 if (len.x > 0) {
-					 len.x += posf.y;
-					 // 0x8000 = 0.5
-					 for (int i = 0x8000 + (posf.x << 16); pos.y <= len.x; posf.y++) {
-						 Pixel(i >> 16, posf.y, posf.z, color);
-						 i += len.z;
-					 }
-					 return;
-				 }
+	if (isHeight) {
+		if (len.x > 0) {
+			len.x += pos.y;
+			// 0x8000 = 0.5
+			for (int i = 0x8000 + (pos.x << 16); pos.y <= len.x; pos.y++) {
+				Pixel(i >> 16, pos.y, pos.z, color);
+				i += len.z;
+			}
+			return;
+		}
 
-				 len.x += posf.y;
-				 for (int i = 0x8000 + (posf.x << 16); pos.y >= len.x; posf.y--) {
-					 Pixel(i >> 16, posf.y, posf.z, color);
-					 i -= len.z;
-				 }
-				 return;
-			 }
+		len.x += pos.y;
+		for (int i = 0x8000 + (pos.x << 16); pos.y >= len.x; pos.y--) {
+			Pixel(i >> 16, pos.y, pos.z, color);
+			i -= len.z;
+		}
+		return;
+	}
 
-			 if (len.x > 0) {
-				 len.x += posf.x;
-				 for (int i = 0x8000 + (posf.y << 16); pos.x <= len.x; posf.x++) {
-					 Pixel(posf.x, i >> 16, posf.z, color);
-					 i += len.z;
-				 }
-				 return;
-			 }
+	if (len.x > 0) {
+		len.x += pos.x;
+		for (int i = 0x8000 + (pos.y << 16); pos.x <= len.x; pos.x++) {
+			Pixel(pos.x, i >> 16, pos.z, color);
+			i += len.z;
+		}
+		return;
+	}
 
-			 len.x += posf.x;
-			 for (int i = 0x8000 + (posf.y << 16); pos.x >= len.x; posf.x--) {
-				 Pixel(posf.x, i >> 16, posf.z, color);
-				 i -= len.z;
-			 }
+	len.x += pos.x;
+	for (int i = 0x8000 + (pos.y << 16); pos.x >= len.x; pos.x--) {
+		Pixel(pos.x, i >> 16, pos.z, color);
+		i -= len.z;
+	}
 }
 void Graphic::Line(Vector3i pos, Vector3i pos2, const Matrix4x4f& Trans, EnumColor color) {
 	pos  = pos  * Trans;
@@ -217,38 +217,98 @@ void Graphic::DrawSprite(const Vector3f& pos, const Vector3i& rotate, const Vect
 	}
 }
 void Graphic::Fill(Vector3f pos, Vector3f pos2, EnumColor color) {
-	Matrix4x4f Trans = GetTranslate();
-
-	if (pos.x > pos2.x) { Swap<float>(&pos.x, &pos2.x); }
-	if (pos.y > pos2.y) { Swap<float>(&pos.y, &pos2.y); }
-
+	Vector3f Trans = (*m_HalfScreenSize - *CameraPos);
 	int Height = 0;
 	int index = 0;
 
-	Vector3i posi = pos * Trans;
-	Vector3i pos2i = pos2 * Trans;
+	Vector3i posi = pos + Trans;
+	Vector3i pos2i = pos2 + Trans;
 
-	for (int i = posi.y; i <= pos2i.y; i++) {
-		if (i < 0) { continue; }
-		if (i >= m_ScreenSize->y) { return; }
-		Height = i * m_ScreenSize->x;
+	if (posi.x > pos2i.x) {
+		if (posi.y > pos2i.y) {
+			for (int i = pos2i.y; i <= posi.y; i++) {
+				if (i < 0) { continue; }
+				if (i >= m_ScreenSize->y) { return; }
+				Height = i * m_ScreenSize->x;
 
-		for (int j = posi.x; j <= pos2i.x; j++) {
-			if (j < 0) { continue; }
-			if (j >= m_ScreenSize->x) { break; }
+				for (int j = pos2i.x; j <= posi.x; j++) {
+					if (j < 0) { continue; }
+					if (j >= m_ScreenSize->x) { break; }
 
-			index = Height + j;
+					index = Height + j;
 
-			if (m_Depth[index] < posi.z) {
-				m_Screen[index].Attributes = color;
-				m_Depth[index] = posi.z;
+					if (m_Depth[index] < posi.z) {
+						m_Screen[index].Attributes = color;
+						m_Depth[index] = posi.z;
+					}
+				}
+			}
+		}
+		else {
+			for (int i = posi.y; i <= pos2i.y; i++) {
+				if (i < 0) { continue; }
+				if (i >= m_ScreenSize->y) { return; }
+				Height = i * m_ScreenSize->x;
+
+				for (int j = pos2i.x; j <= posi.x; j++) {
+					if (j < 0) { continue; }
+					if (j >= m_ScreenSize->x) { break; }
+
+					index = Height + j;
+
+					if (m_Depth[index] < posi.z) {
+						m_Screen[index].Attributes = color;
+						m_Depth[index] = posi.z;
+					}
+				}
+			}
+		}
+	}
+	else {
+		if (posi.y > pos2i.y) {
+			for (int i = pos2i.y; i <= posi.y; i++) {
+				if (i < 0) { continue; }
+				if (i >= m_ScreenSize->y) { return; }
+				Height = i * m_ScreenSize->x;
+
+				for (int j = posi.x; j <= pos2i.x; j++) {
+					if (j < 0) { continue; }
+					if (j >= m_ScreenSize->x) { break; }
+
+					index = Height + j;
+
+					if (m_Depth[index] < posi.z) {
+						m_Screen[index].Attributes = color;
+						m_Depth[index] = posi.z;
+					}
+				}
+			}
+		}
+		else {
+			for (int i = posi.y; i <= pos2i.y; i++) {
+				if (i < 0) { continue; }
+				if (i >= m_ScreenSize->y) { return; }
+				Height = i * m_ScreenSize->x;
+
+				for (int j = posi.x; j <= pos2i.x; j++) {
+					if (j < 0) { continue; }
+					if (j >= m_ScreenSize->x) { break; }
+
+					index = Height + j;
+
+					if (m_Depth[index] < posi.z) {
+						m_Screen[index].Attributes = color;
+						m_Depth[index] = posi.z;
+					}
+				}
 			}
 		}
 	}
 }
 void Graphic::Mask(Vector3i pos, EnumColor color) {
 	bool isFail = false;
-	if (GetPixel(pos) != color) {
+	EnumColor get = GetPixel(pos);
+	if (get != color && get != Color_NULL) {
 		Pixel(pos, color, &isFail);
 		if (isFail) { return; }
 	} else { return; }

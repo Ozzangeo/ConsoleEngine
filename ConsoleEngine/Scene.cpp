@@ -1,9 +1,22 @@
 #include "Scene.h"
 
 void Scene::Awake() {
+	// 먼저 오브젝트들을 추가한 다음
 	GameObjects();
 
-	for (auto& GameObject : m_GameObjects) { GameObject->Start(); }
+	// 오브젝트들의 컴포넌트를 설정해준다.
+	for (auto& GameObject : m_GameObjects) {
+		GameObject->Start();
+		GameObject->isStart = true;
+	}
+	
+	// 모든 오브젝트들의 기본 컴포넌트의 설정을 해준다.
+	for (auto& GameObject : m_GameObjects) { GameObject->Work(); }
+
+	// GameObjects에서 추가된 기본 오브젝트들의 설정을 해준다.
+	Work();
+
+	isStart = true;
 }
 void Scene::Update() {
 	for (auto& item : m_GameObjects) {

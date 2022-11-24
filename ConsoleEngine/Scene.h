@@ -11,6 +11,7 @@ class Scene {
 	friend class SceneManager;
 private:
 	bool isEnd = false;
+	bool isStart = false;
 
 	list<GameObject*> m_GameObjects;
 	list<GameObject*> m_RemoveObjectList;
@@ -21,6 +22,9 @@ private:
 
 protected:
 	virtual void GameObjects() = 0;
+
+	// 컴포넌트의 Start가 실행된 이후 실행됨.
+	virtual void Work() {};
 
 public:
 	template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool> = true> T*	 AddGameObject(wstring name, int tag = INT_MIN);
@@ -55,7 +59,12 @@ template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>> inline T* S
 	GameObject->name = name;
 	GameObject->tag = tag;
 	GameObject->scene = this;
+	GameObject->isStart = isStart;
 	GameObject->Components();
+	if (isStart) {
+		GameObject->Start();
+		GameObject->Work();
+	}
 	m_GameObjects.push_back(GameObject);
 
 	return dynamic_cast<T*>(GameObject);

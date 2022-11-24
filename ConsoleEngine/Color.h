@@ -32,6 +32,29 @@ public:
 
 	Rgb255() : r(0), g(0), b(0) {}
 	Rgb255(BYTE _r, BYTE _g, BYTE _b) : r(_r), g(_g), b(_b) {}
+
+	Rgb255(Vector3i vec) : r(vec.x), g(vec.y), b(vec.z) {}
+	Rgb255(Vector3f vec) : r(static_cast<BYTE>(vec.x)), g(static_cast<BYTE>(vec.y)), b(static_cast<BYTE>(vec.z)) {}
+
+	Vector3i operator+(const Rgb255& ref) {
+		return Vector3i(r + ref.r, g + ref.g, b + ref.b);
+	}
+	Vector3i operator-(const Rgb255& ref) {
+		return Vector3i(r - ref.r, g - ref.g, b - ref.b);
+	}
+	bool operator==(const Rgb255& ref) {
+		return (r == ref.r) && (g == ref.g) && (b == ref.b);
+	}
+	bool operator!=(const Rgb255& ref) {
+		return (r != ref.r) || (g != ref.g) || (b != ref.b);
+	}
+	bool operator!=(const Vector3i& ref) {
+		return (r != ref.x) || (g != ref.y) || (b != ref.z);
+	}
+
+	operator Vector3f() {
+		return Vector3f(r, g, b);
+	}
 };
 
 class Color {

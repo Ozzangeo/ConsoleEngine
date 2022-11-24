@@ -12,6 +12,7 @@ class GameObject {
 	friend class Components::Camera;
 private:
 	list<Component*> m_Components;
+	list<Component*> m_RemoveConponentList;
 
 	void Start();
 	void Update();
@@ -22,8 +23,11 @@ private:
 protected:
 	bool isOnceGameObject = false;
 	virtual void Components() = 0;
+	virtual void Work() {};
 
 public:
+	bool isStart = false;
+
 	GameObject();
 	virtual ~GameObject();
 
@@ -59,6 +63,7 @@ template<typename T, enable_if_t<is_base_of_v<Component, T>, bool>> inline T* Ga
 	Component->gameobject = this;
 	Component->scene = this->scene;
 	Component->Awake();
+	if (isStart) { Component->Start(); }
 	m_Components.push_back(Component);
 
 	return dynamic_cast<T*>(Component);
@@ -74,11 +79,7 @@ template<typename T, enable_if_t<is_base_of_v<Component, T>, bool>> inline bool 
 	T* component = GetComponent<T>();
 	if (!component) { return false; }
 
-	Component* RComponent = dynamic_cast<Component*>(component);
-	RComponent->Remove();
-	m_Components.remove(RComponent);
-	delete RComponent;
-	RComponent = nullptr;
+	m_RemoveConponentList.push_back(dynamic_cast<Component*>(component));
 
 	return true;
 }

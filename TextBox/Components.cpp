@@ -6,6 +6,8 @@ void Text::Awake() {
 
 	size = { 64, 18 };
 	graphic.SetScreenSize(size);
+	
+	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 void Text::Start() {
 	client = gameobject->AddComponent<Client>();
@@ -13,5 +15,5 @@ void Text::Start() {
 }
 void Text::Update() {
 	Message = client->GetMsg();
-	if (Message != "") { cout << Message << "\n"; }
+	if (Message != "") { cout << '\n' << Message; }
 }

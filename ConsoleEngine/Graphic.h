@@ -63,7 +63,7 @@ public:
 	void SetScreenSize(const COORD& Size);
 
 	// 기본 Graphic 함수
-	void Line		(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, Vector3f pos2 = 0);
+	void Line		(Vector3i pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, Vector3i pos2 = 0);
 	void Circle		(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, EnumColor color, const float& radius, const int& curvature = 0);
 	void DrawSprite	(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale, Sprite& sprite);
 	void Mask		(Vector3i pos, EnumColor color);

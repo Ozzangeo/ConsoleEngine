@@ -13,7 +13,6 @@ void DalmaMain::GameObjects() {
 	arrow->pos->x = 5;
 }
 void Dalma::GameObjects() {
-	AddGameObject<ServerObject>(L"Server", Tag_Server);
 	AddGameObject<GameObjects::Camera>(L"Camera", Tag_Camera);
 	AddGameObject<NoteSpawner>(L"Spawner", Tag_NoteSpawner);
 	AddGameObject<NoneObject>(L"Effector", Tag_Effector);
@@ -68,7 +67,7 @@ void DalmaList::GameObjects() {
 	arrow->sprite.LoadSprite("Sprites/Arrow");
 	arrow->GetGameObject()->pos->x = -2;
 
-	AddGameObject<CD>(L"CD")->pos->x = -30;
+	AddGameObject<Sans>(L"CD")->pos->x = -30;
 }
 
 void DalmaCredit::GameObjects() {

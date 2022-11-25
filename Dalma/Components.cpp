@@ -196,7 +196,6 @@ void AmladPlayer::Update() {
 	if (keyboard.isKeyDown(KeyCode_ESC)) {
 		audio->CloseAudio(1);
 
-		OutResult();
 		SceneManager::GetInstance().ChangeScene<DalmaList>();
 	}
 
@@ -245,24 +244,31 @@ void AmladPlayer::Update() {
 	if (isEnd && duration<float>(chrono::system_clock::now() - start).count() > 5.0f) {
 		audio->CloseAudio(1);
 
-		OutResult();
+		if (Combo > MaxCombo) { MaxCombo = Combo; }
+		ofstream result("Datas/DalmaResult.txt");
+		if(result.fail()) {
+			SceneManager::GetInstance().ChangeScene<DalmaMain>();
+
+			result.close();
+			SceneManager::GetInstance().ChangeScene<DalmaResult>();
+		}
+
+		result << "PlaySong=" << artist << "\n";
+		result << "Perfect=" << to_string(Perfect) << "\n";
+		result << "Great=" << to_string(Great) << "\n";
+		result << "Miss=" << to_string(Miss) << "\n";
+
+		try { result << "Avg=" << to_string(((Perfect * 100.0f) + (Great * 60.0f) + (Miss * 0.0f)) / (Perfect + Great + Miss)) << "%\n"; }
+		catch (exception e) { result << "Avg=" << to_string(0) << "%\n"; }
+
+		result << "MaxCombo=" << to_string(MaxCombo) << "\n";
+
+		result.close();
+
 		SceneManager::GetInstance().ChangeScene<DalmaResult>();
 	}
 }
 void AmladPlayer::Remove() {}
-void AmladPlayer::OutResult() {
-	if (Combo > MaxCombo) { MaxCombo = Combo; }
-	ofstream result("DalmaResult.txt");
-
-	result << "PlaySong=" << artist << "\n";
-	result << "Perfect=" << to_string(Perfect) << "\n";
-	result << "Great=" << to_string(Great) << "\n";
-	result << "Miss=" << to_string(Miss) << "\n";
-	result << "Avg=" << to_string(((Perfect * 100.0f) + (Great * 60.0f) + (Miss * 0.0f)) / (Perfect + Great + Miss)) << "%\n";
-	result << "MaxCombo=" << to_string(MaxCombo) << "\n";
-
-	result.close();
-}
 bool AmladPlayer::OpenAmlad(string path) {
 	if (!isStart) {
 		Perfect = 0;
@@ -587,7 +593,11 @@ void Result::Start() {
 	/* 이런 간편한 괄호가 어째서 밖에서는 region으로만.. */ {
 		string text;
 		string buf;
-		ifstream result("DalmaResult.txt");
+		ifstream result("Datas/DalmaResult.txt");
+
+		if (result.fail()) {
+			SceneManager::GetInstance().ChangeScene<DalmaList>();
+		}
 
 		// 아티스트 - 노래
 		getline(result, text);
@@ -645,7 +655,7 @@ void Result::Start() {
 		getline(ss, buf, '=');
 		getline(ss, buf, '=');
 		try { maxCombo = stof(buf); }
-		catch (exception e) { maxCombo = 0; }
+		catch (exception e) { maxCombo = 0; }                                                         
 
 		result.close();
 	}

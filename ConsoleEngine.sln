@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleEngine", "ConsoleEng
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dalma", "Dalma\Dalma.vcxproj", "{A1E4B988-E40A-411A-A923-1E100126D2D6}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Dalma Setup", "Dalma Setup\Dalma Setup.vdproj", "{20CF76B0-8447-4D51-9B32-A829A220C7FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,11 @@ Global
 		{A1E4B988-E40A-411A-A923-1E100126D2D6}.Release|x64.Build.0 = Release|x64
 		{A1E4B988-E40A-411A-A923-1E100126D2D6}.Release|x86.ActiveCfg = Release|Win32
 		{A1E4B988-E40A-411A-A923-1E100126D2D6}.Release|x86.Build.0 = Release|Win32
+		{20CF76B0-8447-4D51-9B32-A829A220C7FE}.Debug|x64.ActiveCfg = Debug
+		{20CF76B0-8447-4D51-9B32-A829A220C7FE}.Debug|x86.ActiveCfg = Debug
+		{20CF76B0-8447-4D51-9B32-A829A220C7FE}.Debug|x86.Build.0 = Debug
+		{20CF76B0-8447-4D51-9B32-A829A220C7FE}.Release|x64.ActiveCfg = Release
+		{20CF76B0-8447-4D51-9B32-A829A220C7FE}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

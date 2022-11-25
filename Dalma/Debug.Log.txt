@@ -1,39 +1,6 @@
-[FPS] : 107
-[FPS] : 116
-[FPS] : 116
-[FPS] : 117
-[FPS] : 115
-[FPS] : 116
-[FPS] : 117
-[FPS] : 115
-[FPS] : 118
-[FPS] : 115
-[FPS] : 116
-[FPS] : 117
-[FPS] : 118
 [FPS] : 120
-[FPS] : 119
-[FPS] : 120
-[FPS] : 120
-[FPS] : 120
-[FPS] : 120
-[FPS] : 120
-[FPS] : 81
-[FPS] : 109
-[FPS] : 120
-[ Server ] Client Connect Error!
-[FPS] : 109
-[FPS] : 120
-[FPS] : 120
-[FPS] : 108
-[FPS] : 109
-[FPS] : 120
-[FPS] : 107
-[FPS] : 90
-[FPS] : 112
-[FPS] : 120
-[ Server ] Client Connect Error!
-[FPS] : 109
+[FPS] : 78
+[FPS] : 106
 [FPS] : 120
 [FPS] : 120
 [FPS] : 120
@@ -45,7 +12,25 @@
 [FPS] : 120
 [FPS] : 120
 [FPS] : 120
-[FPS] : 108
+[FPS] : 120
+[FPS] : 110
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 93
+[FPS] : 111
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
 [FPS] : 120
 [FPS] : 108
 [FPS] : 120
@@ -63,14 +48,39 @@
 [FPS] : 120
 [FPS] : 120
 [FPS] : 120
+[FPS] : 111
 [FPS] : 120
 [FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 103
+[FPS] : 111
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 108
+[FPS] : 108
 [FPS] : 117
-[FPS] : 109
 [FPS] : 120
-[ SceneManager ] : Release
-[ SceneManager ] : Release
-[ Graphic ] : Release
-[ Math ] : Release
-[ Keyboard ] : Release
-[ Debug ] : Release
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 120
+[FPS] : 109
+[FPS] : 103
+[FPS] : 108

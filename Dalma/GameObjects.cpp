@@ -147,6 +147,6 @@ void Arrow::Components() {
 	sprite->sprite.LoadSprite("Sprites/Arrow");
 }
 
-void CD::Components() {
-	AddComponent<Components::Animator>()->animation.LoadAnimaition("Animations/CD");
+void Sans::Components() {
+	AddComponent<Components::Animator>()->animation.LoadAnimaition("Animations/Sans");
 }

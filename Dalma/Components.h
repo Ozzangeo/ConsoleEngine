@@ -193,8 +193,6 @@ private:
 	void Update() override;
 	void Remove() override;
 
-	void OutResult();
-
 public:
 	static string path;
 	static int Perfect;

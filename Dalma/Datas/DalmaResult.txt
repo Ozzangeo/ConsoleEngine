@@ -1,0 +1,6 @@
+PlaySong=AlexiAction - Fashion Deeps House ( Galaxy )
+Perfect=15
+Great=2
+Miss=4
+Avg=77.142860%
+MaxCombo=12

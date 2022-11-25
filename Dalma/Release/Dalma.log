@@ -1,7 +1,9 @@
 ﻿  Components.cpp
+  GameObjects.cpp
+  main.cpp
+  Scenes.cpp
   코드를 생성하고 있습니다.
-  1072 of 1951 functions (54.9%) were compiled, the rest were copied from previous compilation.
-    24 functions were new in current compilation
-    125 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB not found, fall back to full compilation.
+  All 1946 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
   Dalma.vcxproj -> F:\Github Project\ConsoleEngine\Release\Dalma.exe

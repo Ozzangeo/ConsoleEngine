@@ -1,6 +1,0 @@
-PlaySong=AlexiAction - Fashion Deeps House ( Galaxy )
-Perfect=0
-Great=0
-Miss=0
-Avg=-nan(ind)%
-MaxCombo=0

@@ -90,7 +90,7 @@ class Num : public GameObject {
 #pragma endregion
 
 /* Dalma List */ #pragma region ...
-class CD : public GameObject {
+class Sans : public GameObject {
 private:
 	void Components() override;
 };

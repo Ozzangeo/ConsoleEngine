@@ -63,6 +63,7 @@ private:
 public:
 	Color();
 
+	bool ResetColor();
 	bool SetColor(Rgb255 _RGB, int num);
 };
 

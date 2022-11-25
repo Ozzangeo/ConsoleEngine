@@ -85,6 +85,7 @@ namespace Components {
 	private:
 		void Awake() final override;
 		void Update() final override;
+		void Remove() final override;
 
 	public:
 		Sprite sprite;

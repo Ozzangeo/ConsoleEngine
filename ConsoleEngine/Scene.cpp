@@ -1,6 +1,9 @@
 #include "Scene.h"
 
 void Scene::Awake() {
+	Color color;
+	color.ResetColor();
+
 	// 먼저 오브젝트들을 추가한 다음
 	GameObjects();
 
@@ -34,7 +37,7 @@ void Scene::Update() {
 
 	if (isEnd) {
 		Release();
-		delete this;
+		isDone = true;
 	}
 }
 void Scene::Release() {

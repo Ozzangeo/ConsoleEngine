@@ -378,6 +378,9 @@ void SpriteRenderer::Update() {
 		graphic.DrawSprite(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale, sprite);
 	}
 }
+void SpriteRenderer::Remove() {
+	sprite.~Sprite();
+}
 
 // [ CircleRenderer Component ]
 void CircleRenderer::Awake() {

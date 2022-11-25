@@ -146,3 +146,7 @@ void Arrow::Components() {
 	auto* sprite = AddComponent<SpriteRenderer>();
 	sprite->sprite.LoadSprite("Sprites/Arrow");
 }
+
+void CD::Components() {
+	AddComponent<Components::Animator>()->animation.LoadAnimaition("Animations/CD");
+}

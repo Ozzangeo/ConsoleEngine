@@ -4,6 +4,7 @@ bool SceneManager::isEnd = false;
 SceneManager* SceneManager::m_Instance = nullptr;
 SceneManager::~SceneManager() {
 	if (nowScene) { delete nowScene; nowScene = nullptr; }
+	if (beforeScene) { delete beforeScene; beforeScene = nullptr; }
 }
 SceneManager& SceneManager::GetInstance() {
 	if (!m_Instance) { m_Instance = new SceneManager; }
@@ -11,6 +12,7 @@ SceneManager& SceneManager::GetInstance() {
 }
 
 void SceneManager::Update() {
+	if (beforeScene && beforeScene->isDone) { delete beforeScene; beforeScene = nullptr; }
 	nowScene->Update();
 }
 void SceneManager::Release() {

@@ -9,6 +9,8 @@ private:
 	static bool isEnd;
 
 	Scene* nowScene = nullptr;
+	Scene* beforeScene = nullptr;
+
 	SceneManager() {}
 	SceneManager(const SceneManager& ref) {}
 
@@ -32,7 +34,10 @@ public:
 
 template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>>
 inline void SceneManager::ChangeScene() {
-	if (nowScene) { nowScene->isEnd; }
+	if (nowScene) {
+		nowScene->isEnd = true;
+		beforeScene = nowScene;
+	}
 
 	nowScene = new T;
 	nowScene->Awake();

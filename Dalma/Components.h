@@ -196,14 +196,14 @@ private:
 	void OutResult();
 
 public:
-	static wstring path;
+	static string path;
 	static int Perfect;
 	static int Great;
 	static int Miss;
 	static int Combo;
 	static int MaxCombo;
 
-	bool OpenAmlad(wstring path);
+	bool OpenAmlad(string path);
 	bool OpenAmlad();
 };
 class Filler : public Component {
@@ -232,6 +232,7 @@ class Result : public Component {
 private:
 	SpriteNum* nums[3];
 
+	bool isFull = false;
 	bool isDone = false;
 
 	float nowPerfect = 0.0f;
@@ -252,6 +253,32 @@ private:
 };
 
 #pragma endregion
+/* Dalma List */ #pragma region ...
+class AmladList : public Component {
+private:
+	int choice;
+
+	//        음악 이름 파일 이름
+	vector<pair<string, string>>* Amlads;
+
+	void Awake() override;
+	void Update() override;
+	void Remove() override;
+};
+#pragma endregion
+/* Dalma Credit */ #pragma region ...
+class Credit : public Component {
+private:
+	system_clock::time_point start;
+	bool Egg = false;
+
+	void Awake() override;
+	void Update() override;
+};
+
+#pragma endregion
+
+
 
 
 #endif // !_COMPONENTS_

@@ -5,5 +5,6 @@
 
 #include "../ConsoleEngine/ConsoleEngine.h"
 #include <sstream>
+#include <filesystem>
 
 #endif // !_STDAFX_

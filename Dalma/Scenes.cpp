@@ -1,12 +1,9 @@
 #include "Scenes.h"
 
 void DalmaMain::GameObjects() {
-	auto* camera = AddGameObject<GameObjects::Camera>(L"Camera", Tag_Camera);
-	auto* camComp = camera->GetComponent<Components::Camera>();
-	camComp->SetCameraScale(8, 16);
-	camComp->SetCameraSize({ 128, 36 });
-
-	// 나를 위해 와리 한판
+	auto* camera = AddGameObject<GameObjects::Camera>(L"Camera", Tag_Camera)->GetComponent<Components::Camera>();
+	camera->SetCameraScale(8, 16);
+	camera->SetCameraSize({ 128, 36 });
 
 	auto* sprite = AddGameObject<NoneObject>(L"Banner")->AddComponent<SpriteRenderer>();
 	sprite->sprite.LoadSprite("Sprites/DalmaBanner");
@@ -38,7 +35,6 @@ void Dalma::Work() {
 	color.SetColor({ 255, 204, 255 }, CNote);
 
 	auto* spawner = GetGameObject<NoteSpawner>(Tag_NoteSpawner);
-	AmladPlayer::path = L"TestMap";
 	spawner->GetComponent<AmladPlayer>()->OpenAmlad();
 
 	auto* camera = GetGameObject<GameObjects::Camera>(Tag_Camera)->GetComponent<Components::Camera>();
@@ -62,10 +58,23 @@ void DalmaResult::GameObjects() {
 	*AddGameObject<Num>(L"1")	->pos = Vector3f(26, -2, 0);
 }
 
-void DalmaList::GameObjects()
-{
+void DalmaList::GameObjects() {
+	auto* camera = AddGameObject<GameObjects::Camera>(L"Camera")->GetComponent<Components::Camera>();
+	camera->SetCameraScale(8, 16);
+	camera->SetCameraSize({ 128, 36 });
+
+	AddGameObject<NoneObject>(L"AmladList")->AddComponent<AmladList>();
+	auto* arrow = AddGameObject<NoneObject>(L"Arrow")->AddComponent<SpriteRenderer>();
+	arrow->sprite.LoadSprite("Sprites/Arrow");
+	arrow->GetGameObject()->pos->x = -2;
+
+	AddGameObject<CD>(L"CD")->pos->x = -30;
 }
 
-void DalmaCredit::GameObjects()
-{
+void DalmaCredit::GameObjects() {
+	auto* camera = AddGameObject<GameObjects::Camera>(L"Camera")->GetComponent<Components::Camera>();
+	camera->SetCameraScale(8, 16);
+	camera->SetCameraSize({ 128, 36 });
+
+	AddGameObject<NoneObject>(L"Credit")->AddComponent<Credit>();
 }

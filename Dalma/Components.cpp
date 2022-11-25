@@ -20,8 +20,8 @@ void ChoiceComp::Update() {
 
 	if(keyboard.isKeyDown(KeyCode_ENTER))
 	switch (choice) {
-		case 0: { manager->ChangeScene<DalmaList>(); } break;
-		case 1: { manager->ChangeScene<DalmaCredit>(); } break;
+	case 0: { manager->ChangeScene<DalmaList>(); system("cls"); } break;
+		case 1: { manager->ChangeScene<DalmaCredit>(); system("cls"); } break;
 		case 2: { manager->StopEngine(); } break;
 	}
 
@@ -183,7 +183,7 @@ int AmladPlayer::Great = 0;
 int AmladPlayer::Miss = 0;
 int AmladPlayer::Combo = 0;
 int AmladPlayer::MaxCombo = 0;
-wstring AmladPlayer::path = L"";
+string AmladPlayer::path = "";
 void AmladPlayer::Start() {
 	Nums[0] = scene->GetGameObject(L"100")->GetComponent<SpriteNum>();
 	Nums[1] = scene->GetGameObject(L"10")->GetComponent<SpriteNum>();
@@ -193,6 +193,12 @@ void AmladPlayer::Start() {
 }
 void AmladPlayer::Update() {
 	if (isReady && PlayTime > 1.0f) { isReady = false; audio->PlayAudio(1); }
+	if (keyboard.isKeyDown(KeyCode_ESC)) {
+		audio->CloseAudio(1);
+
+		OutResult();
+		SceneManager::GetInstance().ChangeScene<DalmaList>();
+	}
 
 	Nums[0]->ChangeNum(static_cast<int>(Combo * 0.01f));
 	Nums[1]->ChangeNum(static_cast<int>(Combo * 0.1f));
@@ -257,7 +263,7 @@ void AmladPlayer::OutResult() {
 
 	result.close();
 }
-bool AmladPlayer::OpenAmlad(wstring path) {
+bool AmladPlayer::OpenAmlad(string path) {
 	if (!isStart) {
 		Perfect = 0;
 		Great = 0;
@@ -265,7 +271,7 @@ bool AmladPlayer::OpenAmlad(wstring path) {
 		Combo = 0;
 		MaxCombo = 0;
 
-		ifstream Amlad(L"Amlads/" + path + L".amlad");
+		ifstream Amlad("Amlads/" + path);
 		if (Amlad.fail()) { Amlad.close(); return false; }
 
 		string text;
@@ -515,10 +521,6 @@ void GearButtonComp::Update() {
 	graphic.Fill({ -14, 35, 1 }, { 14, 23, 1 }, Color_Perple);
 }
 
-void SceneMover::Update() {
-	if (keyboard.isKeyDown(KeyCode_0)) { SceneManager::GetInstance().ChangeScene<Dalma>(); }
-}
-
 void NoteJudgment::Start() {
 	objects[0] = scene->GetGameObject(Tag_Perfect);
 	objects[1] = scene->GetGameObject(Tag_Great);
@@ -668,9 +670,12 @@ void Result::Update() {
 		if (round(avg) > round(nowAvg))		{ nowAvg += avg * Time::GetDeltaTime() * (25.0f / avg); }
 		else { nowAvg = avg; }
 
-		if (maxCombo > round(nowCombo))		{ nowCombo += maxCombo * Time::GetDeltaTime() * 0.2f; }
-		else { nowCombo = maxCombo; }
-
+		if (maxCombo > round(nowCombo))		{ nowCombo += maxCombo * Time::GetDeltaTime() * 0.4f; }
+		else {
+			nowCombo = maxCombo;
+			if (miss == 0) { isFull = true; }
+		}
+		
 		if (nowPerfect == perfect &&
 			nowGreat == great &&
 			nowMiss == miss && 
@@ -689,6 +694,86 @@ void Result::Update() {
 	graphic.Text(Vector3i(-30, -1, 0), "Great : " + to_string(static_cast<int>(nowGreat)));
 	graphic.Text(Vector3i(-30, 0, 0), "Miss : " + to_string(static_cast<int>(nowMiss)));
 	graphic.Text(Vector3i(-30, 2, 0), "Avg : " + avg + "%");
+	if(isFull) { graphic.Text(Vector3i(18, 3, 0), "Full Combo!"); }
 		
-	if (!isDone && keyboard.isKeyDown(KeyCode_ENTER)) { SceneManager::GetInstance().ChangeScene<DalmaMain>(); }
+	if (!isDone && keyboard.isKeyDown(KeyCode_ENTER)) { SceneManager::GetInstance().ChangeScene<DalmaList>(); }
 }
+
+void AmladList::Awake() {
+	int i = 0;
+	Amlads = new vector<pair<string, string>>;
+	Amlads->reserve(64);
+
+	string filename;
+	string artist;
+	string song;
+	
+	for (auto& file : filesystem::directory_iterator("Amlads")) {
+		filename = file.path().filename().string();
+
+		ifstream amlad("Amlads/" + filename);
+
+		try {
+			getline(amlad, artist);
+			getline(amlad, song);
+
+			Amlads->push_back({ artist + " - " + song, filename });
+		}
+		catch (exception e) { Debug::Log(e.what()); }
+
+		amlad.close();
+	}
+
+	choice = static_cast<int>(round(Amlads->size() * 0.5f));
+}
+void AmladList::Update() {
+	int i = 0;
+	
+	if (keyboard.isKeyDown(KeyCode_ESC)) {
+		SceneManager::GetInstance().ChangeScene<DalmaMain>();
+		system("cls");
+		return;
+	}
+	if (keyboard.isKeyDown(KeyCode_ENTER)) {
+		AmladPlayer::path = (*Amlads)[choice].second;
+		SceneManager::GetInstance().ChangeScene<Dalma>();
+		system("cls");
+		return;
+	}
+
+	if (keyboard.isKeyDown(KeyCode_DOWN)) { choice++; }
+	if (keyboard.isKeyDown(KeyCode_UP)) { choice--; }
+
+	if (choice < 0) { choice = Amlads->size() - 1; }
+	else if (choice >= static_cast<int>(Amlads->size())) { choice = 0; }
+	
+	for (auto& item : *Amlads) {
+		graphic.Text({ 0, choice - i, 1 }, item.first);
+		i++;
+	}
+}
+void AmladList::Remove() {
+	if (Amlads) { delete Amlads; Amlads = nullptr; }
+}
+
+void Credit::Awake() {
+	start = system_clock::now();
+}
+void Credit::Update() {
+	if (keyboard.isKeyDown(KeyCode_ESC)) {
+		SceneManager::GetInstance().ChangeScene<DalmaMain>();
+		system("cls");
+		return;
+	}
+
+	if (!Egg && duration<float>(system_clock::now() - start).count() >= 523.0f) { Egg = true; scene->AddGameObject<NoneObject>(L"Sans")->AddComponent<SpriteRenderer>()->sprite.LoadSprite("Sprites/Sans"); }
+
+	graphic.Text({ -17, -10, 0 }, "Console Engine v1.0 by 1410 Ozi");
+	graphic.Text({ -5, -8, 0 }, "Dalma[RE]");
+	graphic.Text({ -5, -5, 0 }, "[ Thanks ]");
+	graphic.Text({ -6, -4, 0 }, "Teachar Umm");
+	graphic.Text({ -4, -3, 0 }, "3401 Kdg");
+
+	graphic.Text({ 40, 17, 0 }, "Latest Update 2022-11-25");
+}
+

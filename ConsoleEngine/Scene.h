@@ -13,6 +13,8 @@ private:
 	bool isEnd = false;
 	bool isStart = false;
 
+	bool isDone = false;
+
 	list<GameObject*> m_GameObjects;
 	list<GameObject*> m_RemoveObjectList;
 

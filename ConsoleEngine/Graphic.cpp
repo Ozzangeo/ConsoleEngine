@@ -27,13 +27,19 @@ void Graphic::Release() {
 
 	Debug::Log("[ Graphic ] : Release");
 }
-void Graphic::Text(const Vector3i& pos, string text) {
-	int plus = 0;
-	int Index = static_cast<int>(((pos.y + m_HalfScreenSize->y) * m_ScreenSize->x) + pos.x + m_HalfScreenSize->x);
-	for (int i = 0, size = static_cast<int>(text.length()); i < size; i++) {
-		m_Screen[Index + i + plus].Char.AsciiChar = text[i];
-		if (text[i] >= 128) { plus++; }
+void Graphic::Text(Vector3i pos, string text) {
+	pos.x += static_cast<int>(m_HalfScreenSize->x);
+	pos.y += static_cast<int>(m_HalfScreenSize->y);
 
+	if (0 > pos.y || m_ScreenSize->y <= pos.y ||
+		0 > pos.x || m_ScreenSize->x <= pos.x) {
+		return;
+	}
+
+	int Index = static_cast<int>((pos.y * m_ScreenSize->x) + pos.x);
+	for (int i = 0, size = static_cast<int>(text.length()); i < size; i++) {
+		if (Index + i > m_ScreenSize->z) { break; }
+		m_Screen[Index + i].Char.AsciiChar = text[i];
 		m_Screen[Index + i].Attributes = 15;
 	}
 }

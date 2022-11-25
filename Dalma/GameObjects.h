@@ -89,4 +89,13 @@ class Num : public GameObject {
 
 #pragma endregion
 
+/* Dalma List */ #pragma region ...
+class CD : public GameObject {
+private:
+	void Components() override;
+};
+
+#pragma endregion
+
+
 #endif // !_GAMEOBJECTS_

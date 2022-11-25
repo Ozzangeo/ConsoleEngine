@@ -22,7 +22,11 @@ enum Tags {
 	Tag_NoteSpawner,
 	Tag_Effector,
 	Tag_Note,
-	Tag_JudgmentLine
+	Tag_JudgmentLine,
+	Tag_Perfect,
+	Tag_Great,
+	Tag_Miss,
+	Tag_Line
 };
 
 enum ColorLayer {
@@ -32,10 +36,36 @@ enum ColorLayer {
 	GButton,
 	GButtonBack,
 	GBottom,
-	CNote = 14
+	JPerfect = 11,
+	JGreat,
+	JMiss,
+	CNote
+};
+class SpriteNum : public Component {
+private:
+	SpriteRenderer* renderer;
+	Sprite nums[10];
+
+	void Start() override;
+public:
+	void ChangeNum(int num);
 };
 
 /* DalmaMain */ #pragma region ...
+class ChoiceComp : public Component {
+private:
+	SceneManager* manager;
+	PolygonRenderer* renderer;
+	int choice = 0;
+
+	void Awake() override;
+	void Update() override;
+public:
+	int max = 3;
+};
+
+#pragma endregion
+/* Dalma */ #pragma region ...
 /* Effect */ #pragma region ...
 enum EffectType {
 	Set_BPM = 'b',
@@ -61,8 +91,8 @@ private:
 	Rgb255 StartRGB;
 	Rgb255 EndRGB;
 
-	Vector3f* RGBcount;
-	Vector3f* RGBcountPlus;
+	Vector3f* RGBcount = nullptr;
+	Vector3f* RGBcountPlus = nullptr;
 	void Awake() override;
 	void Update() override;
 	void Remove() override;
@@ -71,17 +101,17 @@ public:
 	void GradationStart(Rgb255 start, Rgb255 end, float second, int Colornum);
 };
 class MoveCamera : public Component {
-	GameObjects::Camera* camera;
+	GameObjects::Camera* camera = nullptr;
 	bool isStart = false;
 
 	float time = 0.0f;
 	float maxTime = 0.0f;
 
-	Vector3f* StartPos;
-	Vector3f* EndPos;
+	Vector3f* StartPos = nullptr;
+	Vector3f* EndPos = nullptr;
 
-	Vector3f* PosCount;
-	Vector3f* PosCountPlus;
+	Vector3f* PosCount = nullptr;
+	Vector3f* PosCountPlus = nullptr;
 
 	void Awake() override;
 	void Start() override;
@@ -91,7 +121,6 @@ public:
 	void CameraStart(Vector3f start, Vector3f end, float second);
 };
 #pragma endregion
-
 class NoteInfo {
 public:
 	NoteInfo(float line = 0, float distance = 0.0f, float time = 0.0f) : Line(line), Distance(distance), Time(time) {}
@@ -106,35 +135,53 @@ private:
 	void Update() override;
 
 public:
+	bool isHit = false;
+
 	static float bpm;
 	static float bpm60;
 	static float speed;
 };
 class NoteEffect : public Component {
 private:
-	PolygonCollider* collider;
-	GameObject* target;
+	bool isEnd = false;
+	PolygonCollider* collider = nullptr;
+	GameObject* target = nullptr;
 
 	void Start() override;
 	void Update() override;
 
 public:
+	void UpdateNow();
+
 	list<EFunc> effects;
 };
 class NoteJudgment : public Component {
 private:
-	bool isHit = false;
+	GameObject* objects[3];
+	PolygonRenderer* renderer;
 
-	void Update() override;
+	PolygonCollider* collider;
+	NoteDown* noteDown;
+
+	void Start();
+	void Update();
+
+public:
+	NoteEffect* noteEffect;
+	KeyCode code;
 };
+
 class AmladPlayer : public Component {
 private:
+	SpriteNum* Nums[3];
 	Audio* audio = nullptr;
-	Server* server = nullptr;
 	string artist;
-
+	
 	bool isStart = false;
 	bool isReady = false;
+	bool isEnd = false;
+
+	chrono::system_clock::time_point start;
 
 	queue<NoteInfo> Notes;
 	float PlayTime = 0.0f;
@@ -144,9 +191,20 @@ private:
 
 	void Start() override;
 	void Update() override;
+	void Remove() override;
+
+	void OutResult();
 
 public:
+	static wstring path;
+	static int Perfect;
+	static int Great;
+	static int Miss;
+	static int Combo;
+	static int MaxCombo;
+
 	bool OpenAmlad(wstring path);
+	bool OpenAmlad();
 };
 class Filler : public Component {
 private:
@@ -161,15 +219,39 @@ public:
 };
 class GearButtonComp : public Component {
 private:
-	static KeyCode code[4];
-
-	void Awake();
 	void Update();
 
 public:
+	static KeyCode code[4];
 	EnumColor Color = Color_SkyBlue;
 };
 
 #pragma endregion
+/* Dalma Result */ #pragma region ...
+class Result : public Component {
+private:
+	SpriteNum* nums[3];
+
+	bool isDone = false;
+
+	float nowPerfect = 0.0f;
+	float nowGreat = 0.0f;
+	float nowMiss = 0.0f;
+	float nowCombo = 0.0f;
+	float nowAvg = 0.0f;
+
+	string artist;
+	float perfect;
+	float great;
+	float miss;
+	float avg;
+	float maxCombo;
+
+	void Start() override;
+	void Update() override;
+};
+
+#pragma endregion
+
 
 #endif // !_COMPONENTS_

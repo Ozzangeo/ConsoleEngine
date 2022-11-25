@@ -64,7 +64,7 @@ namespace Components {
 	};
 	class PolygonCollider : public Component {
 	private:
-		PolygonRenderer* Polygon;
+		PolygonRenderer* Polygon = nullptr;
 
 		void projectPolygon(Vector3f& axis, PolygonRenderer& polygon, Vector3f* maxmin);
 		float distance(Vector3f& maxminA, Vector3f& maxminB);
@@ -148,6 +148,7 @@ namespace Components {
 		bool PlayAudio	(UINT ID, bool isLoop = false);
 		void RePlayAudio(UINT ID);
 		void PauseAudio	(UINT ID);
+		void CloseAudio (UINT ID);
 	};
 	class Server : public Component {
 	private:
@@ -197,6 +198,7 @@ namespace Components {
 
 		queue<string> recvMsg;
 		string nowMsg;
+		string myIP = "";
 
 		void Awake() override;
 		void Update() override;

@@ -6,6 +6,8 @@
 
 class SceneManager {
 private:
+	static bool isEnd;
+
 	Scene* nowScene = nullptr;
 	SceneManager() {}
 	SceneManager(const SceneManager& ref) {}
@@ -18,6 +20,8 @@ public:
 	
 	void Update();
 	static void Release();
+	static void StopEngine();
+	static bool isRunning();
 
 	template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool> = true>
 	void ChangeScene();

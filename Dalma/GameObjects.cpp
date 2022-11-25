@@ -1,5 +1,7 @@
 #include "GameObjects.h"
 
+/* Dalma */#pragma region ...
+
 void ServerObject::Components() {
 
 	auto* server = AddComponent<Server>();
@@ -7,7 +9,7 @@ void ServerObject::Components() {
 }
 const float Note::Width = 3.0f;
 void Note::Components() {
-	AddComponent<DownNote>();
+	AddComponent<NoteDown>();
 	AddComponent<Components::PolygonRenderer>();
 	AddComponent<Components::PolygonCollider>();
 }
@@ -27,8 +29,14 @@ void NoteSpawner::Components() {
 void Gear::Components() {
 	scene->AddGameObject<GearBackground>(L"Backs");
 	scene->AddGameObject<JudgmentLine>(L"Judgment", Tag_JudgmentLine);
+	scene->AddGameObject<PerfectLine>(L"Perfect", Tag_Perfect);
+	scene->AddGameObject<GreatLine>(L"Great", Tag_Great);
+	scene->AddGameObject<MissLine>(L"Miss", Tag_Miss);
+	*scene->AddGameObject<Line>(L"Line", Tag_Line)->pos = Vector3f(0, 15, 1);
+
 	*scene->AddGameObject<GearWall>(L"Wall1")->pos = Vector3f(Note::Width * 5 + 1, 0, 5);
 	*scene->AddGameObject<GearWall>(L"Wall2")->pos = Vector3f(-Note::Width * 5 - 1, 0, 5);
+
 	scene->AddGameObject<GearButton>(L"GButton");
 }
 float* JudgmentLine::PosY = nullptr;
@@ -79,4 +87,62 @@ void GearWall::Components() {
 }
 void GearButton::Components() {
 	AddComponent<GearButtonComp>();
+}
+
+void PerfectLine::Components() {
+	float width = Note::Width * 4;
+	auto* polygon = AddComponent<PolygonRenderer>();
+	polygon->AddVertex(width + 2, length);
+	polygon->AddVertex(-width - 2, length);
+	polygon->AddVertex(-width - 2, -length);
+	polygon->AddVertex(width + 2, -length);
+	polygon->isVisible = false;
+}
+void PerfectLine::Work() {
+	*pos = Vector3f(0, 20, 1);
+}
+
+void GreatLine::Components() {
+	float width = Note::Width * 4;
+	auto* polygon = AddComponent<PolygonRenderer>();
+	polygon->AddVertex(width + 2, length);
+	polygon->AddVertex(-width - 2, length);
+	polygon->AddVertex(-width - 2, -length);
+	polygon->AddVertex(width + 2, -length);
+	polygon->isVisible = false;
+}
+void GreatLine::Work() {
+	*pos = Vector3f(0, 20, 1);
+}
+
+void MissLine::Components() {
+	float width = Note::Width * 4;
+	auto* polygon = AddComponent<PolygonRenderer>();
+	polygon->AddVertex(width + 2, length);
+	polygon->AddVertex(-width - 2, length);
+	polygon->AddVertex(-width - 2, -length);
+	polygon->AddVertex(width + 2, -length);
+	polygon->isVisible = false;
+}
+void MissLine::Work() {
+	*pos = Vector3f(0, 20, 1);
+}
+
+void Line::Components() {
+	auto* polygon = AddComponent<PolygonRenderer>();
+	polygon->AddVertex(2, 0);
+	polygon->AddVertex(-2, 0);
+	polygon->color = Color_Blue;
+}
+
+#pragma endregion
+
+void Num::Components() {
+	AddComponent<SpriteNum>();
+}
+
+void Arrow::Components() {
+	AddComponent<ChoiceComp>();
+	auto* sprite = AddComponent<SpriteRenderer>();
+	sprite->sprite.LoadSprite("Sprites/Arrow");
 }

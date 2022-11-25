@@ -3,8 +3,99 @@
 using namespace std;
 using namespace Components;
 
-void NoteJudgment::Update() {
+void ChoiceComp::Awake() {
+	manager = &SceneManager::GetInstance();
+}
+void ChoiceComp::Update() {
+	if (keyboard.isKeyDown(KeyCode_UP)) { choice--; }
+	if (keyboard.isKeyDown(KeyCode_DOWN)) { choice++; }
+	if (choice < 0) { choice = max - 1; }
+	else if (choice >= max) { choice = 0; }
 
+	switch (choice) {
+		case 0: { gameobject->pos->y = 5.5f; } break;
+		case 1: { gameobject->pos->y = 8; } break;
+		case 2: { gameobject->pos->y = 11.5f; } break;
+	}
+
+	if(keyboard.isKeyDown(KeyCode_ENTER))
+	switch (choice) {
+		case 0: { manager->ChangeScene<DalmaList>(); } break;
+		case 1: { manager->ChangeScene<DalmaCredit>(); } break;
+		case 2: { manager->StopEngine(); } break;
+	}
+
+	graphic.Text({ -3, 5, 0 },  " Start");
+	graphic.Text({ -3, 8, 0 },  "Credit");
+	graphic.Text({ -3, 11, 0 }, " Exit");
+}
+
+void GradationEffect::Awake() {
+	RGBcount = new Vector3f;
+	RGBcountPlus = new Vector3f;
+}
+void GradationEffect::Update() {
+	if (isStart) {
+		*RGBcount += *RGBcountPlus * Time::GetDeltaTime();
+		Vector3i rgbi = RGBcount->round();
+
+		time += Time::GetDeltaTime();
+		if (time >= maxTime) { color.SetColor(EndRGB, num); gameobject->RemoveComponent<GradationEffect>(); }
+		else if (EndRGB != rgbi) { color.SetColor(rgbi, num); }
+	}
+}
+void GradationEffect::Remove() {
+	if (RGBcount) { delete RGBcount; RGBcount = nullptr; }
+	if (RGBcountPlus) { delete RGBcountPlus; RGBcountPlus = nullptr; }
+}
+void GradationEffect::GradationStart(Rgb255 start, Rgb255 end, float second, int Colornum) {
+	StartRGB = start;
+	EndRGB = end;
+
+	*RGBcount = start;
+	if (second == 0) { *RGBcountPlus = Vector3f(end - start); }
+	else { *RGBcountPlus = Vector3f(end - start) / second; }
+
+	num = Colornum;
+	maxTime = second;
+
+	isStart = true;
+}
+
+void MoveCamera::Awake() {
+	StartPos = new Vector3f;
+	EndPos = new Vector3f;
+	PosCount = new Vector3f;
+	PosCountPlus = new Vector3f;
+}
+void MoveCamera::Start() {
+	camera = scene->GetGameObject<GameObjects::Camera>(Tag_Camera);
+}
+void MoveCamera::Update() {
+	if (isStart) {
+		*PosCount += *PosCountPlus * Time::GetDeltaTime();
+
+		time += Time::GetDeltaTime();
+		if (time >= maxTime) { *camera->pos = *EndPos; gameobject->RemoveComponent<MoveCamera>(); }
+		else if (*EndPos != *PosCount) { *camera->pos = *PosCount; }
+	}
+}
+void MoveCamera::Remove() {
+	if (StartPos) { delete StartPos; StartPos = nullptr; }
+	if (EndPos) { delete EndPos; EndPos = nullptr; }
+	if (PosCount) { delete PosCount; PosCount = nullptr; }
+	if (PosCountPlus) { delete PosCountPlus; PosCountPlus = nullptr; }
+}
+void MoveCamera::CameraStart(Vector3f start, Vector3f end, float second) {
+	*StartPos = start;
+	*EndPos = end;
+
+	*PosCount = start;
+	if (second == 0) { *PosCountPlus = (end - start); }
+	else { *PosCountPlus = (end - start) / second; }
+
+	maxTime = second;
+	isStart = true;
 }
 
 float NoteDown::speed = 5.0f;
@@ -12,15 +103,100 @@ float NoteDown::bpm = 0.0f;
 float NoteDown::bpm60 = 0.0f;
 void NoteDown::Update() {
 	*gameobject->pos += Vector3f(0, speed, 0) * Time::GetDeltaTime();
-	if (gameobject->pos->y > 500) { scene->RemoveGameObject(gameobject); }
+	if (gameobject->pos->y >= 50) {
+		if (!isHit) {
+			if (AmladPlayer::Combo > AmladPlayer::MaxCombo) { AmladPlayer::MaxCombo = AmladPlayer::Combo; }
+			AmladPlayer::Miss++;
+			AmladPlayer::Combo = 0;
+
+			scene->GetGameObject(Tag_Line)->GetComponent<PolygonRenderer>()->color = Color_LightPerple;
+			isHit = true;
+		}
+		
+		scene->RemoveGameObject(gameobject);
+	}
 }
 
+void NoteEffect::Start() {
+	collider = gameobject->AddComponent<PolygonCollider>();
+	target = scene->GetGameObject(Tag_JudgmentLine);
+}
+void NoteEffect::Update() {
+	if (!isEnd) {
+		if (collider->isCollision(target) || gameobject->pos->y >= *JudgmentLine::PosY) {
+			auto* effector = scene->GetGameObject<NoneObject>(L"Effector");
+
+			for (auto& effect : effects) {
+#define EP effect.EPara
+
+				switch (effect.EType) {
+				case Set_BPM: {
+					NoteDown::bpm = EP[0];
+					NoteDown::bpm60 = 60 / NoteDown::bpm;
+				} break;
+				case Gradation: {
+					effector->AddComponent<GradationEffect>()
+						->GradationStart(Vector3f{ EP[0], EP[1], EP[2] }, Vector3f{ EP[3], EP[4], EP[5] }, EP[6], static_cast<int>(EP[7]));
+				} break;
+				case Set_Camera: {
+					effector->AddComponent<MoveCamera>()->CameraStart(Vector3f(EP[0], EP[1], 0), Vector3f(EP[2], EP[3], 0), EP[4]);
+				} break;
+				default: {} break;
+				}
+			}
+
+			gameobject->RemoveComponent<NoteEffect>();
+			isEnd = true;
+		}
+	}
+}
+void NoteEffect::UpdateNow() {
+	if (!isEnd) {
+		auto* effector = scene->GetGameObject<NoneObject>(L"Effector");
+
+		for (auto& effect : effects) {
+#define EP effect.EPara
+
+			switch (effect.EType) {
+			case Set_BPM: {
+				NoteDown::bpm = EP[0];
+				NoteDown::bpm60 = 60 / NoteDown::bpm;
+			} break;
+			case Gradation: {
+				effector->AddComponent<GradationEffect>()
+					->GradationStart(Vector3f{ EP[0], EP[1], EP[2] }, Vector3f{ EP[3], EP[4], EP[5] }, EP[6], static_cast<int>(EP[7]));
+			} break;
+			case Set_Camera: {
+				effector->AddComponent<MoveCamera>()->CameraStart(Vector3f(EP[0], EP[1], 0), Vector3f(EP[2], EP[3], 0), EP[4]);
+			} break;
+			default: {} break;
+			}
+		}
+
+		gameobject->RemoveComponent<NoteEffect>();
+		isEnd = true;
+	}
+}
+
+int AmladPlayer::Perfect = 0;
+int AmladPlayer::Great = 0;
+int AmladPlayer::Miss = 0;
+int AmladPlayer::Combo = 0;
+int AmladPlayer::MaxCombo = 0;
+wstring AmladPlayer::path = L"";
 void AmladPlayer::Start() {
+	Nums[0] = scene->GetGameObject(L"100")->GetComponent<SpriteNum>();
+	Nums[1] = scene->GetGameObject(L"10")->GetComponent<SpriteNum>();
+	Nums[2] = scene->GetGameObject(L"1")->GetComponent<SpriteNum>();
+
 	audio = gameobject->AddComponent<Audio>();
-	server = scene->GetGameObject(Tag_Server)->GetComponent<Server>();
 }
 void AmladPlayer::Update() {
-	//if (isReady && PlayTime > 1.0f) { isReady = false; audio->PlayAudio(1); }
+	if (isReady && PlayTime > 1.0f) { isReady = false; audio->PlayAudio(1); }
+
+	Nums[0]->ChangeNum(static_cast<int>(Combo * 0.01f));
+	Nums[1]->ChangeNum(static_cast<int>(Combo * 0.1f));
+	Nums[2]->ChangeNum(Combo);
 
 	while (!Notes.empty()) {
 		NoteInfo noteInfo = Notes.front();
@@ -32,15 +208,18 @@ void AmladPlayer::Update() {
 		}
 
 		auto* nowNote = scene->AddGameObject<Note>(L"Note", Tag_Note);
+		auto* Jud = nowNote->AddComponent<NoteJudgment>();
+
 		auto* noteEffect = nowNote->AddComponent<NoteEffect>();
 		noteEffect->effects = noteInfo.Effects;
+		Jud->noteEffect = noteEffect;
 
 		float BpmMul = (NoteDown::bpm * multiplespeed);
 		 switch (static_cast<int>(noteInfo.Line)) {
-		 case 1: { *nowNote->pos = Vector3f(-11, -BpmMul * 0.1f, nowNote->pos->z); } break;
-		 case 2: { *nowNote->pos = Vector3f(-4,  -BpmMul * 0.1f, nowNote->pos->z); } break;
-		 case 3: { *nowNote->pos = Vector3f( 3,  -BpmMul * 0.1f, nowNote->pos->z); } break;
-		 case 4: { *nowNote->pos = Vector3f(10,  -BpmMul * 0.1f, nowNote->pos->z); } break;
+		 case 1: { *nowNote->pos = Vector3f(-11, -BpmMul * 0.1f, nowNote->pos->z); Jud->code = GearButtonComp::code[0]; } break;
+		 case 2: { *nowNote->pos = Vector3f(-4,  -BpmMul * 0.1f, nowNote->pos->z); Jud->code = GearButtonComp::code[1]; } break;
+		 case 3: { *nowNote->pos = Vector3f( 3,  -BpmMul * 0.1f, nowNote->pos->z); Jud->code = GearButtonComp::code[2]; } break;
+		 case 4: { *nowNote->pos = Vector3f(10,  -BpmMul * 0.1f, nowNote->pos->z); Jud->code = GearButtonComp::code[3]; } break;
 		 default: { scene->RemoveGameObject(nowNote); } break;
 		 }
 		NoteDown::speed = BpmMul * 0.1f;
@@ -50,10 +229,42 @@ void AmladPlayer::Update() {
 
 		PlayTime += Time::GetDeltaTime();
 		ExTime += Time::GetDeltaTime();
+
+		if (Notes.empty()) {
+			isEnd = true;
+			start = chrono::system_clock::now();
+		}
 	}
+
+	if (isEnd && duration<float>(chrono::system_clock::now() - start).count() > 5.0f) {
+		audio->CloseAudio(1);
+
+		OutResult();
+		SceneManager::GetInstance().ChangeScene<DalmaResult>();
+	}
+}
+void AmladPlayer::Remove() {}
+void AmladPlayer::OutResult() {
+	if (Combo > MaxCombo) { MaxCombo = Combo; }
+	ofstream result("DalmaResult.txt");
+
+	result << "PlaySong=" << artist << "\n";
+	result << "Perfect=" << to_string(Perfect) << "\n";
+	result << "Great=" << to_string(Great) << "\n";
+	result << "Miss=" << to_string(Miss) << "\n";
+	result << "Avg=" << to_string(((Perfect * 100.0f) + (Great * 60.0f) + (Miss * 0.0f)) / (Perfect + Great + Miss)) << "%\n";
+	result << "MaxCombo=" << to_string(MaxCombo) << "\n";
+
+	result.close();
 }
 bool AmladPlayer::OpenAmlad(wstring path) {
 	if (!isStart) {
+		Perfect = 0;
+		Great = 0;
+		Miss = 0;
+		Combo = 0;
+		MaxCombo = 0;
+
 		ifstream Amlad(L"Amlads/" + path + L".amlad");
 		if (Amlad.fail()) { Amlad.close(); return false; }
 
@@ -248,104 +459,8 @@ bool AmladPlayer::OpenAmlad(wstring path) {
 	}
 	return false;
 }
-
-void GradationEffect::Awake() {
-	RGBcount = new Vector3f;
-	RGBcountPlus = new Vector3f;
-}
-void GradationEffect::Update() {
-	if (isStart) {
-		*RGBcount += *RGBcountPlus * Time::GetDeltaTime();
-		Vector3i rgbi = RGBcount->round();
-
-		time += Time::GetDeltaTime();
-		if (time >= maxTime) { color.SetColor(EndRGB, num); gameobject->RemoveComponent<GradationEffect>(); }
-		else if (EndRGB != rgbi) { color.SetColor(rgbi, num); }
-	}
-}
-void GradationEffect::Remove() {
-	if (RGBcount) { delete RGBcount; RGBcount = nullptr; }
-	if (RGBcountPlus) { delete RGBcountPlus; RGBcountPlus = nullptr; }
-}
-void GradationEffect::GradationStart(Rgb255 start, Rgb255 end, float second, int Colornum) {
-	StartRGB = start;
-	EndRGB = end;
-
-	*RGBcount = start;
-	if (second == 0) { *RGBcountPlus = Vector3f(end - start); }
-	else { *RGBcountPlus = Vector3f(end - start) / second; }
-
-	num = Colornum;
-	maxTime = second;
-	
-	isStart = true;
-}
-
-void MoveCamera::Awake() {
-	StartPos = new Vector3f;
-	EndPos = new Vector3f;
-	PosCount = new Vector3f;
-	PosCountPlus = new Vector3f;
-}
-void MoveCamera::Start() {
-	camera = scene->GetGameObject<GameObjects::Camera>(Tag_Camera);
-}
-void MoveCamera::Update() {
-	if (isStart) {
-		*PosCount += *PosCountPlus * Time::GetDeltaTime();
-
-		time += Time::GetDeltaTime();
-		if (time >= maxTime) { *camera->pos = *EndPos; gameobject->RemoveComponent<MoveCamera>(); }
-		else if (*EndPos != *PosCount) { *camera->pos = *PosCount; }
-	}
-}
-void MoveCamera::Remove() {
-	if (StartPos) { delete StartPos; StartPos = nullptr; }
-	if (EndPos) { delete EndPos; EndPos = nullptr; }
-	if (PosCount) { delete PosCount; PosCount = nullptr; }
-	if (PosCountPlus) { delete PosCountPlus; PosCountPlus = nullptr; }
-}
-void MoveCamera::CameraStart(Vector3f start, Vector3f end, float second) {
-	*StartPos = start;
-	*EndPos = end;
-
-	*PosCount = start;
-	if (second == 0) { *PosCountPlus = (end - start); }
-	else { *PosCountPlus = (end - start) / second; }
-
-	maxTime = second;
-	isStart = true;
-}
-
-void NoteEffect::Start() {
-	collider = gameobject->AddComponent<PolygonCollider>();
-	target = scene->GetGameObject(Tag_JudgmentLine);
-}
-void NoteEffect::Update() {
-	if (collider->isCollision(target) || gameobject->pos->y >= *JudgmentLine::PosY) {
-		auto* effector = scene->GetGameObject<NoneObject>(L"Effector");
-
-		for (auto& effect : effects) {
-		#define EP effect.EPara
-
-			switch (effect.EType) {
-			case Set_BPM: {
-				NoteDown::bpm = EP[0];
-				NoteDown::bpm60 = 60 / NoteDown::bpm;
-			} break;
-			case Gradation: {
-				effector->AddComponent<GradationEffect>()
-					->GradationStart(Vector3f{ EP[0], EP[1], EP[2] }, Vector3f{ EP[3], EP[4], EP[5] }, EP[6], static_cast<int>(EP[7]));
-			} break;
-			case Set_Camera: {
-				effector->AddComponent<MoveCamera>()->CameraStart(Vector3f(EP[0], EP[1], 0), Vector3f(EP[2], EP[3], 0), EP[4]);
-			} break;
-			default: {} break;
-			}
-		}
-
-		gameobject->RemoveComponent<NoteEffect>();
-	}
+bool AmladPlayer::OpenAmlad() {
+	return OpenAmlad(path);
 }
 
 void Filler::Awake() {
@@ -361,37 +476,219 @@ void Filler::Remove() {
 }
 
 KeyCode GearButtonComp::code[4] = { KeyCode_D, KeyCode_F, KeyCode_J, KeyCode_K };
-void GearButtonComp::Awake() {
-	//color.SetColor(, GButton); 얘는 원래 색상이 예뻐서 건들일 필요 없을듯
-	color.SetColor({ 51, 51, 51 }, GButtonBack);
-	color.SetColor({ 102, 102, 153 }, GBottom);
-}
 void GearButtonComp::Update() {
 	Vector3f Pos[2];
+	float y1 = 26, y2 = 34;
 
-	Pos[0] = { -8 , 24, 1 };
-	Pos[1] = { -13, 32, 1 };
-		 if (keyboard.isKeyDown(code[0])) { graphic.Fill(Pos[0], Pos[1], Color); }
-	else if (keyboard.isKeyHold(code[0])) { graphic.Fill(Pos[0], Pos[1], Color); }
-	else								  { graphic.Fill(Pos[0], Pos[1], Color_Red); }
+	Pos[0] = { -8 , y1, 1 };
+	Pos[1] = { -13, y2, 1 };
+	switch (keyboard.isKey(code[0])) {
+	case KeyType_DOWN:
+	case KeyType_HOLD: { graphic.Fill(Pos[0], Pos[1], Color); } break;
+	case KeyType_NON: { graphic.Fill(Pos[0], Pos[1], Color_Red); } break;
+	}
 
-	Pos[0] = { -1, 24, 1 };
-	Pos[1] = { -6, 32, 1 };
-		 if (keyboard.isKeyDown(code[1])) { graphic.Fill(Pos[0], Pos[1], Color); }
-	else if (keyboard.isKeyHold(code[1])) { graphic.Fill(Pos[0], Pos[1], Color); }
-	else								  { graphic.Fill(Pos[0], Pos[1], Color_Red); }
+	Pos[0] = { -1, y1, 1 };
+	Pos[1] = { -6, y2, 1 };
+	switch (keyboard.isKey(code[1])) {
+	case KeyType_DOWN:
+	case KeyType_HOLD: { graphic.Fill(Pos[0], Pos[1], Color); } break;
+	case KeyType_NON: { graphic.Fill(Pos[0], Pos[1], Color_Red); } break;
+	}
 
-	Pos[0] = { 1, 24, 1 };
-	Pos[1] = { 6, 32, 1 };
-		 if (keyboard.isKeyDown(code[2])) { graphic.Fill(Pos[0], Pos[1], Color); }
-	else if (keyboard.isKeyHold(code[2])) { graphic.Fill(Pos[0], Pos[1], Color); }
-	else								  { graphic.Fill(Pos[0], Pos[1], Color_Red); }
+	Pos[0] = { 1, y1, 1 };
+	Pos[1] = { 6, y2, 1 };
+	switch (keyboard.isKey(code[2])) {
+	case KeyType_DOWN:
+	case KeyType_HOLD: { graphic.Fill(Pos[0], Pos[1], Color); } break;
+	case KeyType_NON: { graphic.Fill(Pos[0], Pos[1], Color_Red); } break;
+	}
 
-	Pos[0] = { 8 , 24, 1 };
-	Pos[1] = { 13, 32, 1 };
-		 if	(keyboard.isKeyDown(code[3])) { graphic.Fill(Pos[0], Pos[1], Color); }
-	else if (keyboard.isKeyHold(code[3])) { graphic.Fill(Pos[0], Pos[1], Color); }
-	else								  { graphic.Fill(Pos[0], Pos[1], Color_Red); }
+	Pos[0] = { 8 , y1, 1 };
+	Pos[1] = { 13, y2, 1 };
+	switch (keyboard.isKey(code[3])) {
+	case KeyType_DOWN:
+	case KeyType_HOLD: { graphic.Fill(Pos[0], Pos[1], Color); } break;
+	case KeyType_NON: { graphic.Fill(Pos[0], Pos[1], Color_Red); } break;
+	}
 
 	graphic.Fill({ -14, 35, 1 }, { 14, 23, 1 }, Color_Perple);
+}
+
+void SceneMover::Update() {
+	if (keyboard.isKeyDown(KeyCode_0)) { SceneManager::GetInstance().ChangeScene<Dalma>(); }
+}
+
+void NoteJudgment::Start() {
+	objects[0] = scene->GetGameObject(Tag_Perfect);
+	objects[1] = scene->GetGameObject(Tag_Great);
+	objects[2] = scene->GetGameObject(Tag_Miss);
+
+	collider = gameobject->AddComponent<PolygonCollider>();
+	noteDown = gameobject->AddComponent<NoteDown>();
+	renderer = scene->GetGameObject(Tag_Line)->AddComponent<PolygonRenderer>();
+}
+void NoteJudgment::Update() {
+	if (keyboard.isKeyDown(code)) {
+		if (collider->isCollision(objects[0])) {
+			AmladPlayer::Perfect++;
+			AmladPlayer::Combo++;
+			
+			renderer->color = Color_LightSkyBlue;
+			noteDown->isHit = true;
+
+			if (noteEffect) { noteEffect->UpdateNow(); }
+		}
+		else if (collider->isCollision(objects[1])) {
+			AmladPlayer::Great++;
+			AmladPlayer::Combo++;
+
+			renderer->color = Color_LightRed;
+			noteDown->isHit = true;
+
+			if (noteEffect) { noteEffect->UpdateNow(); }
+		}
+		else if (collider->isCollision(objects[2])) {
+			if (AmladPlayer::Combo > AmladPlayer::MaxCombo) { AmladPlayer::MaxCombo = AmladPlayer::Combo; }
+			AmladPlayer::Miss++;
+			AmladPlayer::Combo = 0;
+			
+			renderer->color = Color_LightPerple;
+			noteDown->isHit = true;
+
+			if (noteEffect) { noteEffect->UpdateNow(); }
+		}
+	}
+}
+
+void SpriteNum::Start() {
+	renderer = gameobject->AddComponent<SpriteRenderer>();
+
+	nums[0].LoadSprite("Text/Zero");
+	nums[1].LoadSprite("Text/One");
+	nums[2].LoadSprite("Text/Two");
+	nums[3].LoadSprite("Text/Three");
+	nums[4].LoadSprite("Text/Four");
+	nums[5].LoadSprite("Text/Five");
+	nums[6].LoadSprite("Text/Six");
+	nums[7].LoadSprite("Text/Seven");
+	nums[8].LoadSprite("Text/Eight");
+	nums[9].LoadSprite("Text/Nine");
+
+	renderer->sprite = nums[0];
+}
+void SpriteNum::ChangeNum(int num) {
+	renderer->sprite = nums[(num % 10)];
+}
+
+void Result::Start() {
+	/* 이런 간편한 괄호가 어째서 밖에서는 region으로만.. */ {
+		string text;
+		string buf;
+		ifstream result("DalmaResult.txt");
+
+		// 아티스트 - 노래
+		getline(result, text);
+		stringstream ss(text);
+
+		getline(ss, buf, '=');
+		getline(ss, buf, '=');
+		artist = buf;
+
+		// Perfect
+		getline(result, text);
+		ss.clear();
+		ss.str(text);
+
+		getline(ss, buf, '=');
+		getline(ss, buf, '=');
+		try { perfect = stof(buf); }
+		catch (exception e) { perfect = 0; }
+
+		// Great
+		getline(result, text);
+		ss.clear();
+		ss.str(text);
+
+		getline(ss, buf, '=');
+		getline(ss, buf, '=');
+		try { great = stof(buf); }
+		catch (exception e) { great = 0; }
+
+		// Miss
+		getline(result, text);
+		ss.clear();
+		ss.str(text);
+
+		getline(ss, buf, '=');
+		getline(ss, buf, '=');
+		try { miss = stof(buf); }
+		catch (exception e) { miss = 0; }
+
+		// Avg
+		getline(result, text);
+		ss.clear();
+		ss.str(text);
+
+		getline(ss, buf, '=');
+		getline(ss, buf, '=');
+		try { avg = stof(buf); }
+		catch (exception e) { avg = 0; }
+
+		// Max Combo
+		getline(result, text);
+		ss.clear();
+		ss.str(text);
+
+		getline(ss, buf, '=');
+		getline(ss, buf, '=');
+		try { maxCombo = stof(buf); }
+		catch (exception e) { maxCombo = 0; }
+
+		result.close();
+	}
+	
+	nums[0] = scene->GetGameObject(L"100")->GetComponent<SpriteNum>();
+	nums[1] = scene->GetGameObject(L"10")->GetComponent<SpriteNum>();
+	nums[2] = scene->GetGameObject(L"1")->GetComponent<SpriteNum>();
+
+	isDone = true;
+}
+void Result::Update() {
+	if (isDone) {
+		if (perfect > round(nowPerfect))	{ nowPerfect += perfect * Time::GetDeltaTime() * 0.4f; }
+		else { nowPerfect = perfect; }
+
+		if (great > round(nowGreat))		{ nowGreat += great * Time::GetDeltaTime() * 0.4f; }
+		else { nowGreat = great; }
+
+		if (miss > round(nowMiss))			{ nowMiss += miss * Time::GetDeltaTime() * 0.25f; }
+		else { nowMiss = miss; }
+
+		if (round(avg) > round(nowAvg))		{ nowAvg += avg * Time::GetDeltaTime() * (25.0f / avg); }
+		else { nowAvg = avg; }
+
+		if (maxCombo > round(nowCombo))		{ nowCombo += maxCombo * Time::GetDeltaTime() * 0.2f; }
+		else { nowCombo = maxCombo; }
+
+		if (nowPerfect == perfect &&
+			nowGreat == great &&
+			nowMiss == miss && 
+			nowAvg == avg &&
+			nowCombo == maxCombo) { isDone = false; }
+	}
+	nums[0]->ChangeNum(static_cast<int>(nowCombo * 0.01f));
+	nums[1]->ChangeNum(static_cast<int>(nowCombo * 0.1f));
+	nums[2]->ChangeNum(static_cast<int>(nowCombo));
+
+	string avg = to_string(nowAvg);
+	avg.erase(avg.length() - 4, avg.length());
+
+	graphic.Text(Vector3i(-30, -8, 0), artist);
+	graphic.Text(Vector3i(-30, -2, 0), "Perfect : " + to_string(static_cast<int>(nowPerfect)));
+	graphic.Text(Vector3i(-30, -1, 0), "Great : " + to_string(static_cast<int>(nowGreat)));
+	graphic.Text(Vector3i(-30, 0, 0), "Miss : " + to_string(static_cast<int>(nowMiss)));
+	graphic.Text(Vector3i(-30, 2, 0), "Avg : " + avg + "%");
+		
+	if (!isDone && keyboard.isKeyDown(KeyCode_ENTER)) { SceneManager::GetInstance().ChangeScene<DalmaMain>(); }
 }

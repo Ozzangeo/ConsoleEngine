@@ -27,7 +27,16 @@ void Graphic::Release() {
 
 	Debug::Log("[ Graphic ] : Release");
 }
+void Graphic::Text(const Vector3i& pos, string text) {
+	int plus = 0;
+	int Index = static_cast<int>(((pos.y + m_HalfScreenSize->y) * m_ScreenSize->x) + pos.x + m_HalfScreenSize->x);
+	for (int i = 0, size = static_cast<int>(text.length()); i < size; i++) {
+		m_Screen[Index + i + plus].Char.AsciiChar = text[i];
+		if (text[i] >= 128) { plus++; }
 
+		m_Screen[Index + i].Attributes = 15;
+	}
+}
 inline void Graphic::SetScreenScale(const COORD& Scale) {
 	CONSOLE_FONT_INFOEX cfi{};
 	cfi.dwFontSize = { Scale.X, Scale.Y };
@@ -201,6 +210,7 @@ void Graphic::DrawSprite(const Vector3f& pos, const Vector3i& rotate, const Vect
 
 	Pos.x -= (sprite.size.X * 0.5f);
 	Pos.y -= (sprite.size.Y * 0.5f);
+	Pos = Pos.round();
 
 	int Height = 0;
 	int SpriteIndex = 0;
@@ -212,7 +222,7 @@ void Graphic::DrawSprite(const Vector3f& pos, const Vector3i& rotate, const Vect
 			SpriteIndex = Height + j;
 
 			if (sprite.sprite[SpriteIndex] == Color_NULL) { continue; }
-			else { Pixel(Pos.x + i, Pos.y + j, Pos.z, Trans, sprite.sprite[SpriteIndex]); }
+			else { Pixel(Pos.x + j, Pos.y + i, Pos.z, Trans, sprite.sprite[SpriteIndex]); }
 		}
 	}
 }

@@ -35,7 +35,6 @@ using namespace chrono;
 class ConsoleEngine {
 private:
 	float m_FPS;
-	bool isDone;
 	SceneManager& UpdateScene = SceneManager::GetInstance();
 
 public:
@@ -52,18 +51,14 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 
 	UpdateScene.ChangeScene<T>();
 
-	isDone = false;
-	
 	int fps = 0;
 	float time = -1.0f;
 	
-	while (!isDone) {
+	while (!SceneManager::isRunning()) {
 		system_clock::time_point start = system_clock::now();
 		/////////////Update/////////////
 		
 		Keyboard::Update();
-		switch (Keyboard::isKey(KeyCode_ESC)) { case KeyType_DOWN: { isDone = true; } break; }
-
 		UpdateScene.Update();
 		
 		// FPS Debug
@@ -80,6 +75,7 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 		if (m_FPS > Time::ExecutionTime) { Time::Delay(m_FPS - Time::ExecutionTime); }
 		Time::DeltaTime = duration<float>(system_clock::now() - start).count();
 	}
+	UpdateScene.Release();
 }
 
 #endif // !___CONSOLEENGINE___

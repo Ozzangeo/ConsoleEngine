@@ -1,13 +1,5 @@
-[FPS] : 117
 [FPS] : 120
-[FPS] : 120
-[FPS] : 120
-[FPS] : 120
-[FPS] : 120
-[FPS] : 120
-[FPS] : 120
-[FPS] : 120
-[FPS] : 120
+[ SceneManager ] : Release
 [ SceneManager ] : Release
 [ Graphic ] : Release
 [ Math ] : Release

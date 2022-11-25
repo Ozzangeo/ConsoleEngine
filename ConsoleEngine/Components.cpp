@@ -30,21 +30,27 @@ void PolygonRenderer::Awake () {
 void PolygonRenderer::Update() {
 	isUpdateEdge = false;
 	
-	if (!isVisible || vertexCount <= 0) { return; }
+	if (vertexCount <= 0) { return; }
 	else { *beforePos = *vertices.front(); }
 
 	Matrix4x4f Trans = graphic.GetTranslate(*gameobject->pos, gameobject->GetRotate(), *gameobject->scale);
 
-	for (unsigned int i = 0; i < vertexCount; i++) {
-		if (*vertices[i] != *beforePos) {
-			graphic.Line(*vertices[i], *beforePos, Trans, color);
+	if (isVisible) {
+		for (unsigned int i = 0; i < vertexCount; i++) {
+			if (*vertices[i] != *beforePos) {
+				graphic.Line(*vertices[i], *beforePos, Trans, color);
 
-			*beforePos = *vertices[i];
+				*beforePos = *vertices[i];
+			}
+			*verticesRealPos[i] = *vertices[i] * Trans;
 		}
-		*verticesRealPos[i] = *vertices[i] * Trans;
+		graphic.Line(*vertices[vertexCount - 1], *vertices[0], Trans, color);
 	}
-
-	graphic.Line(*vertices[vertexCount - 1], *vertices[0], Trans, color);
+	else {
+		for (unsigned int i = 0; i < vertexCount; i++) {
+			*verticesRealPos[i] = *vertices[i] * Trans;
+		}
+	}
 
 	if (isFill) { graphic.Mask(Vector3f::ONE * Trans, color); }
 }
@@ -446,6 +452,7 @@ bool Audio::PlayAudio(UINT ID, bool isLoop) {
 }
 void Audio::RePlayAudio(UINT ID) { mciSendCommand(ID, MCI_RESUME, 0, NULL); }
 void Audio::PauseAudio (UINT ID) { mciSendCommand(ID, MCI_PAUSE, MCI_NOTIFY, (DWORD)(LPVOID)&mciPlay); }
+void Audio::CloseAudio(UINT ID) { mciSendCommand(ID, MCI_CLOSE, 0, NULL); }
 
 // [ Server Component ]
 const int Server::PACKET_SIZE = 4096;
@@ -600,6 +607,8 @@ void Client::recvServer() {
 
 		recvMsg.push(Msg);
 	}
+
+	ExitServer();
 }
 bool Client::JoinServer(string ip, int port) {
 	if (isJoinServer) { return true; }
@@ -647,6 +656,8 @@ string Client::GetMsg() {
 }
 
 string Client::GetMyIP() {
+	if (myIP != "") { return myIP; }
+	 
 	char HostName[255];
 	if (gethostname(HostName, sizeof(HostName))) { return ""; }
 
@@ -656,7 +667,7 @@ string Client::GetMyIP() {
 	in_addr* pAddr = (in_addr*)Info->h_addr_list[0];
 	if (!pAddr) { return ""; }
 
-	return to_string(pAddr->s_net) + "." + to_string(pAddr->s_host) + "." + to_string(pAddr->s_lh) + "." + to_string(pAddr->s_impno);
+	return (myIP = to_string(pAddr->s_net) + "." + to_string(pAddr->s_host) + "." + to_string(pAddr->s_lh) + "." + to_string(pAddr->s_impno));
 }
 bool Client::isJoin() {
 	return isJoinServer;

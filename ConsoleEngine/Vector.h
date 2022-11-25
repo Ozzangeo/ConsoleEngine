@@ -83,6 +83,7 @@ public:
 	void operator delete[](void* other);
 
 	inline Vector3f product2D();
+	inline Vector3f reverse();
 	inline float dotProduct(const Vector3f& ref);
 	inline float size();
 	inline Vector3f normalize();
@@ -93,6 +94,9 @@ public:
 
 inline Vector3f Vector3f::product2D() {
 	return { -y, x, z, 0 };
+}
+inline Vector3f Vector3f::reverse() {
+	return { -x, -y, -z };
 }
 inline float Vector3f::dotProduct(const Vector3f& ref) {
 	Vector3f res = _mm_mul_ps(this->vecp, ref.vecp);

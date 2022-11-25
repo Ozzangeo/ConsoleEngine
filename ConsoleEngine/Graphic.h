@@ -58,6 +58,8 @@ private:
 	inline EnumColor GetPixel(Vector3i pos);
 
 public:
+	void Text(const Vector3i& pos, string text);
+
 	// 기본 화면 조절 함수 ( 카메라 오브젝트 존재시, 가능한 카메라의 함수를 이용하길 추천 )
 	inline void SetScreenScale(const COORD& Scale);
 	void SetScreenSize(const COORD& Size);

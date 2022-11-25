@@ -1,11 +1,7 @@
 ﻿  Components.cpp
-F:\Github Project\ConsoleEngine\Dalma\Components.cpp(96,4): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
-  GameObjects.cpp
-  Scenes.cpp
-  main.cpp
   코드를 생성하고 있습니다.
-  281 of 1194 functions (23.5%) were compiled, the rest were copied from previous compilation.
-    105 functions were new in current compilation
-    123 functions had inline decision re-evaluated but remain unchanged
+  1 of 912 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Dalma.vcxproj -> F:\Github Project\ConsoleEngine\Release\Dalma.exe

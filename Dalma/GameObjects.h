@@ -56,14 +56,14 @@ public:
 };
 class PerfectLine : public GameObject {
 private:
-	float length = 2.0f;
+	float length = 3.0f;
 
 	void Components() override;
 	void Work() override;
 };
 class GreatLine : public GameObject {
 private:
-	float length = 4.0f;
+	float length = 5.0f;
 
 	void Components() override;
 	void Work() override;

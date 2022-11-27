@@ -111,12 +111,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_ABB7DD72D2904EE68DC886F98CC9BC9F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_AEF2296AACA74A8A8CA77EF2271117FF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -159,6 +153,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D3371A2D7DA94319AC0F7588E8E0354D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D5C7414FD0EF0F43CD72A4DD64F9201E"
         "OwnerKey" = "8:_12E73B426AE84F65B3BB5FBBED038413"
         "MsmSig" = "8:_UNDEFINED"
@@ -177,6 +177,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_EA515309C93248C0A9DAB3EB20D91D03"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_FCE376ADDF9D4E85B87CD269902EA1B0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -189,7 +195,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:..\\ConsoleEngine\\DalmaSetup.msi"
+        "OutputFilename" = "8:..\\DalmaSetup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -206,6 +212,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -565,26 +579,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ABB7DD72D2904EE68DC886F98CC9BC9F"
-            {
-            "SourcePath" = "8:..\\Dalma\\Amlads\\TestMap.amlad"
-            "TargetName" = "8:TestMap.amlad"
-            "Tag" = "8:"
-            "Folder" = "8:_241C911D4BDC42FEB3C949F882FF758A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AEF2296AACA74A8A8CA77EF2271117FF"
             {
             "SourcePath" = "8:..\\Dalma\\Text\\Eight.sprite"
@@ -725,6 +719,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D3371A2D7DA94319AC0F7588E8E0354D"
+            {
+            "SourcePath" = "8:..\\Dalma\\Amlads\\AlexAction - Fashion Deeps House.amlad"
+            "TargetName" = "8:AlexAction - Fashion Deeps House.amlad"
+            "Tag" = "8:"
+            "Folder" = "8:_241C911D4BDC42FEB3C949F882FF758A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D5C7414FD0EF0F43CD72A4DD64F9201E"
             {
             "SourcePath" = "8:api-ms-win-crt-runtime-l1-1-0.dll"
@@ -783,6 +797,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EA515309C93248C0A9DAB3EB20D91D03"
+            {
+            "SourcePath" = "8:..\\Dalma64x64.ico"
+            "TargetName" = "8:Dalma64x64.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_D9B05AE5D27C432486B0878878C81D47"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FCE376ADDF9D4E85B87CD269902EA1B0"
@@ -928,7 +962,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Dalma[RE]"
         "ProductCode" = "8:{3B2E84E2-6C6D-4806-941C-C4F6010E009F}"
-        "PackageCode" = "8:{DD6EB98C-504D-4C49-923A-94BE818F080B}"
+        "PackageCode" = "8:{2F19805E-49BF-4E30-A4E9-A82340D687FC}"
         "UpgradeCode" = "8:{021A2D47-45F8-4103-AECC-670CAAD82F5D}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -1050,7 +1084,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_19DCA3EAC2ED468985921DC02CDBA41C"
             {
-            "Name" = "8:Dalma"
+            "Name" = "8:Dalma[RE]"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -1059,7 +1093,7 @@
             "Target" = "8:_12E73B426AE84F65B3BB5FBBED038413"
             "Folder" = "8:_FE06E52155DD44A0AB108C5922DE2E7A"
             "WorkingFolder" = "8:_D9B05AE5D27C432486B0878878C81D47"
-            "Icon" = "8:"
+            "Icon" = "8:_EA515309C93248C0A9DAB3EB20D91D03"
             "Feature" = "8:"
             }
         }

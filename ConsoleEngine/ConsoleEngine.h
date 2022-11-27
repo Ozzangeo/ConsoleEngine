@@ -38,10 +38,13 @@ private:
 	SceneManager& UpdateScene = SceneManager::GetInstance();
 
 public:
+	// 엔진의 생성자
 	ConsoleEngine();
 
+	// 엔진 시작
 	template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool> = true> void Run(wstring title = L"Engine", int Frame = 60);
 
+	// 엔진 종료
 	static void Release();
 };
 template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void ConsoleEngine::Run(wstring title, int Frame) {

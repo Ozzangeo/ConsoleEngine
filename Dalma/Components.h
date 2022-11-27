@@ -123,9 +123,8 @@ public:
 #pragma endregion
 class NoteInfo {
 public:
-	NoteInfo(float line = 0, float distance = 0.0f, float time = 0.0f) : Line(line), Distance(distance), Time(time) {}
+	NoteInfo(float line = 0, float time = 0.0f) : Line(line), Time(time) {}
 	float Line;
-	float Distance;
 	float Time;
 	list<EFunc> Effects;
 };
@@ -237,13 +236,13 @@ private:
 	float nowGreat = 0.0f;
 	float nowMiss = 0.0f;
 	float nowCombo = 0.0f;
-	float nowAvg = 0.0f;
+	float nowAccuracy = 0.0f;
 
 	string artist;
 	float perfect;
 	float great;
 	float miss;
-	float avg;
+	float accuracy;
 	float maxCombo;
 
 	void Start() override;

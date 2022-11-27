@@ -1,6 +1,6 @@
-[FPS] : 60
-[FPS] : 60
-[ Keyboard ] : Release
+[ SceneManager ] : Release
+[ SceneManager ] : Release
 [ Graphic ] : Release
 [ Math ] : Release
+[ Keyboard ] : Release
 [ Debug ] : Release

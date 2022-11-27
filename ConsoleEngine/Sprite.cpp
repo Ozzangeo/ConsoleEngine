@@ -7,7 +7,10 @@ Sprite::Sprite() {
 	size = { 0, 0 };
 }
 Sprite::~Sprite() {
-	if (sprite) { delete[] sprite; sprite = nullptr; }
+	if (sprite) {
+		delete[] sprite;
+		sprite = nullptr;
+	}
 }
 bool Sprite::LoadSprite(string filename) {
 	ifstream sp(filename + ".sprite");

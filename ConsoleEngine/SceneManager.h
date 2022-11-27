@@ -23,22 +23,41 @@ public:
 	void Update();
 	static void Release();
 	static void StopEngine();
-	static bool isRunning();
+	inline static bool isRunning();
 
 	template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool> = true>
-	void ChangeScene();
+	inline void ChangeScene();
 	Scene* GetNowScene();
 };
 
-#endif // !___SCENEMANAGER___
+inline void SceneManager::StopEngine() {
+	isEnd = true;
+}
+inline bool SceneManager::isRunning() {
+	return !isEnd;
+}
 
 template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>>
 inline void SceneManager::ChangeScene() {
 	if (nowScene) {
 		nowScene->isEnd = true;
+
+		// 만약 이전 씬이 할당되어있다면
+		if (beforeScene) {
+			// 이전 씬이 다 끝날 때 까지 기다리기
+			while (!beforeScene->isDone) {}
+
+			beforeScene->Release();
+			delete beforeScene; beforeScene = nullptr;
+		}
+
 		beforeScene = nowScene;
 	}
-
+	
+	// 화면 버퍼 초기화
+	system("cls");
 	nowScene = new T;
 	nowScene->Awake();
 }
+
+#endif // !___SCENEMANAGER___

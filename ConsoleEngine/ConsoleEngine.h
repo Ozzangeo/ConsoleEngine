@@ -54,11 +54,14 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 	int fps = 0;
 	float time = -1.0f;
 	
-	while (!SceneManager::isRunning()) {
+	while (SceneManager::isRunning()) {
 		system_clock::time_point start = system_clock::now();
 		/////////////Update/////////////
 		
+		// Input Update
 		Keyboard::Update();
+		
+		// Scene Update
 		UpdateScene.Update();
 		
 		// FPS Debug

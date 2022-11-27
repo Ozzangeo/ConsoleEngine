@@ -35,10 +35,7 @@ void Scene::Update() {
 	}
 	m_RemoveObjectList.clear();
 
-	if (isEnd) {
-		Release();
-		isDone = true;
-	}
+	if (isEnd) { isDone = true; }
 }
 void Scene::Release() {
 	for (auto& item : m_GameObjects) {

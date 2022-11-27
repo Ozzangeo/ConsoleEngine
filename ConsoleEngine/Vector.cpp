@@ -50,11 +50,11 @@ Vector3f Vector3f::operator-(const __m128& ref) {
 	return _mm_sub_ps(vecp, ref);
 }
 Vector3f Vector3f::operator*(const float& ref) {
-	__m128 other = _mm_set1_ps(ref);
+	__m128 other = _mm_set_ps1(ref);
 	return _mm_mul_ps(vecp, other);
 }
 Vector3f Vector3f::operator/(const float& ref) {
-	__m128 other = _mm_set1_ps(ref);
+	__m128 other = _mm_set_ps1(ref);
 	return _mm_div_ps(vecp, other);
 }
 
@@ -82,13 +82,11 @@ Vector3f& Vector3f::operator/=(const float& ref) {
 bool Vector3f::operator==(const Vector3f& ref) {
 	return	((this->x == ref.x) &&
 			(this->y == ref.y) &&
-			(this->z == ref.z) &&
 			(this->z == ref.z));
 }
 bool Vector3f::operator!=(const Vector3f& ref) {
 	return	((this->x != ref.x) ||
 			(this->y != ref.y) ||
-			(this->z != ref.z) ||
 			(this->z != ref.z));
 }
 

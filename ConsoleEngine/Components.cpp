@@ -60,19 +60,23 @@ void PolygonRenderer::Remove() {
 	for (auto& item : vertices) {
 		if (item) { delete item; item = nullptr; }
 	}
-	vertices.clear();
-	edges.clear();
-	verticesRealPos.clear();
+	for (auto& item : edges) {
+		if (item) { delete item; item = nullptr; }
+	}
+	for (auto& item : verticesRealPos) {
+		if (item) { delete item; item = nullptr; }
+	}
+
+	vertices.~vector();
+	edges.~vector();
+	verticesRealPos.~vector();
 }
 Vector3f* PolygonRenderer::AddVertex(float x, float y) {
-	Vector3f* ver = new Vector3f(x, y, 0);
-	vertices	   .push_back(ver);
+	vertices	   .push_back(new Vector3f(x, y, 0));
 	verticesRealPos.push_back(new Vector3f);
 	edges		   .push_back(new Vector3f);
 
-	vertexCount++;
-
-	return ver;
+	return vertices[vertexCount++];
 }
 Vector3f* PolygonRenderer::GetVertex(unsigned int index) {
 	return (index >= vertexCount) ? nullptr : vertices[index];
@@ -379,7 +383,7 @@ void SpriteRenderer::Update() {
 	}
 }
 void SpriteRenderer::Remove() {
-	sprite.~Sprite();
+	if (!isNotRemoveSprite) { sprite.~Sprite(); }
 }
 
 // [ CircleRenderer Component ]
@@ -397,6 +401,7 @@ void CircleRenderer::Update() {
 // [ Animator Component ]
 void Animator::Awake() {
 	spriterenderer = gameobject->AddComponent<SpriteRenderer>();
+	spriterenderer->isNotRemoveSprite = true;
 	
 	time = 0.0f;
 	index = 0;
@@ -415,6 +420,9 @@ void Animator::Update() {
 		spriterenderer->sprite = animations[index].second;
 		time += Time::GetDeltaTime();
 	}
+}
+void Animator::Remove() {
+	animations.~vector();
 }
 
 // [ Audio Component ]

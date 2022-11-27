@@ -21,8 +21,8 @@ void ChoiceComp::Update() {
 	if(keyboard.isKeyDown(KeyCode_ENTER))
 	switch (choice) {
 	case 0: { manager->ChangeScene<DalmaList>(); system("cls"); } break;
-		case 1: { manager->ChangeScene<DalmaCredit>(); system("cls"); } break;
-		case 2: { manager->StopEngine(); } break;
+	case 1: { manager->ChangeScene<DalmaCredit>(); system("cls"); } break;
+	case 2: { manager->StopEngine(); } break;
 	}
 
 	graphic.Text({ -3, 5, 0 },  " Start");
@@ -205,13 +205,14 @@ void AmladPlayer::Update() {
 
 	while (!Notes.empty()) {
 		NoteInfo noteInfo = Notes.front();
-		noteInfo.Time = noteInfo.Distance * NoteDown::bpm60;
+		noteInfo.Time *= NoteDown::bpm60;
+
 		if (noteInfo.Time >= ExTime) {
 			ExTime += Time::GetDeltaTime();
 			PlayTime += Time::GetDeltaTime();
 			break;
 		}
-
+		                            
 		auto* nowNote = scene->AddGameObject<Note>(L"Note", Tag_Note);
 		auto* Jud = nowNote->AddComponent<NoteJudgment>();
 
@@ -228,12 +229,10 @@ void AmladPlayer::Update() {
 		 default: { scene->RemoveGameObject(nowNote); } break;
 		 }
 		NoteDown::speed = BpmMul * 0.1f;
-
-		ExTime -= noteInfo.Time;
 		Notes.pop();
 
 		PlayTime += Time::GetDeltaTime();
-		ExTime += Time::GetDeltaTime();
+		ExTime += Time::GetDeltaTime() - noteInfo.Time;
 
 		if (Notes.empty()) {
 			isEnd = true;
@@ -258,8 +257,8 @@ void AmladPlayer::Update() {
 		result << "Great=" << to_string(Great) << "\n";
 		result << "Miss=" << to_string(Miss) << "\n";
 
-		try { result << "Avg=" << to_string(((Perfect * 100.0f) + (Great * 60.0f) + (Miss * 0.0f)) / (Perfect + Great + Miss)) << "%\n"; }
-		catch (exception e) { result << "Avg=" << to_string(0) << "%\n"; }
+		try { result << "Accuracy=" << to_string(((Perfect * 100.0f) + (Great * 60.0f) + (Miss * 0.0f)) / (Perfect + Great + Miss)) << "%\n"; }
+		catch (exception e) { result << "Accuracy=" << to_string(0) << "%\n"; }
 
 		result << "MaxCombo=" << to_string(MaxCombo) << "\n";
 
@@ -335,10 +334,10 @@ bool AmladPlayer::OpenAmlad(string path) {
 			try { note.Line = stof(buf); }
 			catch (exception e) { note.Line = 0; }
 
-			// [ 거리 ]
+			// [ 시간 ]
 			getline(ss, buf, ',');
-			try { note.Distance = stof(buf); }
-			catch (exception e) { note.Distance = 0; }
+			try { note.Time = stof(buf); }
+			catch (exception e) { note.Time = 0; }
 #pragma endregion
 
 			// [ 이펙트 ]
@@ -524,7 +523,7 @@ void GearButtonComp::Update() {
 	case KeyType_NON: { graphic.Fill(Pos[0], Pos[1], Color_Red); } break;
 	}
 
-	graphic.Fill({ -14, 35, 1 }, { 14, 23, 1 }, Color_Perple);
+	graphic.Fill({ -14, 35, 1 }, { 14, 21, 1 }, Color_Perple);
 }
 
 void NoteJudgment::Start() {
@@ -590,6 +589,7 @@ void SpriteNum::ChangeNum(int num) {
 }
 
 void Result::Start() {
+	color.SetColor({ 51, 102, 51 }, 0);
 	/* 이런 간편한 괄호가 어째서 밖에서는 region으로만.. */ {
 		string text;
 		string buf;
@@ -637,15 +637,15 @@ void Result::Start() {
 		try { miss = stof(buf); }
 		catch (exception e) { miss = 0; }
 
-		// Avg
+		// Accuracy
 		getline(result, text);
 		ss.clear();
 		ss.str(text);
 
 		getline(ss, buf, '=');
 		getline(ss, buf, '=');
-		try { avg = stof(buf); }
-		catch (exception e) { avg = 0; }
+		try { accuracy = stof(buf); }
+		catch (exception e) { accuracy = 0; }
 
 		// Max Combo
 		getline(result, text);
@@ -677,8 +677,8 @@ void Result::Update() {
 		if (miss > round(nowMiss))			{ nowMiss += miss * Time::GetDeltaTime() * 0.25f; }
 		else { nowMiss = miss; }
 
-		if (round(avg) > round(nowAvg))		{ nowAvg += avg * Time::GetDeltaTime() * (25.0f / avg); }
-		else { nowAvg = avg; }
+		if (round(accuracy) > round(nowAccuracy))		{ nowAccuracy += accuracy * Time::GetDeltaTime() * (25.0f / accuracy); }
+		else { nowAccuracy = accuracy; }
 
 		if (maxCombo > round(nowCombo))		{ nowCombo += maxCombo * Time::GetDeltaTime() * 0.4f; }
 		else {
@@ -689,21 +689,21 @@ void Result::Update() {
 		if (nowPerfect == perfect &&
 			nowGreat == great &&
 			nowMiss == miss && 
-			nowAvg == avg &&
+			nowAccuracy == accuracy &&
 			nowCombo == maxCombo) { isDone = false; }
 	}
 	nums[0]->ChangeNum(static_cast<int>(nowCombo * 0.01f));
 	nums[1]->ChangeNum(static_cast<int>(nowCombo * 0.1f));
 	nums[2]->ChangeNum(static_cast<int>(nowCombo));
 
-	string avg = to_string(nowAvg);
-	avg.erase(avg.length() - 4, avg.length());
+	string accuracy = to_string(nowAccuracy);
+	accuracy.erase(accuracy.length() - 4, accuracy.length());
 
 	graphic.Text(Vector3i(-30, -8, 0), artist);
 	graphic.Text(Vector3i(-30, -2, 0), "Perfect : " + to_string(static_cast<int>(nowPerfect)));
 	graphic.Text(Vector3i(-30, -1, 0), "Great : " + to_string(static_cast<int>(nowGreat)));
 	graphic.Text(Vector3i(-30, 0, 0), "Miss : " + to_string(static_cast<int>(nowMiss)));
-	graphic.Text(Vector3i(-30, 2, 0), "Avg : " + avg + "%");
+	graphic.Text(Vector3i(-30, 2, 0), "Accuracy : " + accuracy + "%");
 	if(isFull) { graphic.Text(Vector3i(18, 3, 0), "Full Combo!"); }
 		
 	if (!isDone && keyboard.isKeyDown(KeyCode_ENTER)) { SceneManager::GetInstance().ChangeScene<DalmaList>(); }

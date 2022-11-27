@@ -82,7 +82,10 @@ namespace Components {
 		Vector3f isCollisionVec(list<GameObject*>& objects, const Vector3f& velocity);
 	};
 	class SpriteRenderer : public Component {
+		friend class Animator;
 	private:
+		bool isNotRemoveSprite = false;
+
 		void Awake() final override;
 		void Update() final override;
 		void Remove() final override;
@@ -112,6 +115,7 @@ namespace Components {
 
 		void Awake() final override;
 		void Update() final override;
+		void Remove() final override;
 
 	public:
 		Animation animation;

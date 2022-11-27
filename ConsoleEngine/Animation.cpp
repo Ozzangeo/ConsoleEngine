@@ -45,7 +45,9 @@ bool Animation::LoadAnimaition(string filename) {
 			AniSize.Y++;
 		}
 
-		AniSprite = new EnumColor[AniSize.X * AniSize.Y];
+		if (AniSize.X * AniSize.Y != 0) { AniSprite = new EnumColor[AniSize.X * AniSize.Y]; }
+		else { AniSprite = nullptr; }
+
 		anicount++;
 	}
 

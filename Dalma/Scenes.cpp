@@ -1,6 +1,10 @@
 #include "Scenes.h"
 
 void DalmaMain::GameObjects() {
+	Color color;
+	color.SetColor({ 34, 163, 159 }, 0);
+	color.SetColor({ 243, 239, 224 }, 15);
+
 	auto* camera = AddGameObject<GameObjects::Camera>(L"Camera", Tag_Camera)->GetComponent<Components::Camera>();
 	camera->SetCameraScale(8, 16);
 	camera->SetCameraSize({ 128, 36 });
@@ -58,6 +62,10 @@ void DalmaResult::GameObjects() {
 }
 
 void DalmaList::GameObjects() {
+	Color color;
+	color.SetColor({ 102, 90, 72 }, 0);
+	color.SetColor({ 237, 228, 224 }, 15);
+
 	auto* camera = AddGameObject<GameObjects::Camera>(L"Camera")->GetComponent<Components::Camera>();
 	camera->SetCameraScale(8, 16);
 	camera->SetCameraSize({ 128, 36 });
@@ -71,6 +79,10 @@ void DalmaList::GameObjects() {
 }
 
 void DalmaCredit::GameObjects() {
+	Color color;
+	color.SetColor({ 101, 100, 124}, 0);
+	color.SetColor({ 241, 211, 179 }, 15);
+
 	auto* camera = AddGameObject<GameObjects::Camera>(L"Camera")->GetComponent<Components::Camera>();
 	camera->SetCameraScale(8, 16);
 	camera->SetCameraSize({ 128, 36 });

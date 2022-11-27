@@ -3,8 +3,8 @@
 bool SceneManager::isEnd = false;
 SceneManager* SceneManager::m_Instance = nullptr;
 SceneManager::~SceneManager() {
-	if (nowScene) { delete nowScene; nowScene = nullptr; }
-	if (beforeScene) { delete beforeScene; beforeScene = nullptr; }
+	if (nowScene)		{ nowScene->Release();		delete nowScene;	nowScene = nullptr; }
+	if (beforeScene)	{ beforeScene->Release();	delete beforeScene; beforeScene = nullptr; }
 }
 SceneManager& SceneManager::GetInstance() {
 	if (!m_Instance) { m_Instance = new SceneManager; }
@@ -12,18 +12,11 @@ SceneManager& SceneManager::GetInstance() {
 }
 
 void SceneManager::Update() {
-	if (beforeScene && beforeScene->isDone) { delete beforeScene; beforeScene = nullptr; }
 	nowScene->Update();
 }
 void SceneManager::Release() {
 	if (m_Instance) { delete m_Instance; m_Instance = nullptr; }
 	Debug::Log("[ SceneManager ] : Release");
-}
-void SceneManager::StopEngine() {
-	isEnd = true;
-}
-bool SceneManager::isRunning() {
-	return isEnd;
 }
 Scene* SceneManager::GetNowScene() {
 	return nowScene;

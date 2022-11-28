@@ -1,6 +1,0 @@
-[ SceneManager ] : Release
-[ SceneManager ] : Release
-[ Graphic ] : Release
-[ Math ] : Release
-[ Keyboard ] : Release
-[ Debug ] : Release

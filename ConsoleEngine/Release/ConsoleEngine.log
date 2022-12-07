@@ -1,1 +1,9 @@
-﻿  ConsoleEngine.vcxproj -> F:\Github Project\ConsoleEngine\Release\ConsoleEngine.lib
+﻿  Component.cpp
+  Components.cpp
+  ConsoleEngine.cpp
+  GameObject.cpp
+  GameObjects.cpp
+  Graphic.cpp
+  Scene.cpp
+  SceneManager.cpp
+  ConsoleEngine.vcxproj -> F:\Github Project\ConsoleEngine\Release\ConsoleEngine.lib

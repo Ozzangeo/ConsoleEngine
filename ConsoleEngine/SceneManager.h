@@ -54,8 +54,6 @@ inline void SceneManager::ChangeScene() {
 		beforeScene = nowScene;
 	}
 	
-	// 화면 버퍼 초기화
-	system("cls");
 	nowScene = new T;
 	nowScene->Awake();
 }

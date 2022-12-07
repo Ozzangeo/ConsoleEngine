@@ -27,7 +27,7 @@ void Graphic::Release() {
 
 	Debug::Log("[ Graphic ] : Release");
 }
-void Graphic::Text(Vector3i pos, wstring text) {
+void Graphic::Text(Vector3i pos, wstring text, WORD color) {
 	int plus = 0;
 	pos.x += static_cast<int>(m_HalfScreenSize->x);
 	pos.y += static_cast<int>(m_HalfScreenSize->y);
@@ -41,13 +41,29 @@ void Graphic::Text(Vector3i pos, wstring text) {
 	for (int i = 0, size = static_cast<int>(text.length()); i < size; i++) {
 		if (Index + i + plus > m_ScreenSize->z) { break; }
 		m_Screen[Index + i + plus].Char.UnicodeChar = text[i];
-		m_Screen[Index + i + plus].Attributes = 15;
+		m_Screen[Index + i + plus].Attributes = color;
 
 		if (text[i] >= 128) {
-			m_Screen[Index + i + plus + 1].Attributes = 15;
 			plus++;
+			m_Screen[Index + i + plus].Attributes = color;
 		}
 	}
+}
+void Graphic::Text(Vector3i pos, WCHAR text, WORD color) {
+	pos.x += static_cast<int>(m_HalfScreenSize->x);
+	pos.y += static_cast<int>(m_HalfScreenSize->y);
+
+	if (0 > pos.y || m_ScreenSize->y <= pos.y ||
+		0 > pos.x || m_ScreenSize->x <= pos.x) {
+		return;
+	}
+
+	int Index = static_cast<int>((pos.y * m_ScreenSize->x) + pos.x);
+	if (Index > m_ScreenSize->z) { return; }
+	m_Screen[Index].Char.UnicodeChar = text;
+	m_Screen[Index].Attributes = color;
+
+	if (text >= 128) { m_Screen[Index + 1].Attributes = color; }
 }
 inline void Graphic::SetScreenScale(const COORD& Scale) {
 	CONSOLE_FONT_INFOEX cfi{};

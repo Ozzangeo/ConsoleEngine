@@ -193,14 +193,14 @@ private:
 	void Remove() override;
 
 public:
-	static string path;
+	static wstring path;
 	static int Perfect;
 	static int Great;
 	static int Miss;
 	static int Combo;
 	static int MaxCombo;
 
-	bool OpenAmlad(string path);
+	bool OpenAmlad(wstring path);
 	bool OpenAmlad();
 };
 class Filler : public Component {
@@ -238,7 +238,7 @@ private:
 	float nowCombo = 0.0f;
 	float nowAccuracy = 0.0f;
 
-	string artist;
+	wstring artist;
 	float perfect;
 	float great;
 	float miss;
@@ -256,7 +256,7 @@ private:
 	int choice;
 
 	//        음악 이름 파일 이름
-	vector<pair<string, string>>* Amlads;
+	vector<pair<wstring, wstring>>* Amlads;
 
 	void Awake() override;
 	void Update() override;

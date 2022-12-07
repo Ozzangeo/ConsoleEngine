@@ -1,11 +1,2 @@
-﻿  Component.cpp
-  Components.cpp
-  ConsoleEngine.cpp
-  GameObject.cpp
-  GameObjects.cpp
-  Graphic.cpp
-  Scene.cpp
-  SceneManager.cpp
-  Vector.cpp
-  코드를 생성하고 있습니다...
+﻿  Graphic.cpp
   ConsoleEngine.vcxproj -> F:\Github Project\ConsoleEngine\Debug\ConsoleEngine.lib

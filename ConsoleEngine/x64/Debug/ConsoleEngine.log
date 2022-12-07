@@ -1,12 +1,28 @@
-﻿  Color.cpp
+﻿  Animation.cpp
+  Color.cpp
   Component.cpp
-  DefaultComponents.cpp
-  DefaultGameObjects.cpp
-  Engine.cpp
-  Field.cpp
+  Debug.cpp
+  Components.cpp
+  GameObjects.cpp
+  ConsoleEngine.cpp
   GameObject.cpp
   Graphic.cpp
-  Layer.cpp
+  Keyboard.cpp
+  Math.cpp
+  Matrix.cpp
   Scene.cpp
+  SceneManager.cpp
+  Sprite.cpp
+  Time.cpp
   Vector.cpp
+F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(448,108): warning C4311: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 포인터가 잘립니다.
+F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(448,108): warning C4302: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 잘립니다.
+F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(457,105): warning C4311: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 포인터가 잘립니다.
+F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(457,105): warning C4302: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 잘립니다.
+F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(458,95): warning C4311: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 포인터가 잘립니다.
+F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(458,95): warning C4302: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 잘립니다.
+F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(465,101): warning C4311: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 포인터가 잘립니다.
+F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(465,101): warning C4302: '형식 캐스트': 'LPVOID'에서 'DWORD'(으)로 잘립니다.
+F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(571,51): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+F:\Github Project\ConsoleEngine\ConsoleEngine\Components.cpp(663,44): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   ConsoleEngine.vcxproj -> F:\Github Project\ConsoleEngine\x64\Debug\ConsoleEngine.lib

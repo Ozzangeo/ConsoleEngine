@@ -25,9 +25,9 @@ void ChoiceComp::Update() {
 	case 2: { manager->StopEngine(); } break;
 	}
 
-	graphic.Text({ -3, 5, 0 },  " Start");
-	graphic.Text({ -3, 8, 0 },  "Credit");
-	graphic.Text({ -3, 11, 0 }, " Exit");
+	graphic.Text({ -3, 5, 0 },  L" Start");
+	graphic.Text({ -3, 8, 0 },  L"Credit");
+	graphic.Text({ -3, 11, 0 }, L" Exit");
 }
 
 void GradationEffect::Awake() {
@@ -183,7 +183,7 @@ int AmladPlayer::Great = 0;
 int AmladPlayer::Miss = 0;
 int AmladPlayer::Combo = 0;
 int AmladPlayer::MaxCombo = 0;
-string AmladPlayer::path = "";
+wstring AmladPlayer::path = L"";
 void AmladPlayer::Start() {
 	Nums[0] = scene->GetGameObject(L"100")->GetComponent<SpriteNum>();
 	Nums[1] = scene->GetGameObject(L"10")->GetComponent<SpriteNum>();
@@ -268,7 +268,7 @@ void AmladPlayer::Update() {
 	}
 }
 void AmladPlayer::Remove() {}
-bool AmladPlayer::OpenAmlad(string path) {
+bool AmladPlayer::OpenAmlad(wstring path) {
 	if (!isStart) {
 		Perfect = 0;
 		Great = 0;
@@ -276,7 +276,7 @@ bool AmladPlayer::OpenAmlad(string path) {
 		Combo = 0;
 		MaxCombo = 0;
 
-		ifstream Amlad("Amlads/" + path);
+		ifstream Amlad(L"Amlads/" + path);
 		if (Amlad.fail()) { Amlad.close(); return false; }
 
 		string text;
@@ -591,9 +591,9 @@ void SpriteNum::ChangeNum(int num) {
 void Result::Start() {
 	color.SetColor({ 51, 102, 51 }, 0);
 	/* 이런 간편한 괄호가 어째서 밖에서는 region으로만.. */ {
-		string text;
-		string buf;
-		ifstream result("Datas/DalmaResult.txt");
+		wstring text;
+		wstring buf;
+		wifstream result(L"Datas/DalmaResult.txt");
 
 		if (result.fail()) {
 			SceneManager::GetInstance().ChangeScene<DalmaList>();
@@ -601,10 +601,10 @@ void Result::Start() {
 
 		// 아티스트 - 노래
 		getline(result, text);
-		stringstream ss(text);
+		wstringstream ss(text);
 
-		getline(ss, buf, '=');
-		getline(ss, buf, '=');
+		getline(ss, buf, L'=');
+		getline(ss, buf, L'=');
 		artist = buf;
 
 		// Perfect
@@ -612,8 +612,8 @@ void Result::Start() {
 		ss.clear();
 		ss.str(text);
 
-		getline(ss, buf, '=');
-		getline(ss, buf, '=');
+		getline(ss, buf, L'=');
+		getline(ss, buf, L'=');
 		try { perfect = stof(buf); }
 		catch (exception e) { perfect = 0; }
 
@@ -622,8 +622,8 @@ void Result::Start() {
 		ss.clear();
 		ss.str(text);
 
-		getline(ss, buf, '=');
-		getline(ss, buf, '=');
+		getline(ss, buf, L'=');
+		getline(ss, buf, L'=');
 		try { great = stof(buf); }
 		catch (exception e) { great = 0; }
 
@@ -632,8 +632,8 @@ void Result::Start() {
 		ss.clear();
 		ss.str(text);
 
-		getline(ss, buf, '=');
-		getline(ss, buf, '=');
+		getline(ss, buf, L'=');
+		getline(ss, buf, L'=');
 		try { miss = stof(buf); }
 		catch (exception e) { miss = 0; }
 
@@ -642,8 +642,8 @@ void Result::Start() {
 		ss.clear();
 		ss.str(text);
 
-		getline(ss, buf, '=');
-		getline(ss, buf, '=');
+		getline(ss, buf, L'=');
+		getline(ss, buf, L'=');
 		try { accuracy = stof(buf); }
 		catch (exception e) { accuracy = 0; }
 
@@ -652,8 +652,8 @@ void Result::Start() {
 		ss.clear();
 		ss.str(text);
 
-		getline(ss, buf, '=');
-		getline(ss, buf, '=');
+		getline(ss, buf, L'=');
+		getline(ss, buf, L'=');
 		try { maxCombo = stof(buf); }
 		catch (exception e) { maxCombo = 0; }                                                         
 
@@ -696,38 +696,38 @@ void Result::Update() {
 	nums[1]->ChangeNum(static_cast<int>(nowCombo * 0.1f));
 	nums[2]->ChangeNum(static_cast<int>(nowCombo));
 
-	string accuracy = to_string(nowAccuracy);
+	wstring accuracy = to_wstring(nowAccuracy);
 	accuracy.erase(accuracy.length() - 4, accuracy.length());
 
 	graphic.Text(Vector3i(-30, -8, 0), artist);
-	graphic.Text(Vector3i(-30, -2, 0), "Perfect : " + to_string(static_cast<int>(nowPerfect)));
-	graphic.Text(Vector3i(-30, -1, 0), "Great : " + to_string(static_cast<int>(nowGreat)));
-	graphic.Text(Vector3i(-30, 0, 0), "Miss : " + to_string(static_cast<int>(nowMiss)));
-	graphic.Text(Vector3i(-30, 2, 0), "Accuracy : " + accuracy + "%");
-	if(isFull) { graphic.Text(Vector3i(18, 3, 0), "Full Combo!"); }
+	graphic.Text(Vector3i(-30, -2, 0), L"Perfect : " + to_wstring(static_cast<int>(nowPerfect)));
+	graphic.Text(Vector3i(-30, -1, 0), L"Great : " + to_wstring(static_cast<int>(nowGreat)));
+	graphic.Text(Vector3i(-30, 0, 0),  L"Miss : " + to_wstring(static_cast<int>(nowMiss)));
+	graphic.Text(Vector3i(-30, 2, 0),  L"Accuracy : " + accuracy + L"%");
+	if(isFull) { graphic.Text(Vector3i(18, 3, 0), L"Full Combo!"); }
 		
 	if (!isDone && keyboard.isKeyDown(KeyCode_ENTER)) { SceneManager::GetInstance().ChangeScene<DalmaList>(); }
 }
 
 void AmladList::Awake() {
 	int i = 0;
-	Amlads = new vector<pair<string, string>>;
+	Amlads = new vector<pair<wstring, wstring>>;
 	Amlads->reserve(64);
 
-	string filename;
-	string artist;
-	string song;
+	wstring filename;
+	wstring artist;
+	wstring song;
 	
 	for (auto& file : filesystem::directory_iterator("Amlads")) {
-		filename = file.path().filename().string();
+		filename = file.path().filename().wstring();
 
-		ifstream amlad("Amlads/" + filename);
+		wifstream amlad(L"Amlads/" + filename);
 
 		try {
 			getline(amlad, artist);
 			getline(amlad, song);
 
-			Amlads->push_back({ artist + " - " + song, filename });
+			Amlads->push_back({ artist + L" - " + song, filename });
 		}
 		catch (exception e) { Debug::Log(e.what()); }
 
@@ -778,12 +778,12 @@ void Credit::Update() {
 
 	if (!Egg && duration<float>(system_clock::now() - start).count() >= 523.0f) { Egg = true; scene->AddGameObject<NoneObject>(L"Sans")->AddComponent<SpriteRenderer>()->sprite.LoadSprite("Sprites/Sans"); }
 
-	graphic.Text({ -17, -10, 0 }, "Console Engine v1.0 by 1410 Ozi");
-	graphic.Text({ -5, -8, 0 }, "Dalma[RE]");
-	graphic.Text({ -5, -5, 0 }, "[ Thanks ]");
-	graphic.Text({ -6, -4, 0 }, "Teachar Umm");
-	graphic.Text({ -4, -3, 0 }, "3401 Kdg");
+	graphic.Text({ -17, -10, 0 }, L"Console Engine v1.0 by 1410 Ozi");
+	graphic.Text({ -5, -8, 0 }, L"Dalma[RE]");
+	graphic.Text({ -5, -5, 0 }, L"[ Thanks ]");
+	graphic.Text({ -6, -4, 0 }, L"Teachar Umm");
+	graphic.Text({ -4, -3, 0 }, L"3401 Kdg");
 
-	graphic.Text({ 40, 17, 0 }, "Latest Update 2022-11-25");
+	graphic.Text({ 40, 17, 0 }, L"Latest Update 2022-11-25");
 }
 

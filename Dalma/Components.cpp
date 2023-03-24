@@ -4,7 +4,7 @@ using namespace std;
 using namespace Components;
 
 void ChoiceComp::Awake() {
-	manager = &SceneManager::GetInstance();
+	m_manager = &SceneManager::GetInstance();
 }
 void ChoiceComp::Update() {
 	if (keyboard.isKeyDown(KeyCode_UP)) { choice--; }
@@ -20,9 +20,9 @@ void ChoiceComp::Update() {
 
 	if(keyboard.isKeyDown(KeyCode_ENTER))
 	switch (choice) {
-	case 0: { manager->ChangeScene<DalmaList>(); system("cls"); } break;
-	case 1: { manager->ChangeScene<DalmaCredit>(); system("cls"); } break;
-	case 2: { manager->StopEngine(); } break;
+	case 0: { m_manager->ChangeScene<DalmaList>(); system("cls"); } break;
+	case 1: { m_manager->ChangeScene<DalmaCredit>(); system("cls"); } break;
+	case 2: { m_manager->StopEngine(); } break;
 	}
 
 	graphic.Text({ -3, 5, 0 },  L" Start");
@@ -569,23 +569,23 @@ void NoteJudgment::Update() {
 }
 
 void SpriteNum::Start() {
-	renderer = gameobject->AddComponent<SpriteRenderer>();
+	m_renderer = gameobject->AddComponent<SpriteRenderer>();
 
-	nums[0].LoadSprite("Text/Zero");
-	nums[1].LoadSprite("Text/One");
-	nums[2].LoadSprite("Text/Two");
-	nums[3].LoadSprite("Text/Three");
-	nums[4].LoadSprite("Text/Four");
-	nums[5].LoadSprite("Text/Five");
-	nums[6].LoadSprite("Text/Six");
-	nums[7].LoadSprite("Text/Seven");
-	nums[8].LoadSprite("Text/Eight");
-	nums[9].LoadSprite("Text/Nine");
+	m_nums[0].LoadSprite("Text/Zero");
+	m_nums[1].LoadSprite("Text/One");
+	m_nums[2].LoadSprite("Text/Two");
+	m_nums[3].LoadSprite("Text/Three");
+	m_nums[4].LoadSprite("Text/Four");
+	m_nums[5].LoadSprite("Text/Five");
+	m_nums[6].LoadSprite("Text/Six");
+	m_nums[7].LoadSprite("Text/Seven");
+	m_nums[8].LoadSprite("Text/Eight");
+	m_nums[9].LoadSprite("Text/Nine");
 
-	renderer->sprite = nums[0];
+	m_renderer->sprite = m_nums[0];
 }
 void SpriteNum::ChangeNum(int num) {
-	renderer->sprite = nums[(num % 10)];
+	m_renderer->sprite = m_nums[(num % 10)];
 }
 
 void Result::Start() {

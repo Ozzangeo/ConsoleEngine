@@ -10,10 +10,7 @@ class SceneManager;
 class Scene {
 	friend class SceneManager;
 private:
-	bool isEnd = false;
-	bool isStart = false;
-
-	bool isDone = false;
+	bool m_isStart = false;
 
 	list<GameObject*> m_GameObjects;
 	list<GameObject*> m_RemoveObjectList;
@@ -61,9 +58,9 @@ template<typename T, enable_if_t<is_base_of_v<GameObject, T>, bool>> inline T* S
 	GameObject->name = name;
 	GameObject->tag = tag;
 	GameObject->scene = this;
-	GameObject->isStart = isStart;
+	GameObject->isStart = m_isStart;
 	GameObject->Components();
-	if (isStart) {
+	if (m_isStart) {
 		GameObject->Start();
 		GameObject->Work();
 	}

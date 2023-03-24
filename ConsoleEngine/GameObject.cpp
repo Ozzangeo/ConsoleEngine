@@ -6,12 +6,12 @@ GameObject::GameObject() {
 
 	pos = new Vector3f(0.0f);
 	scale = new Vector3f(1.0f);
-	rotate = new Vector3i(0, 0, 0);
+	m_rotate = new Vector3i(0, 0, 0);
 }
 GameObject::~GameObject() {
 	if (pos) { delete pos; pos = nullptr; }
 	if (scale) { delete scale; scale = nullptr; }
-	if (rotate) { delete rotate; rotate = nullptr; }
+	if (m_rotate) { delete m_rotate; m_rotate = nullptr; }
 }
 
 void GameObject::Start() {

@@ -1,6 +1,6 @@
 PlaySong=AlexiAction - Fashion Deeps House ( Galaxy ) (Short)
-Perfect=160
-Great=18
-Miss=6
-Accuracy=92.826088%
-MaxCombo=62
+Perfect=156
+Great=23
+Miss=5
+Accuracy=92.282608%
+MaxCombo=56

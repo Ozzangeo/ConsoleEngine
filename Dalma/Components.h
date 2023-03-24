@@ -43,8 +43,8 @@ enum ColorLayer {
 };
 class SpriteNum : public Component {
 private:
-	SpriteRenderer* renderer;
-	Sprite nums[10];
+	SpriteRenderer* m_renderer;
+	Sprite m_nums[10];
 
 	void Start() override;
 public:
@@ -54,7 +54,7 @@ public:
 /* DalmaMain */ #pragma region ...
 class ChoiceComp : public Component {
 private:
-	SceneManager* manager;
+	SceneManager* m_manager;
 	PolygonRenderer* renderer;
 	int choice = 0;
 

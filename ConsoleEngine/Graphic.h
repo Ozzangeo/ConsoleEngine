@@ -21,10 +21,10 @@ private:
 	Graphic();
 	~Graphic();
 
-	Vector3f* CameraPos;
+	Vector3f* m_CameraPos;
 	Vector3i* m_ScreenSize;
 	Vector3f* m_HalfScreenSize;
-	Vector3i* CameraRotate;
+	Vector3i* m_CameraRotate;
 
 	COORD m_size;
 	SMALL_RECT m_rect;
@@ -40,7 +40,6 @@ private:
 	static Graphic* m_Instance;
 
 	void SetScreen();
-
 
 	void Render();
 	static void Release();
@@ -82,16 +81,6 @@ public:
 	inline Matrix4x4f GetTranslate();
 };
 inline void Graphic::DrawCircle(const Vector3f& pos, const Vector3f& pos2, const Matrix4x4f& Trans, EnumColor& color) {
-	/*Pixel((pos.x + pos2.x), (pos.y + pos2.y), pos.z, Trans, color);
-	Pixel((pos.x - pos2.x), (pos.y + pos2.y), pos.z, Trans, color);
-	Pixel((pos.x + pos2.x), (pos.y - pos2.y), pos.z, Trans, color);
-	Pixel((pos.x - pos2.x), (pos.y - pos2.y), pos.z, Trans, color);
-
-	Pixel((pos.x + pos2.y), (pos.y + pos2.x), pos.z, Trans, color);
-	Pixel((pos.x - pos2.y), (pos.y + pos2.x), pos.z, Trans, color);
-	Pixel((pos.x + pos2.y), (pos.y - pos2.x), pos.z, Trans, color);
-	Pixel((pos.x - pos2.y), (pos.y - pos2.x), pos.z, Trans, color);*/
-
 	Pixel((pos.y + pos2.y), (-pos.x + pos2.x), pos.z, Trans, color);
 	Pixel((pos.y + pos2.y), (-pos.x - pos2.x), pos.z, Trans, color);
 	Pixel((pos.y - pos2.y), (-pos.x + pos2.x), pos.z, Trans, color);
@@ -170,19 +159,19 @@ inline EnumColor Graphic::GetPixel(Vector3i pos) {
 }
 
 inline Matrix4x4f Graphic::GetTranslate(const Vector3f& pos, const Vector3i& rotate, const Vector3f& scale) {
-	return Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix((*m_HalfScreenSize - *CameraPos) + pos);
+	return Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix((*m_HalfScreenSize - *m_CameraPos) + pos);
 }
 inline Matrix4x4f Graphic::GetTranslate(const Vector3i& rotate, const Vector3f& scale) {
-	return Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
+	return Math::GetScaleMatrix(scale) * Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *m_CameraPos);
 }
 inline Matrix4x4f Graphic::GetTranslate(const Vector3i& rotate) {
-	return Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
+	return Math::GetRotateMatrix(rotate) * Math::GetPosMatrix(*m_HalfScreenSize - *m_CameraPos);
 }
 inline Matrix4x4f Graphic::GetTranslate(const Vector3f& scale) {
-	return Math::GetScaleMatrix(scale) * Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
+	return Math::GetScaleMatrix(scale) * Math::GetPosMatrix(*m_HalfScreenSize - *m_CameraPos);
 }
 inline Matrix4x4f Graphic::GetTranslate() {
-	return Math::GetPosMatrix(*m_HalfScreenSize - *CameraPos);
+	return Math::GetPosMatrix(*m_HalfScreenSize - *m_CameraPos);
 }
 
 #endif // !___GRAPHIC___

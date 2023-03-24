@@ -6,8 +6,8 @@ using namespace Components;
 void Camera::Awake() {
 	COORD CameraSize = { 128, 72 };
 	graphic.SetScreenSize(CameraSize);
-	graphic.CameraPos = gameobject->pos;
-	graphic.CameraRotate = gameobject->rotate;
+	graphic.m_CameraPos = gameobject->pos;
+	graphic.m_CameraRotate = gameobject->m_rotate;
 }
 void Camera::Update() { graphic.Render(); }
 void Camera::SetCameraScale (short Scale) { graphic.SetScreenScale({ Scale, Scale }); }

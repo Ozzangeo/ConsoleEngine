@@ -132,8 +132,8 @@ enum KeyType {
 class Keyboard {
 	friend class ConsoleEngine;
 private:
-	static bool* isHold;
-	static KeyType* type;
+	static bool* m_isHold;
+	static KeyType* m_type;
 	static void Update();
 	static void Release();
 

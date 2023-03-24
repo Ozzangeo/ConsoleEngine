@@ -17,7 +17,7 @@ using namespace chrono;
 class ConsoleEngine {
 private:
 	float m_FPS;
-	SceneManager& UpdateScene = SceneManager::GetInstance();
+	SceneManager& m_UpdateScene = SceneManager::GetInstance();
 
 public:
 	// 엔진의 생성자
@@ -29,12 +29,13 @@ public:
 	// 엔진 종료
 	static void Release();
 };
-template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void ConsoleEngine::Run(wstring title, int Frame) {
+template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>>
+inline void ConsoleEngine::Run(wstring title, int Frame) {
 	SetConsoleTitle(title.c_str());
 
 	m_FPS = 1000.0f / Frame;
 
-	UpdateScene.ChangeScene<T>();
+	m_UpdateScene.ChangeScene<T>();
 
 	int fps = 0;
 	float time = -1.0f;
@@ -47,7 +48,7 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 		Keyboard::Update();
 		
 		// Scene Update
-		UpdateScene.Update();
+		m_UpdateScene.Update();
 		
 		// FPS Debug
 		time += Time::DeltaTime;
@@ -58,12 +59,16 @@ template<typename T, enable_if_t<is_base_of_v<Scene, T>, bool>> inline void Cons
 		}
 		fps++;
 		
+		// If Scene Change. -> Delete Before Scene.
+		m_UpdateScene.ClearBeforeScenes();
+
 		////////////////////////////////
 		Time::ExecutionTime = duration<float>(system_clock::now() - start).count() * 1000.0f;
 		if (m_FPS > Time::ExecutionTime) { Time::Delay(m_FPS - Time::ExecutionTime); }
 		Time::DeltaTime = duration<float>(system_clock::now() - start).count();
 	}
-	UpdateScene.Release();
+
+	m_UpdateScene.Release();
 }
 
 #endif // !___CONSOLEENGINE___

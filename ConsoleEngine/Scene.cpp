@@ -19,27 +19,19 @@ void Scene::Awake() {
 	// GameObjects에서 추가된 기본 오브젝트들의 설정을 해준다.
 	Work();
 
-	isStart = true;
+	m_isStart = true;
 }
 void Scene::Update() {
-	for (auto& item : m_GameObjects) {
-		item->Update();
-	}
+	for (auto& item : m_GameObjects) { item->Update(); }
 
-	for (auto& Remove : m_RemoveObjectList) {
-		Remove->Remove();
-		m_GameObjects.remove(Remove);
+	for (auto& item : m_RemoveObjectList) {
+		item->Remove();
+		m_GameObjects.remove(item);
 
-		delete Remove;
-		Remove = nullptr;
+		delete item;
+		item = nullptr;
 	}
 	m_RemoveObjectList.clear();
-
-	if (isEnd) {
-		system("cls");
-		
-		isDone = true;
-	}
 }
 void Scene::Release() {
 	for (auto& item : m_GameObjects) {

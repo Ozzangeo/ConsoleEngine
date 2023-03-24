@@ -12,7 +12,7 @@ Graphic::Graphic() {
 	m_HalfScreenSize = new Vector3f;
 }
 Graphic::~Graphic() {
-	if (m_Screen) { delete[] m_Screen; m_Screen = nullptr; }\
+	if (m_Screen) { delete[] m_Screen; m_Screen = nullptr; }
 	if (m_Depth) { delete[] m_Depth; m_Depth = nullptr; }
 	if (m_ScreenSize) { delete[] m_ScreenSize; m_ScreenSize = nullptr; }
 	if (m_HalfScreenSize) { delete[] m_HalfScreenSize; m_HalfScreenSize = nullptr; }
@@ -255,7 +255,7 @@ void Graphic::DrawSprite(const Vector3f& pos, const Vector3i& rotate, const Vect
 	}
 }
 void Graphic::Fill(Vector3f pos, Vector3f pos2, EnumColor color) {
-	Vector3f Trans = (*m_HalfScreenSize - *CameraPos);
+	Vector3f Trans = (*m_HalfScreenSize - *m_CameraPos);
 	int Height = 0;
 	int index = 0;
 

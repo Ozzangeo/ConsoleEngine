@@ -18,7 +18,7 @@ private:
 	void Update();
 	void Remove();
 
-	Vector3i* rotate;
+	Vector3i* m_rotate;
 
 protected:
 	bool isOnceGameObject = false;
@@ -88,19 +88,19 @@ inline void GameObject::SetRotateX(float x) {
 	while (x > 180) { x -= 360; }
 	while (x < -180) { x += 360; }
 
-	rotate->x = static_cast<int>(round(x)) + 180;
+	m_rotate->x = static_cast<int>(round(x)) + 180;
 }
 inline void GameObject::SetRotateY(float y) {
 	while (y > 180) { y -= 360; }
 	while (y < -180) { y += 360; }
 
-	rotate->y = static_cast<int>(round(y)) + 180;
+	m_rotate->y = static_cast<int>(round(y)) + 180;
 }
 inline void GameObject::SetRotateZ(float z) {
 	while (z > 180) { z -= 360; }
 	while (z < -180) { z += 360; }
 
-	rotate->z = static_cast<int>(round(z)) + 180;
+	m_rotate->z = static_cast<int>(round(z)) + 180;
 }
 inline Vector3i GameObject::SetRotate(float x, float y, float z) {
 	while (x > 180) { x -= 360; }
@@ -113,20 +113,20 @@ inline Vector3i GameObject::SetRotate(float x, float y, float z) {
 	while (z > 180) { z -= 360; }
 	while (z < -180) { z += 360; }
 
-	return (*rotate = {
+	return (*m_rotate = {
 		static_cast<int>(round(x)) + 180,
 		static_cast<int>(round(y)) + 180,
 		static_cast<int>(round(z)) + 180 });
 }
 
 inline Vector3f GameObject::Reset() {
-	*rotate = { 0, 0, 90 };
+	*m_rotate = { 0, 0, 90 };
 	return { 180, 180, -90 };
 }
 
-inline int GameObject::GetRotateX() { return rotate->x; }
-inline int GameObject::GetRotateY() { return rotate->y; }
-inline int GameObject::GetRotateZ() { return rotate->z; }
-inline Vector3i GameObject::GetRotate() { return { rotate->x, rotate->y, rotate->z, 0 }; }
+inline int GameObject::GetRotateX() { return m_rotate->x; }
+inline int GameObject::GetRotateY() { return m_rotate->y; }
+inline int GameObject::GetRotateZ() { return m_rotate->z; }
+inline Vector3i GameObject::GetRotate() { return { m_rotate->x, m_rotate->y, m_rotate->z, 0 }; }
 
 #endif // !___GAMEOBJECT___

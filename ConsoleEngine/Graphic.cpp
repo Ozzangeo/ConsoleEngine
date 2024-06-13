@@ -54,12 +54,11 @@ void Graphic::Text(Vector3i pos, WCHAR text, WORD color) {
 	pos.y += static_cast<int>(m_HalfScreenSize->y);
 
 	if (0 > pos.y || m_ScreenSize->y <= pos.y ||
-		0 > pos.x || m_ScreenSize->x <= pos.x) {
-		return;
-	}
+		0 > pos.x || m_ScreenSize->x <= pos.x) { return; }
 
 	int Index = static_cast<int>((pos.y * m_ScreenSize->x) + pos.x);
 	if (Index > m_ScreenSize->z) { return; }
+
 	m_Screen[Index].Char.UnicodeChar = text;
 	m_Screen[Index].Attributes = color;
 

@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Animation" Collapsed="true">
+    <Position X="25.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAEAAAAAAAAEAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Animation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rgb255" Collapsed="true">
+    <Position X="25.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAQAAAAAAAAAIAQAhAAAAAAA=</HashCode>
+      <FileName>Color.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Color" Collapsed="true">
+    <Position X="27.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAgAAABAI=</HashCode>
+      <FileName>Color.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Component">
+    <Position X="14" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAIECAAAAAAAgAABIAAAAAAAACAAAgAAAAAAEA=</HashCode>
+      <FileName>Component.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Debug" Collapsed="true">
+    <Position X="30.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAgACAAAAAAAABAAAAE=</HashCode>
+      <FileName>Debug.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConsoleEngine" Collapsed="true">
+    <Position X="29" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAQAAAAAAAAACAAAAAAAAABAAAAI=</HashCode>
+      <FileName>ConsoleEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObject" Collapsed="true">
+    <Position X="6.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABwAACAEACAIFIAAAAAABIBCAwCkAACEAAAAAAIBEDQ=</HashCode>
+      <FileName>GameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Graphic" Collapsed="true">
+    <Position X="25.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgARAAEAAEAEIAAAAAABAAAAFAgiChAIABSICBYBAS0=</HashCode>
+      <FileName>Graphic.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Keyboard" Collapsed="true">
+    <Position X="27.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAKAAAAAAAAAAAAAAwABAAAAAAAABAAAAAABAAAAA=</HashCode>
+      <FileName>Keyboard.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Math" Collapsed="true">
+    <Position X="29" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAABAAAAQAIAAAAQAAABAJCACAA=</HashCode>
+      <FileName>Math.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Matrix4x4f" Collapsed="true">
+    <Position X="30.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAIAggAAAAAA=</HashCode>
+      <FileName>Matrix.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene" Collapsed="true">
+    <Position X="27.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAxgQAAEEAAAAAAAAAAAgAAAAAAAAAAAAAgAABBAAEA=</HashCode>
+      <FileName>Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneManager" Collapsed="true">
+    <Position X="29" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAMBAAAAAAAQABAQAAAAYAAAAABAJAgQ=</HashCode>
+      <FileName>SceneManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sprite" Collapsed="true">
+    <Position X="30.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAEABAAAAAQAAAAAAAAAAI=</HashCode>
+      <FileName>Sprite.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Time" Collapsed="true">
+    <Position X="25.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAQABAAAAAAAAAIAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Time.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vector3i" Collapsed="true">
+    <Position X="29" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AECAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAggAAAAAA=</HashCode>
+      <FileName>Vector.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vector3f" Collapsed="true">
+    <Position X="27.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAQAAAAAIAAgQAAAAECAAJAAggggAAAAQA=</HashCode>
+      <FileName>Vector.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObjects::Camera" Collapsed="true">
+    <Position X="4.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObjects::Rectangle" Collapsed="true">
+    <Position X="6.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObjects::Circle" Collapsed="true">
+    <Position X="9" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Components::Camera">
+    <Position X="20.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAABAAAAAAABAAAAAAAAAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Components::PolygonRenderer" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQAAAEAAIAAAAAAARAABAADAAAQACCAkABAAAAAAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Components::PolygonCollider">
+    <Position X="9.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAEEAAAAAAAAAAAAAAAGE=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Components::SpriteRenderer">
+    <Position X="14" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAgAAAAAABAABAAAABAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Components::Animator">
+    <Position X="16.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAIAAAAAAAAAAABIAAAAAAAAAAAAAAAAABAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Components::CircleRenderer">
+    <Position X="18.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAACAAAAAAAABAAAAAAAAAAAACAgAAQAAAAAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Components::Audio" Collapsed="true">
+    <Position X="23" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAgAAAAAAAAAACABAAAAEAAAAAAACAABAIAKEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Components::Server" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAAAAQJAAAAAAAAAACBCAgAAAAAAAAAAAAJgAMAEI=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Components::Client">
+    <Position X="11.75" Y="1.75" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="Components::Client::SOCKET_" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Components.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QEQAAAAABAAAAAAAAgAABAAAABAAABBAAAAAJhAEAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="EnumColor" Collapsed="true">
+    <Position X="25.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAQAAAAEAAQAAAAKAAASAAAYAEAAAiAQAAQBAAA=</HashCode>
+      <FileName>Color.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="KeyCode" Collapsed="true">
+    <Position X="27.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ekkAACAEBARAKBIBAAJAACIA8M8gCAAByGnIAxP+ABA=</HashCode>
+      <FileName>Keyboard.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="KeyType" Collapsed="true">
+    <Position X="29" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAAAEEAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Keyboard.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

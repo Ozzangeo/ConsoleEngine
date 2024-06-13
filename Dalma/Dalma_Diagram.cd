@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SpriteNum" Collapsed="true">
+    <Position X="11.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAIAAAAAAAAAAAQAAAQA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChoiceComp" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAAAAAAAAAAAAIAAIAAAAAAAAAAAAAAAAgEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EFunc" Collapsed="true">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAEAAAAAAA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GradationEffect" Collapsed="true">
+    <Position X="11.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBACAAAAAAQAAEAAAABABAAAAACICAQAAAAAAAAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MoveCamera" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAgAAAyAAAAAAAAAIFQAAAAAAAACAQAAAAAAAAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteInfo" Collapsed="true">
+    <Position X="8.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAABAQA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteDown" Collapsed="true">
+    <Position X="4.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAQIAAAQBAAAAAAA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteEffect" Collapsed="true">
+    <Position X="6.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAIAAAAAAEABAAAAAAIAAAEAAAAAA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteJudgment" Collapsed="true">
+    <Position X="10" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAQAAAAAAAAAAAIQCAAAAAAAAAEAAAgAA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AmladPlayer" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASgAAAABCABAAAgCgAChAABABAIAAKBAAAAAoAAAAA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Filler" Collapsed="true">
+    <Position X="11.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAACAAAAAAAAAABAAAAAAAAACAAAAAAAAAAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GearButtonComp" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Result" Collapsed="true">
+    <Position X="6.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQAAAEAgCBgAAwAAAAAgAgAABEAAIAAAAAAGAAAAAA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AmladList" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAABAAIAAAAAAAAAAAAAAIAAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Credit" Collapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAgAAQAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Arrow" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoneObject" Collapsed="true">
+    <Position X="11.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Note" Collapsed="true">
+    <Position X="3" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAIAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteSpawner" Collapsed="true">
+    <Position X="11.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gear" Collapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GearBackground" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GearWall" Collapsed="true">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GearButton" Collapsed="true">
+    <Position X="6.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="JudgmentLine" Collapsed="true">
+    <Position X="4.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PerfectLine" Collapsed="true">
+    <Position X="4.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAIAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GreatLine" Collapsed="true">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAIAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MissLine" Collapsed="true">
+    <Position X="8.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAIAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Line" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServerObject" Collapsed="true">
+    <Position X="10" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Num" Collapsed="true">
+    <Position X="3" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sans" Collapsed="true">
+    <Position X="8.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DalmaMain" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scenes.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DalmaList" Collapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scenes.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DalmaCredit" Collapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scenes.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Dalma" Collapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scenes.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DalmaResult" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scenes.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Tags">
+    <Position X="6.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IgAQAAAAAAAAAAAAACAAAAAgAIAAAAAACAgAAAAAEAA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ColorLayer">
+    <Position X="3" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQCABgAAAAAAAAAAAAAAAAAAABAKAAAAAAAAAAgAAAE=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EffectType">
+    <Position X="4.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAACAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Components.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>
